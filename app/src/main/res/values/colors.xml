@@ -14,4 +14,11 @@
     <color name="bg_btn_login_facebook_unpressed">#1004f0</color>
     <color name="bg_btn_login_google_pressed">#eda71b</color>
     <color name="bg_btn_login_google_unpressed">#f50505</color>
+    <color name="today">#4b82ff</color>
+    <color name="greyed_out">#c7c7c7</color>
+
+    <color name="summer">#44eebd82</color>
+    <color name="fall">#44d8d27e</color>
+    <color name="winter">#44a1c1da</color>
+    <color name="spring">#448da64b</color>
 </resources>

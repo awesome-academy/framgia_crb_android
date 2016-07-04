@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/calendar">
+        <menu>
+            <item
+                android:id="@+id/day"
+                android:title="@string/day"
+                android:checked="true"
+                android:icon="@drawable/ic_emoticon" />
+            <item
+                android:id="@+id/week"
+                android:title="@string/week"
+                android:icon="@drawable/ic_emoticon" />
+            <item
+                android:id="@+id/month"
+                android:title="@string/month"
+                android:icon="@drawable/ic_emoticon" />
+            <item
+                android:id="@+id/few_day"
+                android:title="@string/few_day"
+                android:icon="@drawable/ic_emoticon" />
+        </menu>
+    </item>
+    <group
+        android:id="@+id/calendar_drawer"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/request_email"
+            android:icon="@drawable/ic_send_black"
+            android:title="@string/send_string" />
+        <item
+            android:id="@+id/color"
+            android:title="@string/color"
+            android:icon="@drawable/ic_color_lens_black_24dp" />
+    </group>
+    <group
+        android:id="@+id/other_calendar"
+        android:checkableBehavior="single">
+    </group>
+    <group
+        android:id="@+id/settings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/setting_string" />
+    </group>
+</menu>
