@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">FramgiaCrb</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_login">Login</string>
+    <string name="hint_email_input">Email</string>
+    <string name="hint_password_input">Password</string>
+    <string name="hint_password_confirm">Password confirmation</string>
+    <string name="label_login">Login</string>
+    <string name="email">Email</string>
+    <string name="pass">Password</string>
+    <string name="or">OR</string>
+    <string name="login_with_fb">Login with Facebook</string>
+    <string name="login_with_gg">Login with Google</string>
+    <string name="search">Search</string>
 </resources>
