@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+    <solid android:color="#ffffff" >
+    </solid>
+    <stroke
+        android:width="@dimen/width_edt_background"
+        android:color="@color/edt_background" >
+    </stroke>
+    <padding
+        android:bottom="@dimen/bottom_edt_background"
+        android:left="@dimen/left_edt_background"
+        android:right="@dimen/right_edt_background"
+        android:top="@dimen/top_edt_background" >
+    </padding>
+    <!-- chỗ này set độ cong góc -->
+    <corners android:radius="@dimen/radius_edt_background" >
+    </corners>
+</shape>

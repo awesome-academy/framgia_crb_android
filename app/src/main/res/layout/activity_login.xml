@@ -9,7 +9,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/actionbar"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_marginBottom="@dimen/margin_bottom"
                 android:layout_marginTop="@dimen/margin_top"
                 android:text="@string/title_login"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="@dimen/textview_textsize" />
 
             <RelativeLayout
@@ -45,6 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/padding_left"
+                    android:textColor="@color/black"
                     android:text="@string/email" />
 
                 <EditText
@@ -54,7 +55,7 @@
                     android:layout_below="@+id/text_email"
                     android:layout_marginBottom="@dimen/margin_bottom"
                     android:layout_marginTop="@dimen/margin_top_edit_text"
-                    android:background="@color/white"
+                    android:background="@drawable/edt_bacground"
                     android:hint="@string/hint_email_input"
                     android:inputType="textEmailAddress"
                     android:padding="@dimen/padding" />
@@ -75,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/padding_left"
+                    android:textColor="@color/black"
                     android:text="@string/pass" />
 
                 <EditText
@@ -84,7 +86,7 @@
                     android:layout_below="@+id/text_password"
                     android:layout_marginBottom="@dimen/margin_bottom"
                     android:layout_marginTop="@dimen/margin_top_edit_text"
-                    android:background="@color/white"
+                    android:background="@drawable/edt_bacground"
                     android:hint="@string/hint_password_input"
                     android:inputType="textPassword"
                     android:padding="@dimen/padding" />
@@ -115,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_bottom"
                 android:text="@string/or"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_or"
                 android:textStyle="bold"
                 />

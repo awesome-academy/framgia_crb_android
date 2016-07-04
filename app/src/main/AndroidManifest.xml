@@ -16,6 +16,10 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
