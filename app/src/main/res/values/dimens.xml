@@ -20,4 +20,16 @@
     <dimen name="layout_with_fb">300dp</dimen>
     <dimen name="layout_height_fb">50dp</dimen>
     <dimen name="text_size_search">15sp</dimen>
+    <dimen name="padding_left_item_search">8dp</dimen>
+    <dimen name="padding_right_item_search">8dp</dimen>
+    <dimen name="layout_width_item_search">0dp</dimen>
+    <dimen name="layout_width_imgbt_item_search">30dp</dimen>
+    <dimen name="layout_height_imgbt_item_search">30dp</dimen>
+    <dimen name="layout_margin_item_search">8dp</dimen>
+    <dimen name="bottom_edt_background">1dp</dimen>
+    <dimen name="left_edt_background">1dp</dimen>
+    <dimen name="right_edt_background">1dp</dimen>
+    <dimen name="top_edt_background">1dp</dimen>
+    <dimen name="radius_edt_background">1dp</dimen>
+    <dimen name="width_edt_background">1dp</dimen>
 </resources>

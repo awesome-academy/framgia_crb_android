@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/padding_left_item_search"
+    android:paddingRight="@dimen/padding_right_item_search" >
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="@dimen/layout_width_item_search"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_item_search"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="@dimen/layout_width_imgbt_item_search"
+        android:layout_height="@dimen/layout_height_imgbt_item_search"
+        android:src="@drawable/ic_delete" />
+
+</LinearLayout>
