@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@android:color/white">
 
@@ -13,38 +13,17 @@
         android:paddingBottom="12dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp">
-
-        <!-- prevButton -->
-        <ImageView
-            android:id="@+id/calendar_prev_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/previous_icon" />
-
         <!-- date title -->
         <TextView
             android:id="@+id/calendar_date_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/calendar_prev_button"
-            android:layout_toLeftOf="@+id/calendar_next_button"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#222222"
             android:text="current date" />
-
-        <!-- next button -->
-        <ImageView
-            android:id="@+id/calendar_next_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/next_icon" />
     </RelativeLayout>
 
     <!-- days header -->
@@ -124,7 +103,7 @@
     <GridView
         android:id="@+id/calendar_grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:numColumns="7" />
 
 </LinearLayout>

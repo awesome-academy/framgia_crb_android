@@ -8,16 +8,8 @@
                 android:checked="true"
                 android:icon="@drawable/ic_emoticon" />
             <item
-                android:id="@+id/week"
-                android:title="@string/week"
-                android:icon="@drawable/ic_emoticon" />
-            <item
                 android:id="@+id/month"
                 android:title="@string/month"
-                android:icon="@drawable/ic_emoticon" />
-            <item
-                android:id="@+id/few_day"
-                android:title="@string/few_day"
                 android:icon="@drawable/ic_emoticon" />
         </menu>
     </item>
@@ -32,6 +24,10 @@
             android:id="@+id/color"
             android:title="@string/color"
             android:icon="@drawable/ic_color_lens_black_24dp" />
+        <item
+            android:id="@+id/search"
+            android:title="@string/search"
+            android:icon="@drawable/ic_search_black_24dp" />
     </group>
     <group
         android:id="@+id/other_calendar"
