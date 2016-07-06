@@ -56,4 +56,14 @@
     <string name="calendar3">Mai Đại Diện</string>
     <string name="calendar4">Đặng Anh Quân</string>
     <string name="calendar5">Nguyễn Văn Toàn</string>
+    <string name="action_edit_string">Edit</string>
+    <string name="action_delete_string">Delete</string>
+    <string name="time_string">Thoi gian</string>
+    <string name="event_string">Su kien</string>
+    <string name="loop_string">Lap lai</string>
+    <string name="description_string">Mieu ta</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_error">Error!!!</string>
+    <string name="message_delete">Ban co muon xoa su kien nay</string>
 </resources>

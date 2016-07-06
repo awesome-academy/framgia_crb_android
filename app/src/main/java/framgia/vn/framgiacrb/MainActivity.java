@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,7 +30,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.fragment.CalendarFragment;
+import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mArrow;
     private dayClicked mDayClicked;
     private RelativeLayout mDatePickerButton;
+    private FrameLayout mFrameLayout;
 
     int currentMenuItemId;
     boolean isExpanded = false;
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         mDatePickerButton = (RelativeLayout) findViewById(R.id.date_picker_button);
         Calendar calendar = Calendar.getInstance();
         setSubTitle(dateFormat.format(calendar.getTime()));
+        mFrameLayout = (FrameLayout) findViewById(R.id.frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
     } // end of method initUi()
@@ -123,10 +129,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initFragmentListEvents() {
+        Fragment fragment = new EventsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+    }
+
     private void updateDisplayView(int id) {
         Fragment fragment;
         switch (id) {
             case R.id.day:
+                initFragmentListEvents();
                 break;
             case R.id.month:
                 break;

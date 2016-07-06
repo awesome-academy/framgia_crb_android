@@ -20,9 +20,6 @@
         <activity android:name=".activity.SearchActivity">
 
         </activity>
-        <activity android:name=".activity.SearchActivity">
-
-        </activity>
         <activity
             android:name=".activity.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -31,7 +28,11 @@
                 android:value=".MainActivity" />
         </activity>
 
-        <activity android:name=".activity.CreateEventActvity">
+        <activity android:name=".activity.CreateEventActvity"
+            android:theme="@style/Theme.SWitch">
+        </activity>
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

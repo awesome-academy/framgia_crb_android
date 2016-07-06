@@ -41,4 +41,16 @@
     <dimen name="cardCornerRadius_cardview">4dp</dimen>
     <dimen name="layout_margin_2dp">2dp</dimen>
     <dimen name="layout_margin_5dp">5dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
+    <dimen name="text_size_header">22sp</dimen>
+    <dimen name="text_size_normal">18sp</dimen>
+
+    <!--home screen-->
+    <dimen name="item_month_height">150dp</dimen>
+    <dimen name="item_date_height">60dp</dimen>
+    <dimen name="padding_normal">8dp</dimen>
+    <dimen name="padding_lager">16dp</dimen>
+    <dimen name="item_event_min_height">60dp</dimen>
+    <dimen name="item_event_margin_left">72dp</dimen>
 </resources>

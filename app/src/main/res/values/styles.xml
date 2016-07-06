@@ -5,6 +5,12 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.SWitch" parent="Base.Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
@@ -41,7 +47,7 @@
 
     <style name="ToolbarStyle">
         <item name="android:minHeight">?attr/actionBarSize</item>
-        <!--<item name="android:background">@color/colorPrimary</item>-->
+        <item name="android:background">@color/colorPrimary</item>
         <item name="theme">@style/Toolbar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="colorControlNormal">@android:color/white</item>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners
+                android:radius="5dp"/>
+            <gradient
+                android:startColor="@color/bg_btn_login_unpressed"
+                android:endColor="@color/bg_btn_login_unpressed"/>
+        </shape>
+    </item>
+</selector>
