@@ -24,35 +24,37 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.object.EventInWeek;
 
 /**
- * Created by lethuy on 05/07/2016.
+ * Created by lethuy on 06/07/2016.
  */
-public class CreateEventActvity extends Activity {
-
+public class EditActivity extends Activity{
     private ImageButton mImageButtonBack, mImageButtonAlarm, mImageButtonRepeat, mIamgeButtonSave;
     private EditText mEdtEvent, mEdtDesciption;
     private Switch mSwitchAlarm;
-    private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat, mTxtNewEvent;
+    private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat, mTxtEditEvent;
     private Spinner mSpinerCalendar;
+
+    ArrayList<String> lstData;
 
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
     ArrayAdapter<EventInWeek> adapter = null;
     private Calendar mCal;
     private Date mDateFinish, mHourFinish;
 
-    ArrayList<String> lstData;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
+        mEdtEvent = (EditText) findViewById(R.id.edit_Title_New_Event);
         mTxtDateStart = (TextView) findViewById(R.id.txt_DateStart);
         mTxtDateFinish = (TextView) findViewById(R.id.txt_DateFinish);
         mTxtTimeStart = (TextView) findViewById(R.id.txt_timeStart);
         mTxtTimeFinish = (TextView) findViewById(R.id.txt_TimeFinish);
-        mTxtNewEvent = (TextView) findViewById(R.id.txt_NewEvent);
+        mTxtRepeat = (TextView) findViewById(R.id.txt_Repeat);
 
-        mTxtNewEvent.setText(R.string.new_event);
+        mTxtEditEvent = (TextView) findViewById(R.id.txt_NewEvent);
+
+        mTxtEditEvent.setText(R.string.edit_event);
 
         mImageButtonBack = (ImageButton) findViewById(R.id.btn_back);
         mImageButtonBack.setOnClickListener(new View.OnClickListener() {
@@ -61,9 +63,6 @@ public class CreateEventActvity extends Activity {
                 onBackPressed();
             }
         });
-
-        adapter = new ArrayAdapter<EventInWeek>
-                (this, android.R.layout.simple_list_item_1, arrJob);
 
         lstData = new ArrayList<>();
         lstData.add("Lê Thị Thúy");
@@ -76,10 +75,11 @@ public class CreateEventActvity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSpinerCalendar.setAdapter(adapter);
 
+        mEdtEvent.setText(R.string.event_edit);
+
         getDefaultInfor();
         addEventFormWidgets();
     }
-
     public void getDefaultInfor() {
         mCal = Calendar.getInstance();
         SimpleDateFormat dft = null;
@@ -142,7 +142,7 @@ public class CreateEventActvity extends Activity {
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
         DatePickerDialog pic = new DatePickerDialog(
-                CreateEventActvity.this,
+                EditActivity.this,
                 callback, nam, thang, ngay);
         pic.setTitle(R.string.select_date_start);
         pic.show();
@@ -165,7 +165,7 @@ public class CreateEventActvity extends Activity {
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
         DatePickerDialog pic = new DatePickerDialog(
-                CreateEventActvity.this,
+                EditActivity.this,
                 callback, nam, thang, ngay);
         pic.setTitle(R.string.select_date_finish);
         pic.show();
@@ -193,7 +193,7 @@ public class CreateEventActvity extends Activity {
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
         TimePickerDialog time = new TimePickerDialog(
-                CreateEventActvity.this,
+                EditActivity.this,
                 callback, gio, phut, true);
         time.setTitle(R.string.select_time_start);
         time.show();
@@ -220,7 +220,7 @@ public class CreateEventActvity extends Activity {
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
         TimePickerDialog time = new TimePickerDialog(
-                CreateEventActvity.this,
+                EditActivity.this,
                 callback, gio, phut, true);
         time.setTitle(R.string.select_time_finish);
         time.show();

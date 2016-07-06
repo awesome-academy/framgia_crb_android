@@ -48,14 +48,6 @@
     <string name="select_time_finish">Chọn giờ kết thúc</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <string name="date_format">dd/MM/yyyy</string>
-    <string name="date_format2">hh:mm a</string>
-    <string name="date_format3">HH:mm</string>
-    <string name="calendar1">Lê Thị Thúy</string>
-    <string name="calendar2">Cấn Văn Nghị</string>
-    <string name="calendar3">Mai Đại Diện</string>
-    <string name="calendar4">Đặng Anh Quân</string>
-    <string name="calendar5">Nguyễn Văn Toàn</string>
     <string name="action_edit_string">Edit</string>
     <string name="action_delete_string">Delete</string>
     <string name="time_string">Thoi gian</string>
@@ -66,4 +58,7 @@
     <string name="cancel">Cancel</string>
     <string name="title_error">Error!!!</string>
     <string name="message_delete">Ban co muon xoa su kien nay</string>
+    <string name="edit_event">Edit event</string>
+    <string name="event_edit">Hop team Android</string>
+    <string name="calendar_name">CALENDAR</string>
 </resources>
