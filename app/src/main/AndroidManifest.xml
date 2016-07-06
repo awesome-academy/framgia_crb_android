@@ -3,8 +3,8 @@
     package="framgia.vn.framgiacrb">
 
     <uses-sdk
-        android:minSdkVersion="13"
-        android:maxSdkVersion="23" />
+        android:maxSdkVersion="23"
+        android:minSdkVersion="13" />
 
     <application
         android:allowBackup="true"
@@ -15,14 +15,13 @@
 
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
+        <activity android:name=".activity.SearchActivity">
+
+        </activity>
         <activity
-            android:name=".activity.SearchActivity">
-
-        </activity>
-        <activity android:name=".MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -30,6 +29,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
     </application>
 

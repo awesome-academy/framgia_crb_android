@@ -6,11 +6,11 @@
                 android:id="@+id/day"
                 android:title="@string/day"
                 android:checked="true"
-                android:icon="@drawable/ic_emoticon" />
+                android:icon="@drawable/ic_view_agenda_black_24dp" />
             <item
                 android:id="@+id/month"
                 android:title="@string/month"
-                android:icon="@drawable/ic_emoticon" />
+                android:icon="@drawable/ic_view_module_black_24dp" />
         </menu>
     </item>
     <group
