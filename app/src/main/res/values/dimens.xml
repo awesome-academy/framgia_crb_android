@@ -32,4 +32,5 @@
     <dimen name="top_edt_background">1dp</dimen>
     <dimen name="radius_edt_background">1dp</dimen>
     <dimen name="width_edt_background">1dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
 </resources>

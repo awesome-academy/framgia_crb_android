@@ -134,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
         }
+//        FragmentManager fm = getSupportFragmentManager();
+//        fm.beginTransaction().replace(R.id.frame, fragment).commit();
         currentMenuItemId = id;
     }
 
