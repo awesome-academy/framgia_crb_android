@@ -24,4 +24,6 @@
     <color name="edt_background">#5b607e</color>
     <color name="background">#f1f1f1</color>
     <color name="background_card">#fff</color>
+    <color name="color_text">#797979</color>
+    <color name="selected">#868686</color>
 </resources>

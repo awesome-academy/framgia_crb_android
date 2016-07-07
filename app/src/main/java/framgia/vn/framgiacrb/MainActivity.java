@@ -37,6 +37,7 @@ import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
+    private static final int ANIMATION_DURATION = 100;
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -48,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
     private dayClicked mDayClicked;
     private RelativeLayout mDatePickerButton;
     private FrameLayout mFrameLayout;
+    private Toolbar mToolbar;
 
     int currentMenuItemId;
     boolean isExpanded = false;
     float currentRotation = 360.0f;
 
     SubMenu subMenu;
-    Toolbar toolbar;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
 
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         initUi();
         assignHandler();
         updateDisplayView(R.id.day);
@@ -100,15 +101,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 uncheckAllMenuItems(mNavigationView);
-                item.setChecked(true);
-                if (currentMenuItemId != item.getItemId()) {
+                if (item.getItemId() != R.id.color && item.getItemId() != R.id.setting) {
+                    currentMenuItemId = item.getItemId();
+                } else {
+                    item.setChecked(false);
+                }
+                reCheckMenuItem(mNavigationView);
+                if (item.getItemId() != currentMenuItemId || item.getItemId() == R.id.color) {
                     updateDisplayView(item.getItemId());
                 }
                 mDrawerLayout.closeDrawers();
                 return true;
             }
         });
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -143,13 +149,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.month:
                 break;
-            case R.id.search:
-                break;
             default:
         }
 //        FragmentManager fm = getSupportFragmentManager();
 //        fm.beginTransaction().replace(R.id.frame, fragment).commit();
-        currentMenuItemId = id;
+//        fragment = new MonthFragment();
+//        ((MonthFragment) fragment).setEvents(null);
+//        FragmentManager fm = getSupportFragmentManager();
+//        fm.beginTransaction().replace(R.id.frame, fragment).commit();
+        //currentMenuItemId = id;
     }
 
     private void uncheckAllMenuItems(NavigationView navigationView) {
@@ -192,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         anim.setInterpolator(new LinearInterpolator());
         anim.setFillAfter(true);
         anim.setFillEnabled(true);
-        anim.setDuration(300);
+        anim.setDuration(ANIMATION_DURATION);
         mArrow.startAnimation(anim);
         mAppBarLayout.setExpanded(true, true);
         isExpanded = true;
@@ -204,10 +212,21 @@ public class MainActivity extends AppCompatActivity {
         anim.setInterpolator(new LinearInterpolator());
         anim.setFillAfter(true);
         anim.setFillEnabled(true);
-        anim.setDuration(300);
+        anim.setDuration(ANIMATION_DURATION);
         mArrow.startAnimation(anim);
         mAppBarLayout.setExpanded(false, true);
         isExpanded = false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

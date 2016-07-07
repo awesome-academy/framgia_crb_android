@@ -33,6 +33,8 @@ public class CalendarFragment extends Fragment {
     // how many days to show, default to six weeks, 42 days
     private static final int DAYS_COUNT = 42;
     public static final String TITLE = "time";
+    public static final String YEAR_EXTRA = "year";
+    public static final String MONTH_EXTRA = "month";
     private Calendar calendar = Calendar.getInstance();
 
     private LinearLayout mHeader;
@@ -56,8 +58,8 @@ public class CalendarFragment extends Fragment {
     public static CalendarFragment newInstance(int year, int month) {
         CalendarFragment calendarFragment = new CalendarFragment();
         Bundle args = new Bundle();
-        args.putInt("year", year);
-        args.putInt("month", month);
+        args.putInt(YEAR_EXTRA, year);
+        args.putInt(MONTH_EXTRA, month);
         calendarFragment.setArguments(args);
         return calendarFragment;
     }

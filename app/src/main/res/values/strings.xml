@@ -17,7 +17,7 @@
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="few_day">4 Day</string>
-    <string name="send_string">Request Calendar</string>
+    <string name="send_string">Invites</string>
     <string name="color">Color</string>
     <string name="setting_string">Settings</string>
     <string name="new_event">New Event</string>
@@ -61,4 +61,15 @@
     <string name="edit_event">Edit event</string>
     <string name="event_edit">Hop team Android</string>
     <string name="calendar_name">CALENDAR</string>
+    <string name="today_string">To day</string>
+
+    <string-array name="day_of_week">
+        <item>T2</item>
+        <item>T3</item>
+        <item>T4</item>
+        <item>T5</item>
+        <item>T6</item>
+        <item>T7</item>
+        <item>CN</item>
+    </string-array>
 </resources>
