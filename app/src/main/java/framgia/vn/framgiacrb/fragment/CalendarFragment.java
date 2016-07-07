@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 
-import framgia.vn.framgiacrb.MainActivity;
+import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.R;
 
 /**

@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.QuickContactBadge;
-import android.widget.TextView;
 
-import framgia.vn.framgiacrb.MainActivity;
 import framgia.vn.framgiacrb.R;
 
 /**
