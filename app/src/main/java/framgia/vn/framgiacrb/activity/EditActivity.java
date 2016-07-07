@@ -181,7 +181,7 @@ public class EditActivity extends Activity{
                 if (hourTam > 12)
                     hourTam = hourTam - 12;
                 mTxtTimeStart.setText
-                        (hourTam + ":" + minute + (hourOfDay > 12 ? R.string.pm : R.string.am));
+                        (hourTam + ":" + minute + (hourOfDay>12?" PM":" AM"));
                 mTxtTimeStart.setTag(s);
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);
@@ -208,7 +208,7 @@ public class EditActivity extends Activity{
                 if (hourTam > 12)
                     hourTam = hourTam - 12;
                 mTxtTimeFinish.setText
-                        (hourTam + ":" + minute + (hourOfDay > 12 ? R.string.pm : R.string.am));
+                        (hourTam + ":" + minute + (hourOfDay>12?" PM":" AM"));
                 mTxtTimeFinish.setTag(s);
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);

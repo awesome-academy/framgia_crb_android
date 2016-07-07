@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -9,8 +10,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -24,11 +28,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.xdty.preference.colorpicker.ColorPickerDialog;
+import org.xdty.preference.colorpicker.ColorPickerSwatch;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import framgia.vn.framgiacrb.activity.EditActivity;
 import framgia.vn.framgiacrb.fragment.CalendarFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
@@ -38,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
     private static final int ANIMATION_DURATION = 100;
+    private static final int NUMBER_COLUMN = 5;
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -49,13 +60,14 @@ public class MainActivity extends AppCompatActivity {
     private dayClicked mDayClicked;
     private RelativeLayout mDatePickerButton;
     private FrameLayout mFrameLayout;
-    private Toolbar mToolbar;
 
     int currentMenuItemId;
     boolean isExpanded = false;
     float currentRotation = 360.0f;
 
-    SubMenu subMenu;
+    private Toolbar mToolbar;
+
+    private int mSelectedColor;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
 
@@ -63,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         initUi();
@@ -110,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() != currentMenuItemId || item.getItemId() == R.id.color) {
                     updateDisplayView(item.getItemId());
                 }
+                reCheckMenuItem(mNavigationView);
                 mDrawerLayout.closeDrawers();
                 return true;
             }
@@ -148,6 +164,22 @@ public class MainActivity extends AppCompatActivity {
                 initFragmentListEvents();
                 break;
             case R.id.month:
+                break;
+            case R.id.color:
+                int[] mColors = getResources().getIntArray(R.array.default_rainbow);
+                final ColorPickerDialog dialog = ColorPickerDialog.newInstance(R.string.color_picker_default_title,
+                        mColors,
+                        mSelectedColor,
+                        NUMBER_COLUMN,
+                        ColorPickerDialog.SIZE_SMALL);
+                dialog.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
+
+                    @Override
+                    public void onColorSelected(int color) {
+                        mSelectedColor = color;
+                    }
+                });
+                dialog.show(getFragmentManager(), "color_dialog_test");
                 break;
             default:
         }
