@@ -54,7 +54,7 @@
     <string name="event_string">Su kien</string>
     <string name="loop_string">Lap lai</string>
     <string name="description_string">Mieu ta</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="title_error">Error!!!</string>
     <string name="message_delete">Ban co muon xoa su kien nay</string>
@@ -62,7 +62,6 @@
     <string name="event_edit">Hop team Android</string>
     <string name="calendar_name">CALENDAR</string>
     <string name="today_string">To day</string>
-
     <string-array name="day_of_week">
         <item>T2</item>
         <item>T3</item>
@@ -72,4 +71,7 @@
         <item>T7</item>
         <item>CN</item>
     </string-array>
+    <string name="question">Question</string>
+    <string name="delete">Are you sure want to delete?</string>
+    <string name="yes">Yes</string>
 </resources>
