@@ -41,6 +41,7 @@ import java.util.Locale;
 import framgia.vn.framgiacrb.activity.EditActivity;
 import framgia.vn.framgiacrb.fragment.CalendarFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
+import framgia.vn.framgiacrb.fragment.MonthFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 
 
@@ -117,13 +118,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 uncheckAllMenuItems(mNavigationView);
                 if (item.getItemId() != R.id.color && item.getItemId() != R.id.setting) {
+                    if (item.getItemId() != currentMenuItemId || item.getItemId() == R.id.color) {
+                        updateDisplayView(item.getItemId());
+                    }
                     currentMenuItemId = item.getItemId();
                 } else {
                     item.setChecked(false);
-                }
-                reCheckMenuItem(mNavigationView);
-                if (item.getItemId() != currentMenuItemId || item.getItemId() == R.id.color) {
-                    updateDisplayView(item.getItemId());
                 }
                 reCheckMenuItem(mNavigationView);
                 mDrawerLayout.closeDrawers();
@@ -185,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
         }
 //        FragmentManager fm = getSupportFragmentManager();
 //        fm.beginTransaction().replace(R.id.frame, fragment).commit();
-//        fragment = new MonthFragment();
-//        ((MonthFragment) fragment).setEvents(null);
-//        FragmentManager fm = getSupportFragmentManager();
-//        fm.beginTransaction().replace(R.id.frame, fragment).commit();
+        fragment = new MonthFragment();
+        ((MonthFragment) fragment).setEvents(null);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.frame, fragment).commit();
         //currentMenuItemId = id;
     }
 

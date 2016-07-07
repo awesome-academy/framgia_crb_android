@@ -1,12 +1,14 @@
 package framgia.vn.framgiacrb.ui;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -21,14 +23,15 @@ import framgia.vn.framgiacrb.R;
  * Created by lucky_luke on 7/6/2016.
  */
 public class MonthView extends View {
-    private static final int sMarginTop = 32;
-    private static final int sMarginBottom = 32;
-    private static final int sMarginLeft = 36;
-    private static final int sMarginRight = 36;
-    private static final int sMarginDateOfWeek = 4;
-    private static final int sMarginText = 24;
-    private static final int radius_highlight = 18;
-    private static final int MAX_X = 6;
+    private final Resources r = getResources();
+    private final float sMarginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, r.getDisplayMetrics());
+    private final float sMarginBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, r.getDisplayMetrics());;
+    private final float sMarginLeft = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, r.getDisplayMetrics());;
+    private final float sMarginRight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, r.getDisplayMetrics());;
+    private final float sMarginDateOfWeek = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, r.getDisplayMetrics());;
+    private final float sMarginText = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, r.getDisplayMetrics());;
+    private final float radius_highlight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, r.getDisplayMetrics());;
+    private final int MAX_X = 6;
     private static final int MAX_Y = 5;
     private static final int HIGHLIGHT_ALPHA = 50;
     private static final int DAYS_COUNT = 42;
@@ -64,7 +67,7 @@ public class MonthView extends View {
     }
 
     private void getRect(int x, int y, Rect rect) {
-        rect.set((int) (x * mWidth) + sMarginLeft, (int) (y * mHeight) + sMarginTop, (int) (x * mWidth + mWidth + sMarginLeft),
+        rect.set((int) (x * mWidth + sMarginLeft), (int) (y * mHeight + sMarginTop), (int) (x * mWidth + mWidth + sMarginLeft),
                 (int) (y * mHeight + mHeight + sMarginTop));
     }
 
@@ -111,6 +114,7 @@ public class MonthView extends View {
                     // Centering in Y: measure ascent/descent first
                     float y = mHeight * i + sMarginTop + sMarginText + (fm.ascent + fm.descent) / 2;
                     dayOfMonth.setColor(getResources().getColor(R.color.colorPrimary));
+                    dayOfMonth.setStyle(Paint.Style.FILL);
                     canvas.drawCircle(x, y, radius_highlight, dayOfMonth);
                     dayOfMonth.setColor(Color.WHITE);
                 }
