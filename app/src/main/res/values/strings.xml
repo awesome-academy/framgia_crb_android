@@ -32,16 +32,16 @@
     <string name="thu">THU</string>
     <string name="fri">FRI</string>
     <string name="sat">SAT</string>
-    <string name="start">START</string>
+    <string name="start">Start</string>
     <string name="date">04/07/2016</string>
     <string name="time_start">02:00 AM</string>
-    <string name="finish">FINISH</string>
+    <string name="finish">Finish</string>
     <string name="time_finish">02:30 AM</string>
     <string name="no_repeat">No Repeat</string>
     <string name="invite">Invite</string>
     <string name="desciption">Desciption</string>
     <string name="event_name">lethuy123@framgia.com</string>
-    <string name="all_day">ALL DAY</string>
+    <string name="all_day">All day</string>
     <string name="select_date_start">Chọn ngày bắt đầu</string>
     <string name="select_date_finish">Chọn ngày kết thúc</string>
     <string name="select_time_start">Chọn giờ bắt đầu</string>
@@ -60,7 +60,7 @@
     <string name="message_delete">Ban co muon xoa su kien nay</string>
     <string name="edit_event">Edit event</string>
     <string name="event_edit">Hop team Android</string>
-    <string name="calendar_name">CALENDAR</string>
+    <string name="calendar_name">Calendar</string>
     <string name="today_string">To day</string>
     <string name="home">Home</string>
 
