@@ -33,7 +33,6 @@ import org.xdty.preference.colorpicker.ColorPickerSwatch;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.fragment.CalendarFragment;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
@@ -41,11 +40,10 @@ import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 
-
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
-    private static final int ANIMATION_DURATION = 100;
+    private static final int ANIMATION_DURATION = 50;
     private static final int NUMBER_COLUMN = 5;
 
     private DrawerLayout mDrawerLayout;
@@ -115,11 +113,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 uncheckAllMenuItems(mNavigationView);
                 if (item.getItemId() != R.id.color && item.getItemId() != R.id.setting) {
-                    if (item.getItemId() != currentMenuItemId || item.getItemId() == R.id.color) {
+                    if (item.getItemId() != currentMenuItemId) {
                         updateDisplayView(item.getItemId());
                     }
                     currentMenuItemId = item.getItemId();
                 } else {
+                    if (item.getItemId() == R.id.color) updateDisplayView(item.getItemId());
                     item.setChecked(false);
                 }
                 reCheckMenuItem(mNavigationView);
@@ -186,6 +185,9 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.frame, fragment).commit();
         }
+//        FragmentManager fm = getSupportFragmentManager();
+//        fm.beginTransaction().replace(R.id.frame, fragment).commit();
+        //currentMenuItemId = id;
     }
 
     private void uncheckAllMenuItems(NavigationView navigationView) {
