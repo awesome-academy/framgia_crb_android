@@ -43,6 +43,20 @@ public class MonthView extends View {
     private ArrayList<Date> cells;
     private Calendar mCurrentCalendar = Calendar.getInstance();
 
+    /**
+     * Max allowed duration for a "click", in milliseconds.
+     */
+    private static final int MAX_CLICK_DURATION = 1000;
+
+    /**
+     * Max allowed distance to move during a "click", in DP.
+     */
+    private final float MAX_CLICK_DISTANCE = 15;
+
+    private long mPressStartTime;
+    private float mPressedX;
+    private float mPressedY;
+
     public MonthView(Context context) {
         super(context);
         updateCalendar();
@@ -131,12 +145,36 @@ public class MonthView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() != MotionEvent.ACTION_DOWN) return super.onTouchEvent(event);
-        int x = (int)((event.getX() - sMarginLeft) / mWidth);
-        int y = (int)((event.getY() - sMarginTop) / mHeight);
-        select(x, y);
-        Toast.makeText(getContext(), x + " " + y, Toast.LENGTH_SHORT).show();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                mPressStartTime = System.currentTimeMillis();
+                mPressedX = event.getX();
+                mPressedY = event.getY();
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                long pressDuration = System.currentTimeMillis() - mPressStartTime;
+                if (pressDuration < MAX_CLICK_DURATION && distance(mPressedX, mPressedY, event.getX(), event.getY()) < MAX_CLICK_DISTANCE) {
+                    // Click event has occurred
+                    int x = (int)((event.getX() - sMarginLeft) / mWidth);
+                    int y = (int)((event.getY() - sMarginTop) / mHeight);
+                    select(x, y);
+                    Toast.makeText(getContext(), x + "Click " + y, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         return true;
+    }
+
+    private float distance(float x1, float y1, float x2, float y2) {
+        float dx = x1 - x2;
+        float dy = y1 - y2;
+        float distanceInPx = (float) Math.sqrt(dx * dx + dy * dy);
+        return pxToDp(distanceInPx);
+    }
+
+    private float pxToDp(float px) {
+        return px / getResources().getDisplayMetrics().density;
     }
 
     private void select(int x, int y) {

@@ -40,33 +40,17 @@
                 android:id="@+id/date_picker_button"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <View
-                    android:id="@+id/centerInParent"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_centerVertical="true" />
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/centerInParent"
-                    android:layout_centerVertical="true"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                    android:textColor="@android:color/white" />
+                android:clickable="true">
 
                 <TextView
                     android:id="@+id/date_picker_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/centerInParent"
+                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:text="dddddddd"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"

@@ -46,6 +46,7 @@
                 android:layout_below="@+id/title_time"
                 android:layout_alignLeft="@+id/title_time"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="Bat dau: 8/7/2016 8am"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:gravity="center_vertical" />
             <TextView
@@ -56,6 +57,7 @@
                 android:layout_alignLeft="@+id/batdau_textview"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="Ket thuc: 8/7/2016 9am"
                 android:gravity="center_vertical" />
         </RelativeLayout>
 

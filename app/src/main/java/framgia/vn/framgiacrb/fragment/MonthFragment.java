@@ -1,5 +1,6 @@
 package framgia.vn.framgiacrb.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -44,6 +45,7 @@ public class MonthFragment extends Fragment{
             @Override
             public void onPageSelected(int position) {
                 Toast.makeText(getActivity(), (position / 12) + 1970 + " " + (position % 12 + 1), Toast.LENGTH_SHORT).show();
+                mViewPager.setCurrentItem(position);
             }
 
             @Override
@@ -52,5 +54,10 @@ public class MonthFragment extends Fragment{
             }
         });
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 }
