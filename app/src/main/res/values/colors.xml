@@ -26,4 +26,8 @@
     <color name="background_card">#fff</color>
     <color name="color_text">#797979</color>
     <color name="selected">#868686</color>
+    
+    <!--week screen-->
+    <color name="day_back_gound">#05000000</color>
+    <color name="today_background">#1848adff</color>
 </resources>

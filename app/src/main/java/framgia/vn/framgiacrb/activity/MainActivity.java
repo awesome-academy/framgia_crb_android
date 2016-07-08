@@ -1,8 +1,7 @@
-package framgia.vn.framgiacrb;
+package framgia.vn.framgiacrb.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -10,11 +9,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -34,12 +31,12 @@ import org.xdty.preference.colorpicker.ColorPickerDialog;
 import org.xdty.preference.colorpicker.ColorPickerSwatch;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import framgia.vn.framgiacrb.activity.EditActivity;
+import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.fragment.CalendarFragment;
+import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
@@ -83,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         initUi();
         assignHandler();
-        updateDisplayView(R.id.day);
-        currentMenuItemId = R.id.day;
+        updateDisplayView(R.id.home);
+        currentMenuItemId = R.id.home;
     } // end of method onCreate
 
     private void initUi() {
@@ -151,19 +148,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initFragmentListEvents() {
-        Fragment fragment = new EventsFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-    }
-
     private void updateDisplayView(int id) {
-        Fragment fragment;
+        Fragment fragment = null;
         switch (id) {
-            case R.id.day:
-                initFragmentListEvents();
+            case R.id.home:
+                fragment = new EventsFragment();
+                Toast.makeText(this, "home", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.week:
+                fragment = new EventFollowWeekFragment();
+                Toast.makeText(this, "week", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.month:
+                fragment = new MonthFragment();
+                Toast.makeText(this, "month", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.color:
                 int[] mColors = getResources().getIntArray(R.array.default_rainbow);
@@ -182,14 +180,12 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show(getFragmentManager(), "color_dialog_test");
                 break;
             default:
+                fragment = new EventsFragment();
         }
-//        FragmentManager fm = getSupportFragmentManager();
-//        fm.beginTransaction().replace(R.id.frame, fragment).commit();
-        fragment = new MonthFragment();
-        ((MonthFragment) fragment).setEvents(null);
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.frame, fragment).commit();
-        //currentMenuItemId = id;
+        if (fragment != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.frame, fragment).commit();
+        }
     }
 
     private void uncheckAllMenuItems(NavigationView navigationView) {
@@ -258,6 +254,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.today:
+                // TODO: 08/07/2016
+                break;
+            case R.id.search:
+                startActivity(new Intent(this, SearchActivity.class));
+                break;
+            case R.id.action_settings:
+                // TODO: 08/07/2016
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

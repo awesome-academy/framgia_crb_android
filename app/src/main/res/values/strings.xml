@@ -62,6 +62,8 @@
     <string name="event_edit">Hop team Android</string>
     <string name="calendar_name">CALENDAR</string>
     <string name="today_string">To day</string>
+    <string name="home">Home</string>
+
     <string-array name="day_of_week">
         <item>T2</item>
         <item>T3</item>
