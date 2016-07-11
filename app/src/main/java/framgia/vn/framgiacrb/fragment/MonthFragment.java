@@ -1,7 +1,7 @@
 package framgia.vn.framgiacrb.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -57,7 +57,15 @@ public class MonthFragment extends Fragment{
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Calendar calendar = Calendar.getInstance();
+        //mViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthPagerAdapter.MIN_YEAR)*12 + calendar.get(Calendar.MONTH));
     }
 }

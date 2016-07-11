@@ -43,7 +43,12 @@ public class ItemMonthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_month_view, container, false);
         mMonthView = (MonthView) view.findViewById(R.id.month_view);
-        mMonthView.setTime(mCalendar);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMonthView.setTime(mCalendar);
     }
 }
