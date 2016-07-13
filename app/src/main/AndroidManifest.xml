@@ -17,9 +17,8 @@
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".activity.SearchActivity">
-
-        </activity>
+        <activity android:name=".activity.SearchActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
