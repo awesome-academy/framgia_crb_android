@@ -188,7 +188,6 @@ public class MonthView extends View {
     public void setTime(Calendar calendar) {
         this.mCurrentCalendar = calendar;
         updateCalendar();
-        this.invalidate();
     }
 
     public void updateCalendar() {
@@ -201,5 +200,6 @@ public class MonthView extends View {
             cells.add(currentDate.getTime());
             currentDate.add(Calendar.DAY_OF_MONTH, 1);
         }
+        this.invalidate();
     }
 }

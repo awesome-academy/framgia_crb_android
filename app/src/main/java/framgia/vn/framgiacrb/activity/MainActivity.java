@@ -43,7 +43,7 @@ import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
-    private static final int ANIMATION_DURATION = 50;
+    private static final int ANIMATION_DURATION = 300;
     private static final int NUMBER_COLUMN = 5;
 
     private DrawerLayout mDrawerLayout;
@@ -185,9 +185,6 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.frame, fragment).commit();
         }
-//        FragmentManager fm = getSupportFragmentManager();
-//        fm.beginTransaction().replace(R.id.frame, fragment).commit();
-        //currentMenuItemId = id;
     }
 
     private void uncheckAllMenuItems(NavigationView navigationView) {

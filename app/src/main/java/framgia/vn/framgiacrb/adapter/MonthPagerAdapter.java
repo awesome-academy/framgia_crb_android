@@ -2,7 +2,7 @@ package framgia.vn.framgiacrb.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -12,7 +12,7 @@ import framgia.vn.framgiacrb.fragment.ItemMonthFragment;
 /**
  * Created by lucky_luke on 7/6/2016.
  */
-public class MonthPagerAdapter extends FragmentPagerAdapter{
+public class MonthPagerAdapter extends FragmentStatePagerAdapter {
     public static final int MIN_YEAR = 1970;
     public static final int MAX_YEAR = 2050;
 
@@ -38,8 +38,8 @@ public class MonthPagerAdapter extends FragmentPagerAdapter{
     }
 
     // Returns the page title for the top indicator
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return "Page " + position;
-    }
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        return "Page " + position;
+//    }
 }
