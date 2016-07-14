@@ -86,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
         mDatePickerTextView = (TextView) findViewById(R.id.date_picker_text_view);
         mArrow = (ImageView) findViewById(R.id.date_picker_arrow);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                isExpanded = (verticalOffset == 0);
+            }
+        });
         mCustomMonthCalendarView = (CustomMonthCalendarView) findViewById(R.id.calendar_view);
         mCustomMonthCalendarView.setAdapter(getSupportFragmentManager());
         mDatePickerButton = (RelativeLayout) findViewById(R.id.date_picker_button);

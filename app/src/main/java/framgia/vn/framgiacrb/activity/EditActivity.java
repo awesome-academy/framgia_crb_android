@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,7 +29,7 @@ import framgia.vn.framgiacrb.object.EventInWeek;
 /**
  * Created by lethuy on 06/07/2016.
  */
-public class EditActivity extends Activity{
+public class EditActivity extends Activity implements View.OnTouchListener{
     private ImageButton mImageButtonBack, mImageButtonAlarm, mImageButtonRepeat, mIamgeButtonSave;
     private EditText mEdtEvent, mEdtDesciption;
     private Switch mSwitchAlarm;
@@ -40,6 +43,11 @@ public class EditActivity extends Activity{
     private Calendar mCal;
     private Date mDateFinish, mHourFinish;
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +59,8 @@ public class EditActivity extends Activity{
         mTxtTimeStart = (TextView) findViewById(R.id.txt_timeStart);
         mTxtTimeFinish = (TextView) findViewById(R.id.txt_TimeFinish);
         mTxtRepeat = (TextView) findViewById(R.id.txt_Repeat);
+        CardView cardView = (CardView) findViewById(R.id.card_view2);
+        cardView.setOnTouchListener(this);
 
         mTxtEditEvent = (TextView) findViewById(R.id.txt_NewEvent);
 
@@ -101,6 +111,14 @@ public class EditActivity extends Activity{
         mTxtTimeStart.setOnClickListener(new MyButtonEvent());
         mTxtDateFinish.setOnClickListener(new MyButtonEvent());
         mTxtTimeFinish.setOnClickListener(new MyButtonEvent());
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (!(v instanceof EditText)) {
+            hideSoftKeyboard(EditActivity.this);
+        }
+        return false;
     }
 
     private class MyButtonEvent implements View.OnClickListener {

@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,12 +29,13 @@ import framgia.vn.framgiacrb.object.EventInWeek;
 /**
  * Created by lethuy on 05/07/2016.
  */
-public class CreateEventActvity extends Activity {
+public class CreateEventActvity extends Activity implements View.OnTouchListener{
 
     private ImageButton mImageButtonBack, mImageButtonAlarm, mImageButtonRepeat, mIamgeButtonSave;
     private EditText mEdtEvent, mEdtDesciption;
     private Switch mSwitchAlarm;
     private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat, mTxtNewEvent;
+    private TextView mTxtAllDay, mTxtAllDayStart, mTxtAllDayFinish;
     private Spinner mSpinerCalendar;
 
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
@@ -40,6 +44,11 @@ public class CreateEventActvity extends Activity {
     private Date mDateFinish, mHourFinish;
 
     ArrayList<String> lstData;
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,12 @@ public class CreateEventActvity extends Activity {
         mTxtTimeStart = (TextView) findViewById(R.id.txt_timeStart);
         mTxtTimeFinish = (TextView) findViewById(R.id.txt_TimeFinish);
         mTxtNewEvent = (TextView) findViewById(R.id.txt_NewEvent);
+
+        mTxtAllDay = (TextView) findViewById(R.id.txt_AllDay);
+        mTxtAllDayStart = (TextView) findViewById(R.id.txt_dateStart);
+        mTxtAllDayFinish = (TextView) findViewById(R.id.txt_dateFinish);
+        CardView cardView = (CardView) findViewById(R.id.card_view2);
+        cardView.setOnTouchListener(this);
 
         mTxtNewEvent.setText(R.string.new_event);
 
@@ -101,6 +116,14 @@ public class CreateEventActvity extends Activity {
         mTxtTimeStart.setOnClickListener(new MyButtonEvent());
         mTxtDateFinish.setOnClickListener(new MyButtonEvent());
         mTxtTimeFinish.setOnClickListener(new MyButtonEvent());
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (!(v instanceof EditText)) {
+            hideSoftKeyboard(CreateEventActvity.this);
+        }
+        return false;
     }
 
     private class MyButtonEvent implements View.OnClickListener {
