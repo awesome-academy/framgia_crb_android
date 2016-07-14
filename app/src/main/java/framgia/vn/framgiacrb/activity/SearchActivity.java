@@ -1,13 +1,13 @@
 package framgia.vn.framgiacrb.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,58 +19,66 @@ import framgia.vn.framgiacrb.data.Data;
 /**
  * Created by lethuy on 04/07/2016.
  */
-public class SearchActivity extends Activity implements OnClickListener{
-    private EditText mEditSearch;
-    private ImageButton mImageButtonBack, mImageButtonSearch;
+public class SearchActivity extends AppCompatActivity {
+    private Toolbar mToolbar;
     private RecyclerView mRecycler;
-
+    private SearchView mSearchView;
+    private SearchView.OnQueryTextListener mSearchViewListener;
     private List<Data> listData = new ArrayList<>();
     private CustomRecyclerAdapter adapter;
-
     private RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
-        mEditSearch = (EditText) findViewById(R.id.edit_Search);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecycler = (RecyclerView) findViewById(R.id.recycler);
-
-        mRecycler.setHasFixedSize(true);
-
         layoutManager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(layoutManager);
-
         adapter = new CustomRecyclerAdapter(listData);
         mRecycler.setAdapter(adapter);
-
-        mImageButtonSearch = (ImageButton) findViewById(R.id.btn_search);
-        mImageButtonSearch.setOnClickListener(this);
-
-        mImageButtonBack = (ImageButton) findViewById(R.id.btn_back);
-        mImageButtonBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
     }
 
-    public void addItem() {
-
+    public void addItem(String textSearch) {
         // get data.
-        Data dataToAdd = new Data(mEditSearch.getText().toString());
-
+        Data dataToAdd = new Data(textSearch);
         listData.add(dataToAdd);
-
         // Update adapter.
-        adapter = new CustomRecyclerAdapter(listData);
-        mRecycler.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onClick(View v) {
-        addItem();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search)
+            .getActionView();
+        mSearchView.onActionViewExpanded();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                addItem(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                addItem(newText);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
