@@ -38,7 +38,7 @@
     <dimen name="height_linear">200dp</dimen>
     <dimen name="layout_width_textview">130dp</dimen>
     <dimen name="margin_cardview">5dp</dimen>
-    <dimen name="cardCornerRadius_cardview">4dp</dimen>
+    <dimen name="cardCornerRadius_cardview">2dp</dimen>
     <dimen name="layout_margin_2dp">2dp</dimen>
     <dimen name="layout_margin_5dp">5dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
