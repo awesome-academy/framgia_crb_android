@@ -52,7 +52,7 @@
     <dimen name="padding_normal">8dp</dimen>
     <dimen name="padding_lager">16dp</dimen>
     <dimen name="item_event_min_height">60dp</dimen>
-    <dimen name="item_event_margin_left">72dp</dimen>
+    <dimen name="item_event_margin_left">64dp</dimen>
 
     <dimen name="width_imgButton">16dp</dimen>
     <dimen name="height_imgButton">16dp</dimen>

@@ -78,12 +78,22 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
+        Drawable drawable;
         if (dX > 0) {
-            Drawable drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp, null);
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp, null);
+            } else {
+                drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp);
+            }
             Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
             c.drawBitmap(bitmap,(float) itemView.getWidth()/3, (float) itemView.getTop(), null);
         } else {
-            Drawable drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp, null);
+            if (Build.VERSION.SDK_INT >= 21) {
+                drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp, null);
+            } else {
+                drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp);
+            }
             Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
             c.drawBitmap(bitmap,(float) 2 * itemView.getWidth()/3, (float) itemView.getTop(), null);
         }
