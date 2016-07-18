@@ -26,7 +26,7 @@ public class MonthView extends View {
     private final Resources r = getResources();
     private final float sMarginTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, r.getDisplayMetrics());
     private final float sMarginBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, r.getDisplayMetrics());;
-    private final float sMarginLeft = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, r.getDisplayMetrics());;
+    private final float sMarginLeft = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, r.getDisplayMetrics());;
     private final float sMarginRight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, r.getDisplayMetrics());;
     private final float sMarginDateOfWeek = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, r.getDisplayMetrics());;
     private final float sMarginText = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, r.getDisplayMetrics());;
@@ -37,6 +37,7 @@ public class MonthView extends View {
     private static final int DAYS_COUNT = 42;
     private float mWidth;
     private float mHeight;
+    private float CENTER_X;
     private int selX;     // X index of selection
     private int selY;     // Y index of selection
     private final Rect selRect = new Rect();
@@ -76,6 +77,7 @@ public class MonthView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mWidth = (w - sMarginLeft - sMarginRight) / 7.0f;
         mHeight = (h - sMarginTop - sMarginBottom) / 6.0f;
+        CENTER_X = mWidth / 2;
         getRect(selX, selY, selRect);
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -97,12 +99,13 @@ public class MonthView extends View {
 
         Paint grey = new Paint();
         grey.setColor(getResources().getColor(R.color.color_text));
-        grey.setTextSize(mHeight * 0.15f);
+        grey.setStyle(Paint.Style.FILL);
+        grey.setTextSize(mHeight * 0.2f);
         grey.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         String[] day_of_week = getResources().getStringArray(R.array.day_of_week);
         // Draw text day of week
         for (int j = 0; j < 7; j++) {
-            canvas.drawText(day_of_week[j], j * mWidth + sMarginLeft, sMarginTop - sMarginDateOfWeek, grey);
+            canvas.drawText(day_of_week[j], j * mWidth + sMarginLeft + CENTER_X - grey.measureText(String.valueOf(day_of_week[j])) / 2, sMarginTop - sMarginDateOfWeek, grey);
         }
 
         // Draw day of month
@@ -116,7 +119,8 @@ public class MonthView extends View {
                 int year = date.getYear();
                 Paint dayOfMonth = new Paint();
                 dayOfMonth.setColor(Color.BLACK);
-                dayOfMonth.setTextSize(mHeight * 0.12f);
+                dayOfMonth.setAntiAlias(true);
+                dayOfMonth.setTextSize(mHeight * 0.15f);
                 dayOfMonth.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 if (date.getMonth() != today.getMonth() || date.getYear() != today.getYear()) {
                     dayOfMonth.setColor(getResources().getColor(R.color.greyed_out));
@@ -124,7 +128,7 @@ public class MonthView extends View {
                     // Draw the number in the center of the tile
                     Paint.FontMetrics fm = dayOfMonth.getFontMetrics();
                     // Centering in X: use alignment (and X at midpoint)
-                    float x = mWidth * j + sMarginLeft + dayOfMonth.measureText(String.valueOf(date.getDate())) / 2;
+                    float x = mWidth * j + sMarginLeft  + CENTER_X;
                     // Centering in Y: measure ascent/descent first
                     float y = mHeight * i + sMarginTop + sMarginText + (fm.ascent + fm.descent) / 2;
                     dayOfMonth.setColor(getResources().getColor(R.color.colorPrimary));
@@ -132,7 +136,7 @@ public class MonthView extends View {
                     canvas.drawCircle(x, y, radius_highlight, dayOfMonth);
                     dayOfMonth.setColor(Color.WHITE);
                 }
-                canvas.drawText(String.valueOf(date.getDate()), j * mWidth + sMarginLeft, i * mHeight + sMarginTop + sMarginText, dayOfMonth);
+                canvas.drawText(String.valueOf(date.getDate()), j * mWidth + sMarginLeft + CENTER_X - dayOfMonth.measureText(String.valueOf(date.getDate())) / 2, i * mHeight + sMarginTop + sMarginText, dayOfMonth);
             }
         }
 
