@@ -39,6 +39,7 @@ import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
+import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         assignHandler();
         updateDisplayView(R.id.home);
         currentMenuItemId = R.id.home;
+        TimeUtils.generateRangeDate();
     } // end of method onCreate
 
     private void initUi() {
