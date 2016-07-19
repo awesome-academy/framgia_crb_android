@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/thongbao"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_or" />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/linear_02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="left|center"
+            android:paddingLeft="@dimen/layout_height">
+
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_margin="@dimen/padding_left_linear"
+                android:text="@string/no_repeat"
+                android:textSize="@dimen/text_size_or" />
+
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_cardview"
+                android:text="@string/fiftyminutes"
+                android:textSize="@dimen/text_size_or" />
+
+            <RadioButton
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_cardview"
+                android:text="@string/thirtyminutes"
+                android:textSize="@dimen/text_size_or" />
+
+            <RadioButton
+                android:id="@+id/radio4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_cardview"
+                android:text="@string/onehours"
+                android:textSize="@dimen/text_size_or" />
+
+            <TextView
+                android:id="@+id/txtOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_cardview"
+                android:text="@string/option"
+                android:paddingLeft="@dimen/padding_attendee_option"
+                android:textSize="@dimen/text_size_or" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+</LinearLayout>

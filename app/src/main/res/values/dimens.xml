@@ -45,6 +45,7 @@
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_header">22sp</dimen>
     <dimen name="text_size_normal">18sp</dimen>
+    <dimen name="padding_attendee_option">33dp</dimen>
 
     <!--home screen-->
     <dimen name="item_month_height">150dp</dimen>

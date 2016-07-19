@@ -38,7 +38,7 @@
     <string name="finish">Finish</string>
     <string name="time_finish">02:30 AM</string>
     <string name="no_repeat">No Repeat</string>
-    <string name="invite">Invite</string>
+    <string name="invite">Attendee</string>
     <string name="desciption">Desciption</string>
     <string name="event_name">lethuy123@framgia.com</string>
     <string name="all_day">All day</string>
@@ -77,4 +77,16 @@
     <string name="delete">Are you sure want to delete?</string>
     <string name="yes">Yes</string>
     <string name="action_search">Search</string>
+
+    <string name="message">MESSAGE</string>
+    <string name="thongbao">Notification</string>
+    <string name="fiftyminutes">15 minutes</string>
+    <string name="thirtyminutes">30 minutes</string>
+    <string name="onehours">1 hours</string>
+    <string name="option">Option</string>
+    <string name="minutes">Minute</string>
+    <string name="hour">Hour</string>
+    <string name="via_email">Via Email</string>
+    <string name="via_notification">Via Notification</string>
+    <string name="unable">Không thể đặt thời gian kết thúc sự kiện trước thời gian bắt đầu.</string>
 </resources>
