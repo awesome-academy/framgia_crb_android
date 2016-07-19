@@ -10,10 +10,10 @@
             <item
                 android:id="@+id/week"
                 android:title="@string/week"
-                android:icon="@drawable/ic_view_week" />
+                android:icon="@drawable/ic_view_week"/>
             <item
-                android:id="@+id/month"
-                android:title="@string/month"
+                android:id="@+id/itemMonth"
+                android:title="@string/itemMonth"
                 android:icon="@drawable/ic_view_module_black_24dp" />
         </menu>
     </item>

@@ -2,15 +2,17 @@ package framgia.vn.framgiacrb.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.fragment.item.Date;
-import framgia.vn.framgiacrb.fragment.item.Month;
+import framgia.vn.framgiacrb.fragment.item.ItemDate;
+import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 
 /**
  * Created by nghicv on 04/07/2016.
@@ -39,9 +41,9 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         Object object = mDatas.get(position);
-        if(object instanceof Month)
+        if(object instanceof ItemMonth)
             return VIEW_TYPE_MONTH;
-        if (object instanceof Date)
+        if (object instanceof ItemDate)
             return VIEW_TYPE_DATE;
 
         return VIEW_TYPE_EVENT;
@@ -72,7 +74,22 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Object object = mDatas.get(position);
+        if (object instanceof ItemMonth) {
+            ItemMonth itemMonth = (ItemMonth) object;
+            String text = "Thang " + itemMonth.getMonth() + " Nam " + itemMonth.getYear();
+            MonthViewHolder monthViewHolder = (MonthViewHolder) holder;
+            monthViewHolder.tvMonth.setText(text);
+        } else if (object instanceof ItemDate) {
+            ItemDate date = (ItemDate) object;
+            String dayOfMonth = (String) DateFormat.format("dd", date.getDate());
+            String dayOfWeek = (String) DateFormat.format("EEE", date.getDate());
+            DateViewHolder dateViewHolder = (DateViewHolder) holder;
+            dateViewHolder.tvDate.setText(dayOfMonth);
+            dateViewHolder.tvDay.setText(dayOfWeek);
+        } else {
 
+        }
     }
 
     @Override
@@ -94,16 +111,22 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class MonthViewHolder extends RecyclerView.ViewHolder {
-
+        TextView tvMonth;
         public MonthViewHolder(View itemView) {
             super(itemView);
+            tvMonth = (TextView) itemView.findViewById(R.id.tv_month);
         }
     }
 
     class DateViewHolder extends RecyclerView.ViewHolder {
 
+        TextView tvDate;
+        TextView tvDay;
+
         public DateViewHolder(View itemView) {
             super(itemView);
+            tvDate = (TextView) itemView.findViewById(R.id.tv_date);
+            tvDay = (TextView) itemView.findViewById(R.id.tv_day);
         }
     }
 

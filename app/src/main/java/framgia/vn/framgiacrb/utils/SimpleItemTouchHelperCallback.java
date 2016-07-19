@@ -81,14 +81,13 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         Paint p = new Paint();
         Drawable drawable;
         if (dX > 0) {
-
             if (Build.VERSION.SDK_INT >= 21) {
                 drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp, null);
             } else {
                 drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp);
             }
             Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-            c.drawBitmap(bitmap,(float) itemView.getWidth()/3, (float) itemView.getTop(), null);
+            c.drawBitmap(bitmap,(float) itemView.getWidth()/2, (float) itemView.getTop(), null);
         } else {
             if (Build.VERSION.SDK_INT >= 21) {
                 drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp, null);
@@ -96,7 +95,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
                 drawable = mAdapter.getContext().getResources().getDrawable(R.drawable.ic_delete_grey600_24dp);
             }
             Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-            c.drawBitmap(bitmap,(float) 2 * itemView.getWidth()/3, (float) itemView.getTop(), null);
+            c.drawBitmap(bitmap,(float) itemView.getWidth()/2, (float) itemView.getTop(), null);
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
