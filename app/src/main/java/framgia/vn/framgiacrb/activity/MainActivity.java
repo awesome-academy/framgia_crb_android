@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,12 +34,15 @@ import org.xdty.preference.colorpicker.ColorPickerSwatch;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.fragment.CalendarFragment;
+import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
+import framgia.vn.framgiacrb.ui.MonthView;
+import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private dayClicked mDayClicked;
     private RelativeLayout mDatePickerButton;
     private FrameLayout mFrameLayout;
+    private WrapContentHeightViewPager mCalendarViewPager;
+    private MonthToolbarPagerAdapter mAdapter;
 
     int currentMenuItemId;
     boolean isExpanded = false;
@@ -65,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private int mSelectedColor;
+    private int mPreviousSelected;
+    private int mPreviousSelectedMonth;
+    private int mPreviousSelectedYear;
+    private int mCurrentPosition;
+    private int X;
+    private int Y;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
 
@@ -94,10 +106,45 @@ public class MainActivity extends AppCompatActivity {
                 isExpanded = (verticalOffset == 0);
             }
         });
-        mCustomMonthCalendarView = (CustomMonthCalendarView) findViewById(R.id.calendar_view);
-        mCustomMonthCalendarView.setAdapter(getSupportFragmentManager());
+//        mCustomMonthCalendarView = (CustomMonthCalendarView) findViewById(R.id.calendar_view);
+//        mCustomMonthCalendarView.setAdapter(getSupportFragmentManager());
         mDatePickerButton = (RelativeLayout) findViewById(R.id.date_picker_button);
+//        mCustomMonthCalendarView = (CustomMonthCalendarView) findViewById(R.id.calendar_view);
+//        mCustomMonthCalendarView.setAdapter(getSupportFragmentManager());
+        mCalendarViewPager = (WrapContentHeightViewPager) findViewById(R.id.calendar_view_pager);
+        mAdapter = new MonthToolbarPagerAdapter(this);
+        mCalendarViewPager.setAdapter(mAdapter);
         Calendar calendar = Calendar.getInstance();
+        mCalendarViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH));
+        mPreviousSelected = (calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH);
+        mCurrentPosition = mPreviousSelected;
+        mPreviousSelectedMonth = calendar.get(Calendar.MONTH);
+        mPreviousSelectedYear = calendar.get(Calendar.YEAR);
+        mCalendarViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == mPreviousSelected) {
+                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
+                    mv.setSelected(false);
+                } else if (position == mCurrentPosition){
+                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month"+mCurrentPosition);
+                    mv.setSelect(X, Y);
+                    mv.setSelected(true);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mDatePickerButton = (RelativeLayout) findViewById(R.id.date_picker_button);
         setSubTitle(dateFormat.format(calendar.getTime()));
         mFrameLayout = (FrameLayout) findViewById(R.id.frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -312,11 +359,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setCalendarCheck(int year, int month) {
+        if ((year == mPreviousSelectedYear && month != mPreviousSelectedMonth) ||
+                (year != mPreviousSelectedYear)) {
+            mPreviousSelected = mCurrentPosition;
+            mCurrentPosition = (year - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + month;
+            mPreviousSelectedYear = year;
+            mPreviousSelectedMonth = month;
+        }
+    }
+
     private class dayClicked extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_BROADCAST)) {
-                setSubTitle(intent.getStringExtra(CalendarFragment.TITLE));
+                setSubTitle(intent.getStringExtra(MonthView.TITLE));
+                Calendar calendar = Calendar.getInstance();
+                int year = intent.getIntExtra(MonthView.YEAR, calendar.get(Calendar.YEAR));
+                int month = intent.getIntExtra(MonthView.MONTH, calendar.get(Calendar.MONTH));
+                X = intent.getIntExtra(MonthView.X_AXIS, 0);
+                Y = intent.getIntExtra(MonthView.Y_AXIS, 0);
+                setCalendarCheck(year, month);
                 closeToolbar();
             }
         }

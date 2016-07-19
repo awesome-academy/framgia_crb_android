@@ -65,13 +65,13 @@
     <string name="home">Home</string>
 
     <string-array name="day_of_week">
+        <item>SUN</item>
         <item>MON</item>
         <item>TUE</item>
         <item>WED</item>
         <item>THU</item>
         <item>FRI</item>
         <item>SAT</item>
-        <item>SUN</item>
     </string-array>
     <string name="question">Question</string>
     <string name="delete">Are you sure want to delete?</string>
