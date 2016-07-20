@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -17,13 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,14 +32,17 @@ import org.xdty.preference.colorpicker.ColorPickerDialog;
 import org.xdty.preference.colorpicker.ColorPickerSwatch;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
+import framgia.vn.framgiacrb.fragment.item.ItemLeftMenu;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
@@ -48,11 +51,17 @@ import framgia.vn.framgiacrb.utils.TimeUtils;
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
+    private static final String HOME = "Home";
+    private static final String WEEK = "Week";
+    private static final String MONTH = "Month";
+    private static final String COLOR = "Color";
     private static final int ANIMATION_DURATION = 300;
     private static final int NUMBER_COLUMN = 5;
 
     private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
+    private ListView mNavigationListView;
+    private ArrayList<ItemLeftMenu> mListMenu;
+    private ListMenuAdapter mListMenuAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private AppBarLayout mAppBarLayout;
     private CustomMonthCalendarView mCustomMonthCalendarView;
@@ -77,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private int mCurrentPosition;
     private int X;
     private int Y;
+    private int mCurrentMenuItemPosition;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
 
@@ -91,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         initUi();
         assignHandler();
-        updateDisplayView(R.id.home);
-        currentMenuItemId = R.id.home;
+        mCurrentMenuItemPosition = 1;
+        mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
+        updateDisplayView(mCurrentMenuItemPosition);
         TimeUtils.generateRangeDate();
     } // end of method onCreate
 
@@ -148,8 +159,36 @@ public class MainActivity extends AppCompatActivity {
         setSubTitle(dateFormat.format(calendar.getTime()));
         mFrameLayout = (FrameLayout) findViewById(R.id.frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationListView = (ListView) findViewById(R.id.navigation_view);
+        initMenu();
     } // end of method initUi()
+
+    private void initMenu() {
+        mListMenu = new ArrayList<>();
+        ItemLeftMenu header = new ItemLeftMenu();
+        header.setImageResource(R.drawable.profile);
+        header.setTitle("Lucky Luke");
+        ItemLeftMenu home = new ItemLeftMenu();
+        home.setImageResource(R.drawable.ic_home);
+        home.setTitle(HOME);
+        ItemLeftMenu week = new ItemLeftMenu();
+        week.setImageResource(R.drawable.ic_view_week);
+        week.setTitle(WEEK);
+        ItemLeftMenu month = new ItemLeftMenu();
+        month.setImageResource(R.drawable.ic_view_module_black_24dp);
+        month.setTitle(MONTH);
+        ItemLeftMenu color = new ItemLeftMenu();
+        color.setImageResource(R.drawable.ic_color_lens_black_24dp);
+        color.setTitle(COLOR);
+        mListMenu.add(header);
+        mListMenu.add(home);
+        mListMenu.add(week);
+        mListMenu.add(month);
+        mListMenu.add(color);
+        mListMenuAdapter = new ListMenuAdapter(this, mListMenu);
+        mNavigationListView.setAdapter(mListMenuAdapter);
+        //mNavigationListView
+    }
 
     @SuppressWarnings("deprecation")
     private void assignHandler() {
@@ -163,22 +202,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mNavigationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                uncheckAllMenuItems(mNavigationView);
-                if (item.getItemId() != R.id.color && item.getItemId() != R.id.setting) {
-                    if (item.getItemId() != currentMenuItemId) {
-                        updateDisplayView(item.getItemId());
-                    }
-                    currentMenuItemId = item.getItemId();
-                } else {
-                    if (item.getItemId() == R.id.color) updateDisplayView(item.getItemId());
-                    item.setChecked(false);
-                }
-                reCheckMenuItem(mNavigationView);
-                mDrawerLayout.closeDrawers();
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                updateDisplayView(position);
             }
         });
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close) {
@@ -192,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onDrawerClosed(drawerView);
             }
         };
+        mNavigationListView.setSelection(3);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -202,22 +230,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateDisplayView(int id) {
+    private void updateDisplayView(int position) {
+        ItemLeftMenu item = mListMenu.get(position);
         Fragment fragment = null;
-        switch (id) {
-            case R.id.home:
+        switch (item.getTitle()) {
+            case HOME:
                 fragment = new EventsFragment();
-                Toast.makeText(this, "home", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "home", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.week:
+            case WEEK:
                 fragment = new EventFollowWeekFragment();
-                Toast.makeText(this, "week", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "week", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.month:
+            case MONTH:
                 fragment = new MonthFragment();
-                Toast.makeText(this, "month", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "month", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.color:
+            case COLOR:
                 int[] mColors = getResources().getIntArray(R.array.default_rainbow);
                 final ColorPickerDialog dialog = ColorPickerDialog.newInstance(R.string.color_picker_default_title,
                         mColors,
@@ -233,46 +262,18 @@ public class MainActivity extends AppCompatActivity {
                 });
                 dialog.show(getFragmentManager(), "color_dialog_test");
                 break;
-            default:
-                fragment = new EventsFragment();
         }
         if (fragment != null) {
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.frame, fragment).commit();
         }
-    }
-
-    private void uncheckAllMenuItems(NavigationView navigationView) {
-        Menu menu = navigationView.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            if (item.hasSubMenu()) {
-                SubMenu subMenu = item.getSubMenu();
-                for (int j = 0; j < subMenu.size(); j++) {
-                    MenuItem subMenuItem = subMenu.getItem(j);
-                    subMenuItem.setChecked(false);
-                }
-            } else {
-                item.setChecked(false);
-            }
-        }
-    }
-
-    private void reCheckMenuItem(NavigationView navigationView) {
-        Menu menu = navigationView.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            if (item.hasSubMenu()) {
-                SubMenu subMenu = item.getSubMenu();
-                for (int j = 0; j < subMenu.size(); j++) {
-                    MenuItem subMenuItem = subMenu.getItem(j);
-                    if (subMenuItem.getItemId() == currentMenuItemId) subMenuItem.setChecked(true);
-                    else subMenuItem.setChecked(false);
-                }
-            } else {
-                if (item.getItemId() == currentMenuItemId) item.setChecked(true);
-                else item.setChecked(false);
-            }
+        if (position != 0) {
+            mDrawerLayout.closeDrawers();
+            mCurrentMenuItemPosition = position;
+        } else {
+            Toast.makeText(MainActivity.this, mCurrentMenuItemPosition+"", Toast.LENGTH_SHORT).show();
+            mNavigationListView.setItemChecked(position, false);
+            mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         }
     }
 
@@ -341,15 +342,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(CURRENT_MENU_ITEM, currentMenuItemId);
+        outState.putInt(CURRENT_MENU_ITEM, mCurrentMenuItemPosition);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        currentMenuItemId = savedInstanceState.getInt(CURRENT_MENU_ITEM, R.id.day);
-        reCheckMenuItem(mNavigationView);
-        updateDisplayView(currentMenuItemId);
+        mCurrentMenuItemPosition = savedInstanceState.getInt(CURRENT_MENU_ITEM, 1);
+        //reCheckMenuItem(mNavigationView);
+        updateDisplayView(mCurrentMenuItemPosition);
         super.onRestoreInstanceState(savedInstanceState);
     }
 
