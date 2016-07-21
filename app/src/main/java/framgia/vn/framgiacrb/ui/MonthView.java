@@ -178,7 +178,7 @@ public class MonthView extends View {
         grey.setColor(getResources().getColor(R.color.color_text));
         grey.setStyle(Paint.Style.FILL);
         if (isMatchParent) {
-            grey.setTextSize(mHeight * 0.12f);
+            grey.setTextSize((mWidth < mHeight) ? mHeight * 0.15f : mWidth * 0.15f);
         } else {
             grey.setTextSize(mHeight * 0.45f);
         }
@@ -203,7 +203,7 @@ public class MonthView extends View {
                 Paint dayOfMonth = new Paint();
                 dayOfMonth.setColor(Color.BLACK);
                 if (isMatchParent) {
-                    dayOfMonth.setTextSize(mHeight * 0.12f);
+                    dayOfMonth.setTextSize((mWidth < mHeight) ? mHeight * 0.15f : mWidth * 0.15f);
                 } else {
                     dayOfMonth.setTextSize(mHeight * 0.40f);
                 }
