@@ -18,8 +18,9 @@
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".activity.SearchActivity"
-                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -31,7 +32,7 @@
 
         <activity
             android:name=".activity.CreateEventActvity"
-            android:theme="@style/Theme.SWitch"></activity>
+            android:theme="@style/Theme.SWitch"/>
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -44,8 +45,14 @@
 
         <activity
             android:name=".activity.EditActivity"
-            android:theme="@style/Theme.SWitch">
+            android:theme="@style/Theme.SWitch"></activity>
 
+        <activity
+            android:name=".activity.AttendeeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.CreateEventActvity" />
         </activity>
         <receiver android:name=".services.AlarmReceiver">
             <intent-filter>

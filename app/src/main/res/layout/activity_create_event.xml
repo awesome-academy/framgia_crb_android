@@ -368,7 +368,7 @@
                     android:src="@drawable/ic_invited" />
 
                 <TextView
-                    android:id="@+id/txt_Invited"
+                    android:id="@+id/txt_Attendee"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
