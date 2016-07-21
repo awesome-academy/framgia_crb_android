@@ -288,6 +288,8 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
             mRadioTuan = (RadioButton) v.findViewById(R.id.radioTuan);
             mRadioTB = (RadioButton) v.findViewById(R.id.radioNotifi);
             mRadioEmail = (RadioButton) v.findViewById(R.id.radioEmail);
+            result1 = mRadioPhut.getText().toString();
+            result2 = mRadioTB.getText().toString();
             mGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
