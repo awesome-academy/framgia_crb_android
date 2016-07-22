@@ -39,6 +39,8 @@ import java.util.Locale;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
+import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.model.UserLogin;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private WrapContentHeightViewPager mCalendarViewPager;
     private MonthToolbarPagerAdapter mAdapter;
+    private UserLogin mUserLogin;
+    public static String sAuthToken;
 
     int currentMenuItemId;
     boolean isExpanded = false;
@@ -98,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Intent intent = getIntent();
+        mUserLogin = (UserLogin) intent.getSerializableExtra(Constant.KEY_NAME);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         mCurrentMenuItemPosition = 1;
         mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         updateDisplayView(mCurrentMenuItemPosition);
-        TimeUtils.generateRangeDate();
+        currentMenuItemId = R.id.home;
     } // end of method onCreate
 
     private void initUi() {

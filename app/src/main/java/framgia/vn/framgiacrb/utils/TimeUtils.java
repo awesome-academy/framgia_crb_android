@@ -1,5 +1,6 @@
 package framgia.vn.framgiacrb.utils;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -16,7 +17,7 @@ import framgia.vn.framgiacrb.constant.Constant;
  * Created by nghicv on 18/07/2016.
  */
 public class TimeUtils {
-    public static final String DATE_INPUT = "dd-MM-yyyy";
+    public static final String DATE_INPUT = "yyy-MM-dd";
     public static final String DATE_OUTPUT = "dd-MM-yyyy";
     public static String toStringDate(long milisec) {
         String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
@@ -48,16 +49,11 @@ public class TimeUtils {
         return new SimpleDateFormat(DATE_OUTPUT).format(date);
     }
 
-    public static List<Date> generateRangeDate() {
-        long s = System.currentTimeMillis();
-        List<Date> dates = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        Date startDate = stringToDate(Constant.START_DATE);
-        calendar.setTime(startDate);
-        while (calendar.getTime().before(stringToDate(Constant.END_DATE))) {
-            calendar.add(Calendar.DATE, 1);
-            dates.add(calendar.getTime());
-        }
-        return dates;
+    public static Date formatDate(Date date) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT);
+        Date dateFormat = new Date();
+        dateFormat = format.parse(format.format(date));
+        return dateFormat;
     }
+
 }

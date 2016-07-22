@@ -3,14 +3,18 @@ package framgia.vn.framgiacrb.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.fragment.item.ItemDate;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 
@@ -43,7 +47,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Object object = mDatas.get(position);
         if(object instanceof ItemMonth)
             return VIEW_TYPE_MONTH;
-        if (object instanceof ItemDate)
+        if (object instanceof Date)
             return VIEW_TYPE_DATE;
 
         return VIEW_TYPE_EVENT;
@@ -58,6 +62,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 View itemViewMonth = mLayoutInflater.inflate(R.layout.item_month, parent, false);
                 viewHolder = new MonthViewHolder(itemViewMonth);
                 break;
+
             case VIEW_TYPE_DATE:
                 View itemViewDate = mLayoutInflater.inflate(R.layout.item_date, parent, false);
                 viewHolder = new DateViewHolder(itemViewDate);
@@ -77,18 +82,27 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Object object = mDatas.get(position);
         if (object instanceof ItemMonth) {
             ItemMonth itemMonth = (ItemMonth) object;
-            String text = "Thang " + itemMonth.getMonth() + " Nam " + itemMonth.getYear();
+            String text = itemMonth.getStringMonth() + " " + itemMonth.getYear();
             MonthViewHolder monthViewHolder = (MonthViewHolder) holder;
             monthViewHolder.tvMonth.setText(text);
-        } else if (object instanceof ItemDate) {
-            ItemDate date = (ItemDate) object;
-            String dayOfMonth = (String) DateFormat.format("dd", date.getDate());
-            String dayOfWeek = (String) DateFormat.format("EEE", date.getDate());
+        } else if (object instanceof Date) {
+            Date date = (Date) object;
+            String dayOfMonth = (String) DateFormat.format("dd", date);
+            String dayOfWeek = (String) DateFormat.format("EEE", date);
             DateViewHolder dateViewHolder = (DateViewHolder) holder;
             dateViewHolder.tvDate.setText(dayOfMonth);
             dateViewHolder.tvDay.setText(dayOfWeek);
         } else {
-
+            Event event = (Event) object;
+            EventViewHolder eventViewHolder = (EventViewHolder) holder;
+            eventViewHolder.tvTitleEvent.setText(event.getTitle());
+            SimpleDateFormat format = new SimpleDateFormat("H:mm");
+            Date startDate = event.getStartTime();
+            Date finishDate = event.getFinishTime();
+            String startTime = format.format(startDate);
+            String finishTime = format.format(finishDate);
+            String time = startTime + "-" + finishTime;
+            eventViewHolder.tvTime.setText(time);
         }
     }
 
@@ -132,7 +146,8 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
 
-
+        TextView tvTitleEvent;
+        TextView tvTime;
         public EventViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +158,8 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                 }
             });
+            tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
+            tvTime = (TextView) itemView.findViewById(R.id.tv_time);
         }
     }
 

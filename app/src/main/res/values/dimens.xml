@@ -63,4 +63,6 @@
     <dimen name="text_header_event_size">12sp</dimen>
     <dimen name="column_hour_height">60dp</dimen>
     <dimen name="header_row_padding">12dp</dimen>
+    <dimen name="text_size_day">16dp</dimen>
+    <dimen name="text_size_date">22dp</dimen>
 </resources>
