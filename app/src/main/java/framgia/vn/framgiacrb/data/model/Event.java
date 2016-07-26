@@ -4,10 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+import io.realm.RealmObject;
+
 /**
  * Created by nghicv on 20/07/2016.
  */
-public class Event {
+public class Event extends RealmObject {
 
     @SerializedName("id")
     private int mId;
@@ -41,4 +43,12 @@ public class Event {
 
     @SerializedName("type")
     private int mType;
+
+    public Date getStartDate() {
+        return mStartTime;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
 }
