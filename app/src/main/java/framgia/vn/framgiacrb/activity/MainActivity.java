@@ -46,6 +46,7 @@ import framgia.vn.framgiacrb.fragment.item.ItemLeftMenu;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
+import framgia.vn.framgiacrb.utils.DrawableUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -304,6 +305,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.today).setIcon(DrawableUtil.writeOnDrawable(
+            getApplicationContext(),
+            R.drawable.ic_web_asset_white_24dp,
+            DrawableUtil.getTodayDay()
+        ));
         return true;
     }
 
