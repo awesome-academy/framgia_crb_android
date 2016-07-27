@@ -1,20 +1,30 @@
 package framgia.vn.framgiacrb.fragment.item;
 
+import java.util.Date;
+
+import framgia.vn.framgiacrb.data.model.Event;
+
 /**
  * Created by nghicv on 04/07/2016.
  */
 public class ItemEvent {
-    private ItemDate mDate;
+    private Date mDate;
+    private Event mEvent;
 
-    public ItemEvent(ItemDate date) {
+    public ItemEvent(Date date) {
         mDate = date;
     }
 
-    public ItemDate getDate() {
+    public ItemEvent(Date date, Event event) {
+        mDate = date;
+        mEvent = event;
+    }
+
+    public Date getDate() {
         return mDate;
     }
 
-    public void setDate(ItemDate date) {
+    public void setDate(Date date) {
         mDate = date;
     }
 }

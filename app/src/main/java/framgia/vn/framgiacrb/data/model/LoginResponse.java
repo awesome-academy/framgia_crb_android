@@ -11,7 +11,7 @@ public class LoginResponse implements Serializable {
     @SerializedName("message")
     private String message;
     @SerializedName("user")
-    private String user;
+    private UserLogin user;
 
     public LoginResponse(){}
 
@@ -23,11 +23,11 @@ public class LoginResponse implements Serializable {
         this.message = message;
     }
 
-    public String getUser() {
+    public UserLogin getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(UserLogin user) {
         this.user = user;
     }
 

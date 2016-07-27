@@ -63,6 +63,7 @@
     <string name="calendar_name">Calendar</string>
     <string name="today_string">To day</string>
     <string name="home">Home</string>
+    <string name="message_error">Error</string>
 
     <string-array name="day_of_week">
         <item>SUN</item>

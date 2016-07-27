@@ -18,8 +18,6 @@ public class UserLogin implements Serializable{
     private String mAvatar;
     @SerializedName("auth_token")
     private String mAuth_token;
-    @SerializedName("message")
-    private String mMessage;
 
     public UserLogin() {}
 
@@ -69,13 +67,5 @@ public class UserLogin implements Serializable{
 
     public void setAuth_token(String auth_token) {
         this.mAuth_token = auth_token;
-    }
-
-    public String getMessage() {
-        return mMessage;
-    }
-
-    public void setMessage(String mMessage) {
-        this.mMessage = mMessage;
     }
 }

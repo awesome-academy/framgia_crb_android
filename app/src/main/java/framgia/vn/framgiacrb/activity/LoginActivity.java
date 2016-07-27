@@ -14,6 +14,7 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
 import framgia.vn.framgiacrb.data.model.UserLogin;
+import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.object.ApiInterface;
 import framgia.vn.framgiacrb.utils.NetworkUtil;
 import framgia.vn.framgiacrb.utils.ValidationLogin;
@@ -68,44 +69,17 @@ public class LoginActivity extends Activity {
     }
 
     public void getDataFromInternet(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        ApiInterface service = retrofit.create(ApiInterface.class);
-
-        Call<UserLogin> call = service.authenticate(mEditTextEmail.getText().toString(),
-                mEditTextPassword.getText().toString());
-
-        Call<LoginResponse> loginResponseCall = service.getMessage(mEditTextEmail.getText().toString(),
-                mEditTextPassword.getText().toString());
-
-        call.enqueue(new Callback<UserLogin>() {
+        ServiceBuilder.getService().authenticate(mEditTextEmail.getText().toString(),
+                mEditTextPassword.getText().toString()).enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<UserLogin> call, Response<UserLogin> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 mProgressDialog.cancel();
                 if (response.body() == null) {
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
-                    UserLogin userLogin = new UserLogin();
-                    try {
-                        int id = response.body().getId();
-                        String name = response.body().getName();
-                        String email = response.body().getEmail();
-                        String avatar = response.body().getAvatar();
-                        String auth_token = response.body().getAuth_token();
-
-                        userLogin.setId(id);
-                        userLogin.setName(name);
-                        userLogin.setEmail(email);
-                        userLogin.setAvatar(avatar);
-                        userLogin.setAuth_token(auth_token);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    UserLogin userLogin = response.body().getUser();
+                    MainActivity.sAuthToken = userLogin.getAuth_token();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(Constant.KEY_NAME, userLogin);
                     startActivity(intent);
@@ -117,7 +91,7 @@ public class LoginActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<UserLogin> call, Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
 
             }
         });

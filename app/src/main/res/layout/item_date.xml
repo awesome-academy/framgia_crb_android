@@ -13,12 +13,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_date"
-            android:textSize="@dimen/text_size_title"
-            android:text="4"/>
+            android:textSize="@dimen/text_size_date"
+            android:text="4"
+            android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_title"
+            android:textSize="@dimen/text_size_day"
             android:id="@+id/tv_day"
             android:text="Th2" />
     </LinearLayout>

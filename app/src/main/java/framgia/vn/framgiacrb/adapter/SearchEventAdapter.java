@@ -33,7 +33,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
     @Override
     public void onBindViewHolder(SearchEventAdapter.EventViewHolder holder, int position) {
         Event obj = getData().get(position);
-        Date startDate = obj.getStartDate();
+        Date startDate = obj.getStartTime();
         String timeDay = Integer.toString(startDate.getDay()) + " / " + Integer.toString
             (startDate.getMonth());
         holder.time.setText(timeDay);
