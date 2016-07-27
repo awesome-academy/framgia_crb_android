@@ -19,6 +19,7 @@ import framgia.vn.framgiacrb.fragment.item.ItemLeftMenu;
 public class ListMenuAdapter extends BaseAdapter{
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_ITEM = 1;
+    private static final int VIEW_TYPE_LABEL = 2;
     private ArrayList<ItemLeftMenu> mListMenuItem;
     private Context mContext;
 
@@ -29,7 +30,7 @@ public class ListMenuAdapter extends BaseAdapter{
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -37,6 +38,8 @@ public class ListMenuAdapter extends BaseAdapter{
         switch (position) {
             case 0:
                 return VIEW_TYPE_HEADER;
+            case 4:
+                return VIEW_TYPE_LABEL;
             default:
                 return VIEW_TYPE_ITEM;
         }
@@ -64,6 +67,11 @@ public class ListMenuAdapter extends BaseAdapter{
         switch (getItemViewType(position)) {
             case VIEW_TYPE_HEADER:
                 v = LayoutInflater.from(this.mContext).inflate(R.layout.header_drawer, parent, false);
+                break;
+            case VIEW_TYPE_LABEL:
+                v = LayoutInflater.from(this.mContext).inflate(R.layout.item_label_listview_menu, parent, false);
+                holder.titleTextView = (TextView) v.findViewById(R.id.label);
+                holder.titleTextView.setText(this.mListMenuItem.get(position).getTitle());
                 break;
             case VIEW_TYPE_ITEM:
             default:

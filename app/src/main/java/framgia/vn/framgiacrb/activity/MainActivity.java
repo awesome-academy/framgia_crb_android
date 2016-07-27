@@ -52,10 +52,12 @@ import framgia.vn.framgiacrb.utils.TimeUtils;
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
+    public static final String ACTION_TODAY = "GO_TO_TODAY";
     private static final String HOME = "Home";
     private static final String WEEK = "Week";
     private static final String MONTH = "Month";
     private static final String COLOR = "Color";
+    private static final String LABEL = "Calendar";
     private static final int ANIMATION_DURATION = 300;
     private static final int NUMBER_COLUMN = 5;
 
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     private int X;
     private int Y;
     private int mCurrentMenuItemPosition;
+    private int mTotalToolbarRange;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
 
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         mDatePickerTextView = (TextView) findViewById(R.id.date_picker_text_view);
         mArrow = (ImageView) findViewById(R.id.date_picker_arrow);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        mTotalToolbarRange = mAppBarLayout.getTotalScrollRange();
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -178,14 +182,13 @@ public class MainActivity extends AppCompatActivity {
         ItemLeftMenu month = new ItemLeftMenu();
         month.setImageResource(R.drawable.ic_view_module_black_24dp);
         month.setTitle(MONTH);
-        ItemLeftMenu color = new ItemLeftMenu();
-        color.setImageResource(R.drawable.ic_color_lens_black_24dp);
-        color.setTitle(COLOR);
+        ItemLeftMenu label = new ItemLeftMenu();
+        label.setTitle(LABEL);
         mListMenu.add(header);
         mListMenu.add(home);
         mListMenu.add(week);
         mListMenu.add(month);
-        mListMenu.add(color);
+        mListMenu.add(label);
         mListMenuAdapter = new ListMenuAdapter(this, mListMenu);
         mNavigationListView.setAdapter(mListMenuAdapter);
         //mNavigationListView
@@ -220,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onDrawerClosed(drawerView);
             }
         };
-        mNavigationListView.setSelection(3);
+//        mNavigationListView.setSelection(3);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -247,28 +250,14 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new MonthFragment();
                 Toast.makeText(MainActivity.this, "month", Toast.LENGTH_SHORT).show();
                 break;
-            case COLOR:
-                int[] mColors = getResources().getIntArray(R.array.default_rainbow);
-                final ColorPickerDialog dialog = ColorPickerDialog.newInstance(R.string.color_picker_default_title,
-                        mColors,
-                        mSelectedColor,
-                        NUMBER_COLUMN,
-                        ColorPickerDialog.SIZE_SMALL);
-                dialog.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
-
-                    @Override
-                    public void onColorSelected(int color) {
-                        mSelectedColor = color;
-                    }
-                });
-                dialog.show(getFragmentManager(), "color_dialog_test");
+            case LABEL:
                 break;
         }
         if (fragment != null) {
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.frame, fragment).commit();
         }
-        if (position != 0) {
+        if (position != 0 && position != 4) {
             mDrawerLayout.closeDrawers();
             mCurrentMenuItemPosition = position;
         } else {
@@ -318,10 +307,35 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.today:
-                // TODO: 08/07/2016
+                Intent intent = new Intent();
+                intent.setAction(ACTION_TODAY);
+                Calendar current = Calendar.getInstance();
+                intent.putExtra(MonthView.YEAR, current.get(Calendar.YEAR));
+                intent.putExtra(MonthView.MONTH, current.get(Calendar.MONTH));
+                this.sendBroadcast(intent);
+                mCalendarViewPager.setCurrentItem(
+                        (current.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12
+                        + current.get(Calendar.MONTH));
+                setSubTitle(dateFormat.format(current.getTime()));
                 break;
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));
+                break;
+            case R.id.color:
+                int[] mColors = getResources().getIntArray(R.array.default_rainbow);
+                final ColorPickerDialog dialog = ColorPickerDialog.newInstance(R.string.color_picker_default_title,
+                        mColors,
+                        mSelectedColor,
+                        NUMBER_COLUMN,
+                        ColorPickerDialog.SIZE_SMALL);
+                dialog.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
+
+                    @Override
+                    public void onColorSelected(int color) {
+                        mSelectedColor = color;
+                    }
+                });
+                dialog.show(getFragmentManager(), "color_dialog_test");
                 break;
             case R.id.action_settings:
                 // TODO: 08/07/2016
