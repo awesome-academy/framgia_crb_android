@@ -89,4 +89,19 @@
     <string name="via_email">Via Email</string>
     <string name="via_notification">Via Notification</string>
     <string name="unable">Không thể đặt thời gian kết thúc sự kiện trước thời gian bắt đầu.</string>
+
+    <string name="error_email_blank">Email can not blank!</string>
+    <string name="error_email_invalid">Invalid email or password!</string>
+    <string name="error_name_blank">Name can not blank!</string>
+    <string name="error_name_short">Name is too short!</string>
+    <string name="error_password_blank">Password can not blank!</string>
+    <string name="error_password_short">Password is too short!</string>
+    <string name="msg_wait">Please waiting...</string>
+    <string name="bad_request">Bad request</string>
+    <string name="error_unauthorized">Unauthorized!</string>
+    <string name="error_server_not_found">Server not found!</string>
+    <string name="error_internal_server_error">Internal server error!</string>
+    <string name="error_unknown">Something went wrong! Please try again later!</string>
+    <string name="error_response_data">Error response data!</string>
+    <string name="msg_no_internet">No internet!</string>
 </resources>
