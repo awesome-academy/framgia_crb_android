@@ -14,7 +14,10 @@ import java.util.List;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.CustomRecyclerAdapter;
+import framgia.vn.framgiacrb.adapter.SearchEventAdapter;
 import framgia.vn.framgiacrb.data.Data;
+import framgia.vn.framgiacrb.object.RealmController;
+import io.realm.Realm;
 
 /**
  * Created by lethuy on 04/07/2016.
@@ -24,30 +27,25 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView mRecycler;
     private SearchView mSearchView;
     private SearchView.OnQueryTextListener mSearchViewListener;
-    private List<Data> listData = new ArrayList<>();
-    private CustomRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    private Realm mRealm;
+    private SearchEventAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        init();
+    }
+
+    private void init() {
+        mRealm = RealmController.with(this).getRealm();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecycler = (RecyclerView) findViewById(R.id.recycler);
         layoutManager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(layoutManager);
-        adapter = new CustomRecyclerAdapter(listData);
-        mRecycler.setAdapter(adapter);
-    }
-
-    public void addItem(String textSearch) {
-        // get data.
-        Data dataToAdd = new Data(textSearch);
-        listData.add(dataToAdd);
-        // Update adapter.
-        adapter.notifyDataSetChanged();
+        mRecycler.setHasFixedSize(true);
     }
 
     @Override
@@ -59,13 +57,20 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                addItem(query);
+                mAdapter.updateData(RealmController.with(SearchActivity.this)
+                    .searchEvent(query));
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                addItem(newText);
+                if(mAdapter == null) {
+                    mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
+                        (SearchActivity.this).searchEvent(newText));
+                    mRecycler.setAdapter(mAdapter);
+                }
+                mAdapter.updateData(RealmController.with(SearchActivity.this)
+                    .searchEvent(newText));
                 return false;
             }
         });
