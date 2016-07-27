@@ -1,5 +1,9 @@
 package framgia.vn.framgiacrb.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +18,10 @@ import java.util.Date;
 import java.util.HashSet;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.adapter.MonthPagerAdapter;
+import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
+import framgia.vn.framgiacrb.ui.MonthView;
 
 /**
  * Created by lucky_luke on 7/6/2016.
@@ -23,6 +30,7 @@ public class MonthFragment extends Fragment{
     private HashSet<Date> mEvents;
     private ViewPager mViewPager;
     private MonthPagerAdapter mMonthPagerAdapter;
+    private GoToDayReceiver mGoToDayReceiver;
 
     public void setEvents(HashSet<Date> events) {
         this.mEvents = events;
@@ -67,5 +75,27 @@ public class MonthFragment extends Fragment{
         super.onResume();
         //Calendar calendar = Calendar.getInstance();
         //mViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthPagerAdapter.MIN_YEAR)*12 + calendar.get(Calendar.MONTH));
+        mGoToDayReceiver = new GoToDayReceiver();
+        IntentFilter intentFilter = new IntentFilter(MainActivity.ACTION_TODAY);
+        getActivity().registerReceiver(mGoToDayReceiver, intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(mGoToDayReceiver);
+        mGoToDayReceiver = null;
+    }
+
+    private class GoToDayReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(MainActivity.ACTION_TODAY)) {
+                Calendar calendar = Calendar.getInstance();
+                int year = intent.getIntExtra(MonthView.YEAR, calendar.get(Calendar.YEAR));
+                int month = intent.getIntExtra(MonthView.MONTH, calendar.get(Calendar.MONTH));
+                mViewPager.setCurrentItem((year- MonthToolbarPagerAdapter.MIN_YEAR)*12 + month);
+            }
+        }
     }
 }
