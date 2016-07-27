@@ -1,5 +1,6 @@
 package framgia.vn.framgiacrb.network;
 
+import framgia.vn.framgiacrb.constant.Constant;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -9,8 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by nghicv on 18/07/2016.
  */
 public class ServiceBuilder {
-    public static final String BASE_URL = "";
-
     public static final int TOKEN_EXPIRED = 401;
 
     private static Retrofit sInstance;
@@ -23,7 +22,7 @@ public class ServiceBuilder {
 
         if (sInstance == null) {
             sInstance = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(Constant.BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
