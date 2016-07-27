@@ -6,6 +6,7 @@ package framgia.vn.framgiacrb.fragment.item;
 public class ItemLeftMenu {
     private int mImageResource;
     private String mTitle;
+    private String mEmail;
 
     public ItemLeftMenu() {
     }
@@ -24,5 +25,13 @@ public class ItemLeftMenu {
 
     public void setTitle(String mTitle) {
         this.mTitle = mTitle;
+    }
+
+    public void setEmail(String email) {
+        mEmail = email;
+    }
+
+    public String getEmail() {
+        return mEmail;
     }
 }

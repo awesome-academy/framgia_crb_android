@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,14 +11,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
+import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
-import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.utils.NetworkUtil;
 import framgia.vn.framgiacrb.utils.ValidationLogin;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +31,7 @@ import retrofit2.Response;
 /**
  * Created by lethuy on 01/07/2016.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements Realm.Transaction.OnSuccess{
     private EditText mEditTextEmail, mEditTextPassword;
     private Button mButtonLogin, mButtonLoginFb, mButtonLoginGg;
     private SharedPreferences mSharedPreferences;
@@ -75,12 +81,30 @@ public class LoginActivity extends Activity {
                 if (response.body() == null) {
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
-                    User user = response.body().getUser();
-                    Session.sAuthToken = user.getAuth_token();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra(Constant.KEY_NAME, user);
-                    startActivity(intent);
-                    finish();
+                    User userLogin = response.body().getUser();
+                    MainActivity.sAuthToken = userLogin.getAuth_token();
+                    List<Calendar> listUserCalendar = userLogin.getUserCalendars();
+                    List<Calendar> listShareUserCalendar = userLogin.getShareUserCalendars();
+                    List<Calendar> listCalendar = new ArrayList<Calendar>();
+                    for (int i = 0; i < listUserCalendar.size(); i++) {
+                        Calendar calendar = new Calendar();
+                        calendar.setId(listUserCalendar.get(i).getId());
+                        calendar.setUserId(listUserCalendar.get(i).getUserId());
+                        calendar.setPermissionId(listUserCalendar.get(i).getPermissionId());
+                        calendar.setColorId(listUserCalendar.get(i).getColorId());
+                        calendar.setName(listShareUserCalendar.get(i).getName());
+                        calendar.setStatus(listShareUserCalendar.get(i).getStatus());
+                        calendar.setDefault(listShareUserCalendar.get(i).isDefault());
+                        calendar.setDescription(listShareUserCalendar.get(i).getDescription());
+                        listCalendar.add(calendar);
+                    }
+                    Realm realm = Realm.getDefaultInstance();
+                    new EventRepositoriesLocal(realm).addCalendars(listCalendar, LoginActivity.this);
+                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(MainActivity.NAME_TITLE, userLogin.getName());
+                    editor.putString(MainActivity.EMAIL_TITLE, userLogin.getEmail());
+                    editor.commit();
                 }
                 else {
                     Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
@@ -102,4 +126,9 @@ public class LoginActivity extends Activity {
         return user;
     }
 
+    @Override
+    public void onSuccess() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
 }

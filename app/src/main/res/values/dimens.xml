@@ -70,4 +70,5 @@
     <dimen name="item_month_margin_top">56dp</dimen>
     <dimen name="item_timeline_margin_bottom">2dp</dimen>
     <dimen name="item_timeline_margin_left">54dp</dimen>
+    <dimen name="text_label_size">14sp</dimen>
 </resources>
