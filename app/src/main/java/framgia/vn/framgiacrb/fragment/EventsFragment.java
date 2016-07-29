@@ -1,11 +1,13 @@
 package framgia.vn.framgiacrb.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -43,7 +45,7 @@ public class EventsFragment extends Fragment {
     private ListEventAdapter mAdapter;
     private List<Object> mDatas = new ArrayList<>();
     private int mFirstMonth;
-    private int position;
+    private int mPositionToday;
     private int mFirstYear;
     private int mLastMonth;
     private int mLastYear;
@@ -73,7 +75,15 @@ public class EventsFragment extends Fragment {
                 }
             }
         });
-        mEventRepositories.getEventsByCalendar(MainActivity.sAuthToken, calendar);
+        mEventRepositories.getEventsByCalendar(MainActivity.sAuthToken, calendar, getActivity());
+        getActivity().registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(MainActivity.ACTION_TODAY)) {
+                    mRecyclerViewEvents.scrollToPosition(mPositionToday);
+                }
+            }
+        }, new IntentFilter(MainActivity.ACTION_TODAY));
         return mViewEvents;
     }
 
@@ -83,7 +93,6 @@ public class EventsFragment extends Fragment {
         mFloatingActionButton = (FloatingActionButton) mViewEvents.findViewById(R.id.fab);
         mAdapter = new ListEventAdapter(getActivity(), mDatas);
         mRecyclerViewEvents.setAdapter(mAdapter);
-        mRecyclerViewEvents.scrollToPosition(position);
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -160,7 +169,7 @@ public class EventsFragment extends Fragment {
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         while (month < mLastMonth + 1) {
             if (date.equals(today)) {
-                position = mDatas.size();
+                mPositionToday = mDatas.size();
             }
             mDatas.add(date);
             mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
@@ -169,6 +178,10 @@ public class EventsFragment extends Fragment {
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
         }
         mAdapter.notifyDataSetChanged();
+        if (mPositionToday > 20) {
+            loadDatasForNextMonth();
+        }
+        mRecyclerViewEvents.scrollToPosition(mPositionToday);
     }
 
     private void loadDatasForNextMonth() throws ParseException {
@@ -216,6 +229,7 @@ public class EventsFragment extends Fragment {
         }
         mDatas.add(0, new ItemMonth(mFirstMonth, stringMonth, mFirstYear));
         mAdapter.notifyItemRangeInserted(0, mDatas.size() - mOldDataSize);
+        mPositionToday = mPositionToday + mDatas.size() - mOldDataSize;
     }
 
     @Override
