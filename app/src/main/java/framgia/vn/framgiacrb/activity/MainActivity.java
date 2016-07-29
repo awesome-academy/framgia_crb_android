@@ -49,7 +49,6 @@ import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
 import framgia.vn.framgiacrb.utils.DrawableUtil;
-import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
@@ -114,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         updateDisplayView(mCurrentMenuItemPosition);
         currentMenuItemId = R.id.home;
+        mUserLogin = (UserLogin) getIntent().getSerializableExtra(Constant.KEY_NAME);
     } // end of method onCreate
 
     private void initUi() {

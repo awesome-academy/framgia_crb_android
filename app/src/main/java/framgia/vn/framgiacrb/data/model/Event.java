@@ -30,7 +30,7 @@ public class Event extends RealmObject {
     private Date mFinishTime;
 
     @SerializedName("status")
-    private String status;
+    private String mStatus;
 
     @SerializedName("repeat_type")
     private String mRepeatType;
@@ -60,6 +60,14 @@ public class Event extends RealmObject {
     public void setToday(boolean today) {
         mIsToday = today;
     }
+    @SerializedName("all_day")
+    private boolean mAll_day;
+
+    @SerializedName("user_id")
+    private int mUser_id;
+
+    @SerializedName("calendar_id")
+    private int mCalendar_id;
 
     public String getId() {
         return mId;
@@ -102,11 +110,11 @@ public class Event extends RealmObject {
     }
 
     public String getStatus() {
-        return status;
+        return mStatus;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.mStatus = status;
     }
 
     public String getRepeatType() {
@@ -155,5 +163,30 @@ public class Event extends RealmObject {
 
     public void setEventId(int eventId) {
         mEventId = eventId;
+    }
+
+
+    public boolean isAll_day() {
+        return mAll_day;
+    }
+
+    public void setAll_day(boolean mAll_day) {
+        this.mAll_day = mAll_day;
+    }
+
+    public int getUser_id() {
+        return mUser_id;
+    }
+
+    public void setUser_id(int mUser_id) {
+        this.mUser_id = mUser_id;
+    }
+
+    public int getCalendar_id() {
+        return mCalendar_id;
+    }
+
+    public void setCalendar_id(int mCalendar_id) {
+        this.mCalendar_id = mCalendar_id;
     }
 }

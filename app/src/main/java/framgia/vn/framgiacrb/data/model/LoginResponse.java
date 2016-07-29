@@ -9,26 +9,25 @@ import java.io.Serializable;
  */
 public class LoginResponse implements Serializable {
     @SerializedName("message")
-    private String message;
+    private String mMessage;
     @SerializedName("user")
-    private UserLogin user;
+    private UserLogin mUser;
 
     public LoginResponse(){}
 
     public String getMessage() {
-        return message;
+        return mMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String mMessage) {
+        this.mMessage = mMessage;
     }
 
     public UserLogin getUser() {
-        return user;
+        return mUser;
     }
 
-    public void setUser(UserLogin user) {
-        this.user = user;
+    public void setUser(UserLogin mUser) {
+        this.mUser = mUser;
     }
-
 }

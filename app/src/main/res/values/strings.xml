@@ -33,7 +33,7 @@
     <string name="fri">FRI</string>
     <string name="sat">SAT</string>
     <string name="start">Start</string>
-    <string name="date">04/07/2016</string>
+    <string name="date">04-07-2016</string>
     <string name="time_start">02:00 AM</string>
     <string name="finish">Finish</string>
     <string name="time_finish">02:30 AM</string>
@@ -42,6 +42,7 @@
     <string name="desciption">Desciption</string>
     <string name="event_name">lethuy123@framgia.com</string>
     <string name="all_day">All day</string>
+    <string name="place">Place</string>
     <string name="select_date_start">Chọn ngày bắt đầu</string>
     <string name="select_date_finish">Chọn ngày kết thúc</string>
     <string name="select_time_start">Chọn giờ bắt đầu</string>
@@ -106,4 +107,6 @@
     <string name="error_response_data">Error response data!</string>
     <string name="msg_no_internet">No internet!</string>
     <string name="message_not_connect">Not connection</string>
+    <string name="error">Error</string>
+    <string name="not_be_empty">Not be empty</string>
 </resources>
