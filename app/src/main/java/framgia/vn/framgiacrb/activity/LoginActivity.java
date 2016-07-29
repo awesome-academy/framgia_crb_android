@@ -15,14 +15,11 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
 import framgia.vn.framgiacrb.data.model.UserLogin;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
-import framgia.vn.framgiacrb.object.ApiInterface;
 import framgia.vn.framgiacrb.utils.NetworkUtil;
 import framgia.vn.framgiacrb.utils.ValidationLogin;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by lethuy on 01/07/2016.

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -48,6 +49,17 @@ public class Event extends RealmObject {
 
     @SerializedName("event_id")
     private int mEventId;
+
+    @Ignore
+    private boolean mIsToday;
+
+    public boolean isToday() {
+        return mIsToday;
+    }
+
+    public void setToday(boolean today) {
+        mIsToday = today;
+    }
 
     public String getId() {
         return mId;

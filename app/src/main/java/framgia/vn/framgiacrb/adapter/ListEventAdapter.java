@@ -1,6 +1,7 @@
 package framgia.vn.framgiacrb.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -14,9 +15,11 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.fragment.item.ItemDate;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
+import framgia.vn.framgiacrb.utils.TimeUtils;
 
 /**
  * Created by nghicv on 04/07/2016.
@@ -26,6 +29,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_MONTH = 0;
     private static final int VIEW_TYPE_DATE = 1;
     private static final int VIEW_TYPE_EVENT = 2;
+    private static final int VIEW_TYPE_TIMELINE = 3;
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -49,8 +53,9 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return VIEW_TYPE_MONTH;
         if (object instanceof Date)
             return VIEW_TYPE_DATE;
-
-        return VIEW_TYPE_EVENT;
+        if (object instanceof Event)
+            return VIEW_TYPE_EVENT;
+        return VIEW_TYPE_TIMELINE;
     }
 
     @Override
@@ -72,6 +77,10 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 View itemmViewEvent = mLayoutInflater.inflate(R.layout.item_event, parent, false);
                 viewHolder = new EventViewHolder(itemmViewEvent);
                 break;
+            case VIEW_TYPE_TIMELINE:
+                View itemViewTimeline = mLayoutInflater.inflate(R.layout.item_timeline, parent, false);
+                viewHolder = new EventViewHolder(itemViewTimeline);
+                break;
 
         }
         return viewHolder;
@@ -87,12 +96,20 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             monthViewHolder.tvMonth.setText(text);
         } else if (object instanceof Date) {
             Date date = (Date) object;
+            Date today = java.util.Calendar.getInstance().getTime();
             String dayOfMonth = (String) DateFormat.format("dd", date);
             String dayOfWeek = (String) DateFormat.format("EEE", date);
             DateViewHolder dateViewHolder = (DateViewHolder) holder;
             dateViewHolder.tvDate.setText(dayOfMonth);
             dateViewHolder.tvDay.setText(dayOfWeek);
-        } else {
+            if (TimeUtils.toStringDate(date).compareTo(TimeUtils.toStringDate(today)) == 0) {
+                dateViewHolder.tvDate.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                dateViewHolder.tvDay.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            } else {
+                dateViewHolder.tvDate.setTextColor(mContext.getResources().getColor(R.color.text_default_event_color));
+                dateViewHolder.tvDay.setTextColor(mContext.getResources().getColor(R.color.text_default_event_color));
+            }
+        } else if (object instanceof Event){
             Event event = (Event) object;
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
             eventViewHolder.tvTitleEvent.setText(event.getTitle());
@@ -160,6 +177,13 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
             tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time);
+        }
+    }
+
+    class TimeLineViewHolder extends RecyclerView.ViewHolder {
+
+        public TimeLineViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
