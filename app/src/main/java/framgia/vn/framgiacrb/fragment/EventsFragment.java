@@ -54,7 +54,7 @@ public class EventsFragment extends Fragment {
     private EventRepositories mEventRepositories;
     private EventRepositoriesLocal mEventRepositoriesLocal;
     private Realm mRealm;
-
+    private BroadcastReceiver mBroadcastReceiverToday;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,14 +76,23 @@ public class EventsFragment extends Fragment {
             }
         });
         mEventRepositories.getEventsByCalendar(MainActivity.sAuthToken, calendar, getActivity());
-        getActivity().registerReceiver(new BroadcastReceiver() {
+        mBroadcastReceiverToday = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(MainActivity.ACTION_TODAY)) {
-                    mRecyclerViewEvents.scrollToPosition(mPositionToday);
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
+                    int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    if (firstVisibleItem > mPositionToday) {
+                        mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
+                    } else {
+                        mRecyclerViewEvents.scrollToPosition(mPositionToday + 5);
+                    }
+
                 }
             }
-        }, new IntentFilter(MainActivity.ACTION_TODAY));
+        };
+        getActivity().registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
         return mViewEvents;
     }
 
@@ -168,10 +177,12 @@ public class EventsFragment extends Fragment {
         Date date = calendar.getTime();
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         while (month < mLastMonth + 1) {
+
+            mDatas.add(date);
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
+                mDatas.add(null);
             }
-            mDatas.add(date);
             mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
@@ -181,7 +192,7 @@ public class EventsFragment extends Fragment {
         if (mPositionToday > 20) {
             loadDatasForNextMonth();
         }
-        mRecyclerViewEvents.scrollToPosition(mPositionToday);
+        mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
     }
 
     private void loadDatasForNextMonth() throws ParseException {
@@ -236,6 +247,7 @@ public class EventsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mRealm.close();
+        getActivity().unregisterReceiver(mBroadcastReceiverToday);
     }
 
 }

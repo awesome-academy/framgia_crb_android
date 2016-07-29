@@ -51,9 +51,7 @@ public class TimeUtils {
 
     public static Date formatDate(Date date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT);
-        Date dateFormat = new Date();
-        dateFormat = format.parse(format.format(date));
-        return dateFormat;
+        return format.parse(format.format(date));
     }
 
 }
