@@ -66,7 +66,7 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 if(mAdapter == null) {
                     mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
-                        (SearchActivity.this).searchEvent(newText));
+                        (SearchActivity.this).getAllEvent());
                     mRecycler.setAdapter(mAdapter);
                 }
                 mAdapter.updateData(RealmController.with(SearchActivity.this)

@@ -16,8 +16,14 @@ import java.util.Calendar;
 public class DrawableUtil {
     private static final float TEXT_ZOOM = 0.4f;
     private static final float OFFSET_Y = 0.7f;
+    private static final String STRING_HEADER = "0";
     public static String getTodayDay() {
-        return Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        if(today >= 10) {
+            return Integer.toString(today);
+        } else {
+            return STRING_HEADER + Integer.toString(today);
+        }
     }
 
     public static BitmapDrawable writeOnDrawable(Context context, int drawableId, String text){

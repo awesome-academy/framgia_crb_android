@@ -37,7 +37,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
         String timeDay = Integer.toString(startDate.getDay()) + " / " + Integer.toString
             (startDate.getMonth());
         holder.time.setText(timeDay);
-        holder.content.setText(obj.getDescription());
+        holder.content.setText(obj.getTitle());
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {

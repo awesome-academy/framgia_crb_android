@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import framgia.vn.framgiacrb.data.model.Event;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -11,6 +12,8 @@ import io.realm.RealmResults;
  * Created by framgia on 26/07/2016.
  */
 public class RealmController {
+    public static final String EVENT_TITLE_FIELD = "mTitle";
+    public static final String EVENT_DESCRIPTION_FIELD = "mDescription";
     private static RealmController instance;
     private final Realm realm;
 
@@ -36,9 +39,9 @@ public class RealmController {
     }
     public RealmResults<Event> searchEvent(String textSearch) {
         return realm.where(Event.class)
-            .contains("author", "Author 0")
+            .contains(EVENT_TITLE_FIELD, textSearch, Case.INSENSITIVE)
             .or()
-            .contains("title", "Realm")
+            .contains(EVENT_DESCRIPTION_FIELD, textSearch, Case.INSENSITIVE)
             .findAll();
     }
 }
