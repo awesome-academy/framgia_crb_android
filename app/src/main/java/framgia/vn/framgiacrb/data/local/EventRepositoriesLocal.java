@@ -12,6 +12,7 @@ import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by nghicv on 26/07/2016.
@@ -87,7 +88,7 @@ public class EventRepositoriesLocal implements EventRepository{
         calendar.add(java.util.Calendar.HOUR, 23);
         Date toDate = calendar.getTime();
         return mRealm.where(Event.class).between(START_DATE_FIELD, date, toDate)
-                .findAll();
+                .findAllSorted(START_DATE_FIELD, Sort.ASCENDING);
     }
 
     public boolean isExists(Event event) {

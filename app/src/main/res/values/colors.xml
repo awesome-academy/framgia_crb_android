@@ -31,4 +31,16 @@
     <!--week screen-->
     <color name="day_back_gound">#05000000</color>
     <color name="today_background">#1848adff</color>
+    <color name="color_event_1">#AC725E</color>
+    <color name="color_event_2">#D06B64</color>
+    <color name="color_event_3">#F83A22</color>
+    <color name="color_event_4">#FA573C</color>
+    <color name="color_event_5">#FF7537</color>
+    <color name="color_event_6">#FFAD46</color>
+    <color name="color_event_7">#42D692</color>
+    <color name="color_event_8">#16A765</color>
+    <color name="color_event_9">#B3DC6C</color>
+    <color name="color_event_10">#4986E7</color>
+    <color name="color_event_11">#FBE983</color>
+    <color name="color_event_12">#FAD165</color>
 </resources>

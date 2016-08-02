@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.fragment.item.ItemDate;
@@ -120,6 +122,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             String finishTime = format.format(finishDate);
             String time = startTime + "-" + finishTime;
             eventViewHolder.tvTime.setText(time);
+            eventViewHolder.cardView.setCardBackgroundColor(mContext.getResources().getColor(Constant.color[event.getColorId()]));
         }
     }
 
@@ -165,6 +168,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         TextView tvTitleEvent;
         TextView tvTime;
+        CardView cardView;
         public EventViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +181,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
             tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time);
+            cardView = (CardView) itemView.findViewById(R.id.card_view_item_event);
         }
     }
 
