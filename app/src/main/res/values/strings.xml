@@ -105,4 +105,5 @@
     <string name="error_unknown">Something went wrong! Please try again later!</string>
     <string name="error_response_data">Error response data!</string>
     <string name="msg_no_internet">No internet!</string>
+    <string name="message_not_connect">Not connection</string>
 </resources>
