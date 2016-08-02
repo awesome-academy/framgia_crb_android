@@ -1,12 +1,5 @@
 package framgia.vn.framgiacrb.utils;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
-import framgia.vn.framgiacrb.R;
-
 /**
  * Created by lethuy on 19/07/2016.
  */
@@ -41,7 +34,7 @@ public class Utils {
         } else {
             formatMonth = "0" + String.valueOf(monthOfYear);
         }
-        return formatDay + "/" + formatMonth  + "/" + year;
+        return formatDay + "-" + formatMonth  + "-" + year;
     }
 
 }

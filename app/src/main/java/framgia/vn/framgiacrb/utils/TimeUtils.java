@@ -1,17 +1,9 @@
 package framgia.vn.framgiacrb.utils;
 
-import android.text.format.DateFormat;
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-
-import framgia.vn.framgiacrb.constant.Constant;
 
 /**
  * Created by nghicv on 18/07/2016.
@@ -36,6 +28,17 @@ public class TimeUtils {
 
     public static Date stringToDate(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT, Locale.getDefault());
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            return null;
+        }
+        return date;
+    }
+
+    public static Date stringToDate(String dateString, String dateInput) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
         Date date = new Date();
         try {
             date = dateFormat.parse(dateString);

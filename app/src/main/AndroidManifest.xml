@@ -60,6 +60,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.CreateEventActvity" />
         </activity>
+
+        <activity
+            android:name=".activity.PlaceActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.CreateEventActvity" />
+        </activity>
+
         <receiver android:name=".services.AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

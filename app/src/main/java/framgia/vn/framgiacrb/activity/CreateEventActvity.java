@@ -11,17 +11,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -37,27 +34,36 @@ import java.util.Date;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.data.model.CreateEventResponse;
+import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.data.model.NewEvent;
+import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.object.EventInWeek;
+import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by lethuy on 05/07/2016.
  */
 public class CreateEventActvity extends Activity implements View.OnTouchListener {
     private final String MESSAGE = "MESSAGE";
-    private final String FORMAT_DATE = "dd/MM/yyyy";
+    private final String FORMAT_DATE = "dd-MM-yyyy";
     private final String FORMAT_TIME = "HH:mm";
     private final String FORMAT_TIME_A = "hh:mm a";
     private final String TIME_AM = "AM";
     private final String TIME_PM = "PM";
     private ImageButton mImageButtonBack;
-    private EditText mEdtOption;
-    private RadioButton mRadioPhut, mRadioGio, mRadioNgay, mRadioTuan, mRadioThang, mRadioTB, mRadioEmail;
+    private EditText mEdtOption, mEdtTitle, mEdtDesciption;
+    private ImageButton mButtonSave;
+    private RadioButton mRadioPhut, mRadioGio, mRadioNgay, mRadioTuan, mRadioTB, mRadioEmail;
     private Switch mSwitchAlarm;
     private RadioGroup mRadioGroup;
     private RadioButton mRadioButton1, mRadioButton2, mRadioButton3, mRadioButton4;
     private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat, mTxtNewEvent;
-    private TextView mTxtOption, mTxtAttendee;
+    private TextView mTxtOption, mTxtAttendee, mTxtPlace;
     private Spinner mSpinerCalendar;
 
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
@@ -90,6 +96,10 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
 
         mTxtRepeat = (TextView) findViewById(R.id.txt_Repeat);
         mTxtAttendee = (TextView) findViewById(R.id.txt_Attendee);
+        mTxtPlace = (TextView) findViewById(R.id.txt_Place);
+
+        mEdtTitle = (EditText) findViewById(R.id.edit_Title_New_Event);
+        mEdtDesciption = (EditText) findViewById(R.id.title_description);
 
         CardView cardView = (CardView) findViewById(R.id.card_view2);
         cardView.setOnTouchListener(this);
@@ -115,6 +125,14 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
             }
         });
 
+        mTxtPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateEventActvity.this, PlaceActivity.class);
+                startActivityForResult(intent, 2);
+            }
+        });
+
         mTxtAttendee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +140,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
                 startActivityForResult(intent, 2);
             }
         });
+
 
         adapter = new ArrayAdapter<EventInWeek>
                 (this, android.R.layout.simple_list_item_1, arrJob);
@@ -136,6 +155,20 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mListData);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSpinerCalendar.setAdapter(adapter);
+
+        mButtonSave = (ImageButton) findViewById(R.id.btn_Save);
+        mButtonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = mEdtTitle.getText().toString();
+                if (!title.equals("")) {
+                    getDataFromService(createEvent());
+                } else {
+                    Toast.makeText(CreateEventActvity.this, R.string.not_be_empty, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         getDefaultInfor();
         addEventFormWidgets();
         selectRepeat();
@@ -379,7 +412,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         };
 
         String s = mTxtDateStart.getText() + "";
-        String strArrtmp[] = s.split("/");
+        String strArrtmp[] = s.split("-");
         int ngay = Integer.parseInt(strArrtmp[0]);
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
@@ -412,7 +445,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
             }
         };
         String s = mTxtDateFinish.getText() + "";
-        String strArrtmp[] = s.split("/");
+        String strArrtmp[] = s.split("-");
         int ngay = Integer.parseInt(strArrtmp[0]);
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
@@ -475,5 +508,37 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
                 callback, gio, phut, true);
         time.setTitle(R.string.select_time_finish);
         time.show();
+    }
+
+    public void getDataFromService(NewEvent newEvent) {
+        ServiceBuilder.getService().createEvent(newEvent).enqueue(new Callback<CreateEventResponse>() {
+            @Override
+            public void onResponse(Call<CreateEventResponse> call, Response<CreateEventResponse> response) {
+                if (response.body() == null) {
+                    Toast.makeText(CreateEventActvity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreateEventResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public NewEvent createEvent() {
+        Event event = new Event();
+        event.setTitle(mEdtTitle.getText().toString());
+        String dateStart = mTxtDateStart.getText().toString() + " "
+                + mTxtTimeStart.getText().toString();
+        dateStart = dateStart.substring(0, dateStart.length() - 2);
+        dateStart = dateStart.trim();
+        event.setStartTime(TimeUtils.stringToDate(dateStart, "dd-MM-yyyy H:mm"));
+        String dateFinish = mTxtDateFinish.getText().toString() + " " + mTxtTimeFinish.getText().toString();
+        dateFinish = dateFinish.substring(0, dateFinish.length() - 2);
+        dateFinish = dateFinish.trim();
+        event.setFinishTime(TimeUtils.stringToDate(dateFinish, "dd-MM-yyyy H:mm"));
+        event.setCalendar_id(6);
+        return new NewEvent(MainActivity.sAuthToken, event);
     }
 }
