@@ -5,4 +5,5 @@ package framgia.vn.framgiacrb.data;
  */
 public interface OnLoadEventListener {
     void onSuccess();
+    void onError();
 }

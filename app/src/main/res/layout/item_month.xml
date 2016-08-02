@@ -6,13 +6,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_month_height"
-        android:background="@drawable/bg"
-        android:gravity="center">
+        android:layout_marginTop="@dimen/item_month_margin_top">
         <TextView
+            android:layout_marginLeft="@dimen/item_event_margin_left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tv_month"
-            android:gravity="center"
             android:textSize="@dimen/text_size_header"
             android:textColor="@android:color/black"
             android:text="Thang 7 nam 2016"

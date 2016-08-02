@@ -14,6 +14,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
+import framgia.vn.framgiacrb.utils.Connectivity;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import io.realm.Realm;
@@ -74,21 +76,35 @@ public class EventsFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onError() {
+
+            }
         });
-        mEventRepositories.getEventsByCalendar(MainActivity.sAuthToken, calendar, getActivity());
+
+        if (Connectivity.isConnected(getActivity())) {
+            mEventRepositories.getEventsByCalendar(MainActivity.sAuthToken, calendar, getActivity());
+        } else {
+            try {
+                initDatas();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+        }
+
         mBroadcastReceiverToday = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(MainActivity.ACTION_TODAY)) {
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
                     int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                    int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                     if (firstVisibleItem > mPositionToday) {
                         mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
                     } else {
                         mRecyclerViewEvents.scrollToPosition(mPositionToday + 5);
                     }
-
                 }
             }
         };
@@ -249,5 +265,4 @@ public class EventsFragment extends Fragment {
         mRealm.close();
         getActivity().unregisterReceiver(mBroadcastReceiverToday);
     }
-
 }

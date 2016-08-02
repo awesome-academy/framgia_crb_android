@@ -73,7 +73,10 @@ public class EventRepositories implements EventRepository{
 
             @Override
             public void onFailure(Call<ResposeDTO> call, Throwable t) {
-                Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT);
+                if (mOnLoadEventListener != null) {
+                    mOnLoadEventListener.onSuccess();
+                }
+                Toast.makeText(context, context.getString(R.string.message_not_connect), Toast.LENGTH_SHORT);
             }
         });
     }

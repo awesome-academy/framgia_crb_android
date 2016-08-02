@@ -245,15 +245,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getTitle()) {
             case HOME:
                 fragment = new EventsFragment();
-                Toast.makeText(MainActivity.this, "home", Toast.LENGTH_SHORT).show();
                 break;
             case WEEK:
                 fragment = new EventFollowWeekFragment();
-                Toast.makeText(MainActivity.this, "week", Toast.LENGTH_SHORT).show();
                 break;
             case MONTH:
                 fragment = new MonthFragment();
-                Toast.makeText(MainActivity.this, "month", Toast.LENGTH_SHORT).show();
                 break;
             case LABEL:
                 break;
