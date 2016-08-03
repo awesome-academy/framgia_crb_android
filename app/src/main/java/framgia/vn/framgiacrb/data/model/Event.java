@@ -50,15 +50,15 @@ public class Event extends RealmObject {
     @SerializedName("event_id")
     private int mEventId;
 
-    @Ignore
-    private boolean mIsToday;
+    @SerializedName("color_id")
+    private int mColorId;
 
-    public boolean isToday() {
-        return mIsToday;
+    public int getColorId() {
+        return mColorId;
     }
 
-    public void setToday(boolean today) {
-        mIsToday = today;
+    public void setColorId(int colorId) {
+        mColorId = colorId;
     }
     @SerializedName("all_day")
     private boolean mAll_day;

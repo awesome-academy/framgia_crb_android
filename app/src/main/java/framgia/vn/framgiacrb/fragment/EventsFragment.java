@@ -29,6 +29,7 @@ import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.adapter.ListEventAdapter;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
+import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.utils.Connectivity;
@@ -192,14 +193,28 @@ public class EventsFragment extends Fragment {
         calendar.set(mLastYear, month - 1, 1);
         Date date = calendar.getTime();
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
+        boolean isTimelineAdded = false;
         while (month < mLastMonth + 1) {
 
             mDatas.add(date);
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
-                mDatas.add(null);
+                List<Event> events = mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date));
+                for (int i = 0; i < events.size(); i++) {
+                    Event event = events.get(i);
+                    if (event.getStartTime().getTime() > today.getTime() && !isTimelineAdded) {
+                        mDatas.add(null);
+                        isTimelineAdded = true;
+                    }
+                    mDatas.add(event);
+                }
+                if (!isTimelineAdded) {
+                    mDatas.add(null);
+                }
+            } else {
+                mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
             }
-            mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
