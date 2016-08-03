@@ -3,6 +3,8 @@ package framgia.vn.framgiacrb.object;
 import android.app.Activity;
 import android.app.Application;
 
+import java.util.Date;
+
 import framgia.vn.framgiacrb.data.model.Event;
 import io.realm.Case;
 import io.realm.Realm;
@@ -11,9 +13,7 @@ import io.realm.RealmResults;
 /**
  * Created by framgia on 26/07/2016.
  */
-public class RealmController {
-    public static final String EVENT_TITLE_FIELD = "mTitle";
-    public static final String EVENT_DESCRIPTION_FIELD = "mDescription";
+public class RealmController implements EventField {
     private static RealmController instance;
     private final Realm realm;
 

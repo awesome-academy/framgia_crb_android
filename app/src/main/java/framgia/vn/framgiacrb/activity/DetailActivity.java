@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,17 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.object.EventParcelabler;
 
-/**
- * Created by lucky_luke on 7/5/2016.
- */
-public class DetailActivity extends AppCompatActivity{
-    private TextView mTextViewBegin;
-    private TextView mTextViewEnd;
-
+public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +27,25 @@ public class DetailActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        findView();
+    }
+
+    private void findView() {
+        EventParcelabler eventParcelabler = getIntent()
+            .getParcelableExtra(Constant.INTENT_DATA);
+        TextView description = (TextView) findViewById(R.id.title_description);
+        description.setText(eventParcelabler.getDescription() == null ? "" : eventParcelabler.getDescription());
+        TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
+        startDate.setText(eventParcelabler.getStartTime() == null ? "" : eventParcelabler.getStartTime().toString());
+        TextView endDate = (TextView) findViewById(R.id.txt_DateFinish);
+        endDate.setText(eventParcelabler.getEndDate() == null ? "" : eventParcelabler.getEndDate().toString());
+        TextView title = (TextView) findViewById(R.id.title_event);
+        title.setText(eventParcelabler.getTitle() == null ? "" : eventParcelabler.getTitle());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.detail_menu, menu);
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
         return true;
     }
 
@@ -69,7 +77,7 @@ public class DetailActivity extends AppCompatActivity{
                 builder.create().show();
                 break;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);

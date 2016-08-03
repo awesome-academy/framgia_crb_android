@@ -15,4 +15,5 @@ public class Constant {
             R.color.color_event_4, R.color.color_event_5, R.color.color_event_6, R.color.color_event_7,
             R.color.color_event_8, R.color.color_event_9, R.color.color_event_10, R.color.color_event_11,
             R.color.color_event_12};
+    public static final String INTENT_DATA = "intent_data";
 }
