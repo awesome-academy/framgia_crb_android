@@ -27,11 +27,13 @@ import framgia.vn.framgiacrb.activity.CreateEventActvity;
 import framgia.vn.framgiacrb.activity.DetailActivity;
 import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.adapter.ListEventAdapter;
+import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
+import framgia.vn.framgiacrb.object.EventParcelabler;
 import framgia.vn.framgiacrb.utils.Connectivity;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -126,7 +128,7 @@ public class EventsFragment extends Fragment {
         mAdapter.setOnEventSelectedListener(new ListEventAdapter.OnEventSelectedListener() {
             @Override
             public void onSelected(int position) {
-                startActivity(new Intent(getActivity(), DetailActivity.class));
+                startDetailActivity(position);
             }
         });
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +180,27 @@ public class EventsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void startDetailActivity(int position) {
+        Event event = (Event)mDatas.get(position);
+        EventParcelabler eventParcelabler = new EventParcelabler(
+            event.getId(),
+            event.getTitle(),
+            event.getDescription(),
+            event.getStartTime(),
+            event.getFinishTime(),
+            event.getStatus(),
+            event.getRepeatType(),
+            event.getRepeatEvery(),
+            event.getEndDate(),
+            event.getExceptionDate(),
+            event.getType(),
+            event.getEventId()
+        );
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra(Constant.INTENT_DATA, eventParcelabler);
+        startActivity(intent);
     }
 
     private void initDatas() throws ParseException {
