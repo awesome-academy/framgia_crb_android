@@ -3,30 +3,39 @@ package framgia.vn.framgiacrb.data.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * Created by lethuy on 26/07/2016.
  */
-public class UserLogin implements Serializable{
+public class User implements Serializable{
     @SerializedName("id")
     private int mId;
     @SerializedName("name")
     private String mName;
     @SerializedName("email")
     private String mEmail;
+    @SerializedName("password")
+    private String mPassword;
     @SerializedName("avatar")
     private String mAvatar;
     @SerializedName("auth_token")
-    private String mAuth_token;
+    private String mAutToken;
 
-    public UserLogin() {}
+    @SerializedName("user_calendars")
+    private List<Calendar> mUserCalendars;
 
-    public UserLogin(int id, String name, String email, String avatar, String auth_token) {
+    @SerializedName("shared_calendars")
+    private List<Calendar> mShareUserCalendars;
+
+    public User() {}
+
+    public User(int id, String name, String email, String avatar, String auth_token) {
         this.mId = id;
         this.mName = name;
         this.mEmail = email;
         this.mAvatar = avatar;
-        this.mAuth_token = auth_token;
+        this.mAutToken = auth_token;
     }
 
     public int getId() {
@@ -62,10 +71,34 @@ public class UserLogin implements Serializable{
     }
 
     public String getAuth_token() {
-        return mAuth_token;
+        return mAutToken;
     }
 
     public void setAuth_token(String auth_token) {
-        this.mAuth_token = auth_token;
+        this.mAutToken = auth_token;
+    }
+
+    public String getPassword() {
+        return mPassword;
+    }
+
+    public void setPassword(String mPassword) {
+        this.mPassword = mPassword;
+    }
+
+    public List<Calendar> getUserCalendars() {
+        return mUserCalendars;
+    }
+
+    public void setUserCalendars(List<Calendar> mUserCalendars) {
+        this.mUserCalendars = mUserCalendars;
+    }
+
+    public List<Calendar> getShareUserCalendars() {
+        return mShareUserCalendars;
+    }
+
+    public void setShareUserCalendars(List<Calendar> mShareUserCalendars) {
+        this.mShareUserCalendars = mShareUserCalendars;
     }
 }

@@ -11,7 +11,7 @@ public class CreateEventResponse {
     @SerializedName("events")
     private Event mUser;
     @SerializedName("owner")
-    private UserLogin mOwners;
+    private User mOwners;
     @SerializedName("error")
     private String mError;
 
@@ -33,11 +33,11 @@ public class CreateEventResponse {
         this.mUser = mUser;
     }
 
-    public UserLogin getOwners() {
+    public User getOwners() {
         return mOwners;
     }
 
-    public void setOwners(UserLogin mOwners) {
+    public void setOwners(User mOwners) {
         this.mOwners = mOwners;
     }
 

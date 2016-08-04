@@ -13,7 +13,7 @@ import android.widget.Toast;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
-import framgia.vn.framgiacrb.data.model.UserLogin;
+import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.utils.NetworkUtil;
 import framgia.vn.framgiacrb.utils.ValidationLogin;
@@ -56,7 +56,7 @@ public class LoginActivity extends Activity {
                     if (isValidEmail && isValidPass){
                         mProgressDialog.setMessage(Constant.LOADING);
                         mProgressDialog.show();
-                        getDataFromInternet();
+                        getDataFromInternet(user());
                     } else {
                         Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
                     }
@@ -65,17 +65,16 @@ public class LoginActivity extends Activity {
         });
     }
 
-    public void getDataFromInternet(){
+    public void getDataFromInternet(User user){
 
-        ServiceBuilder.getService().authenticate(mEditTextEmail.getText().toString(),
-                mEditTextPassword.getText().toString()).enqueue(new Callback<LoginResponse>() {
+        ServiceBuilder.getService().authenticate(user).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 mProgressDialog.cancel();
                 if (response.body() == null) {
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
-                    UserLogin userLogin = response.body().getUser();
+                    User userLogin = response.body().getUser();
                     MainActivity.sAuthToken = userLogin.getAuth_token();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(Constant.KEY_NAME, userLogin);
@@ -89,9 +88,17 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-
+                mProgressDialog.cancel();
+                Toast.makeText(LoginActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public User user(){
+        User user = new User();
+        user.setEmail(mEditTextEmail.getText().toString());
+        user.setPassword(mEditTextPassword.getText().toString());
+        return user;
     }
 
 }

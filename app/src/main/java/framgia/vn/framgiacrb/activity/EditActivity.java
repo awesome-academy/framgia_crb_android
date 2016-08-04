@@ -8,7 +8,6 @@ import android.support.v7.widget.CardView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.object.EventInWeek;
 
 /**
  * Created by lethuy on 06/07/2016.
@@ -38,8 +36,6 @@ public class EditActivity extends Activity implements View.OnTouchListener{
 
     ArrayList<String> lstData;
 
-    ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
-    ArrayAdapter<EventInWeek> adapter = null;
     private Calendar mCal;
     private Date mDateFinish, mHourFinish;
 
@@ -73,17 +69,6 @@ public class EditActivity extends Activity implements View.OnTouchListener{
                 onBackPressed();
             }
         });
-
-        lstData = new ArrayList<>();
-        lstData.add("Lê Thị Thúy");
-        lstData.add("Cấn Văn Nghị");
-        lstData.add("Mai Đại Diện");
-        lstData.add("Đặng Anh Quân");
-        lstData.add("Nguyễn Văn Toàn");
-        mSpinerCalendar = (Spinner) findViewById(R.id.spin_Calendar);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, lstData);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        mSpinerCalendar.setAdapter(adapter);
 
         mEdtEvent.setText(R.string.event_edit);
 

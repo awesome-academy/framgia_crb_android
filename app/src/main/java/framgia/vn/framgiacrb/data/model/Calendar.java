@@ -2,10 +2,12 @@ package framgia.vn.framgiacrb.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by nghicv on 20/07/2016.
  */
-public class Calendar {
+public class Calendar implements Serializable{
 
     @SerializedName("id")
     private int mId;
@@ -17,10 +19,13 @@ public class Calendar {
     private String mDescription;
 
     @SerializedName("status")
-    private int mStatus;
+    private String mStatus;
 
     @SerializedName("is_default")
     private boolean mIsDefault;
+
+    @SerializedName("user_id")
+    private String mUserId;
 
     public int getId() {
         return mId;
@@ -46,13 +51,6 @@ public class Calendar {
         mDescription = description;
     }
 
-    public int getStatus() {
-        return mStatus;
-    }
-
-    public void setStatus(int status) {
-        mStatus = status;
-    }
 
     public boolean isDefault() {
         return mIsDefault;
@@ -60,5 +58,13 @@ public class Calendar {
 
     public void setDefault(boolean aDefault) {
         mIsDefault = aDefault;
+    }
+
+    public String getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(String mUserId) {
+        this.mUserId = mUserId;
     }
 }
