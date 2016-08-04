@@ -80,7 +80,7 @@ public class LoginActivity extends Activity {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(Constant.KEY_NAME, user);
                     startActivity(intent);
-
+                    finish();
                 }
                 else {
                     Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();

@@ -12,6 +12,7 @@ public class TimeUtils {
     public static final String DATE_INPUT = "yyy-MM-dd";
     public static final String DATE_OUTPUT = "dd-MM-yyyy";
     public static final String DATE_FORMAT_TOOLBAR = "dd MMM yyyy";
+    public static final String TIME_FORMAT = "HH:mm:ss";
     public static String toStringDate(long milisec) {
         String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
         return dateString;
@@ -61,5 +62,7 @@ public class TimeUtils {
         SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT);
         return format.parse(format.format(date));
     }
-
+    public static String toStringTime(Date date) {
+        return new SimpleDateFormat(TIME_FORMAT).format(date);
+    }
 }
