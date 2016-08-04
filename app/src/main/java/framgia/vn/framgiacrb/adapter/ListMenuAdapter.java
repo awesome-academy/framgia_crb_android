@@ -67,6 +67,13 @@ public class ListMenuAdapter extends BaseAdapter{
         switch (getItemViewType(position)) {
             case VIEW_TYPE_HEADER:
                 v = LayoutInflater.from(this.mContext).inflate(R.layout.header_drawer, parent, false);
+                ItemLeftMenu header = this.mListMenuItem.get(position);
+                holder.titleTextView = (TextView) v.findViewById(R.id.user_name);
+                holder.iconImageView = (ImageView) v.findViewById(R.id.profile_image);
+                holder.emailTextView = (TextView) v.findViewById(R.id.email);
+                holder.iconImageView.setImageResource(header.getImageResource());
+                holder.titleTextView.setText(header.getTitle());
+                holder.emailTextView.setText(header.getEmail());
                 break;
             case VIEW_TYPE_LABEL:
                 v = LayoutInflater.from(this.mContext).inflate(R.layout.item_label_listview_menu, parent, false);
@@ -88,5 +95,6 @@ public class ListMenuAdapter extends BaseAdapter{
     public class Holder {
         public TextView titleTextView;
         public ImageView iconImageView;
+        public TextView emailTextView;
     }
 }

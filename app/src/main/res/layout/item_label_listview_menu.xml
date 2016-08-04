@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <View
-        android:background="@android:color/black"
+        android:background="@color/greyed_out"
         android:layout_width="match_parent"
         android:layout_height="1dp" />
     <TextView
@@ -12,5 +12,5 @@
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textSize="@dimen/text_label_size" />
 </LinearLayout>

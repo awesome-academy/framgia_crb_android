@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -39,8 +40,7 @@ import java.util.Locale;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
-import framgia.vn.framgiacrb.constant.Constant;
-import framgia.vn.framgiacrb.data.model.User;
+import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
@@ -49,11 +49,16 @@ import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
 import framgia.vn.framgiacrb.utils.DrawableUtil;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String SHAREPREFF = "framgia.vn.framgiacrb.preference";
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
     public static final String ACTION_TODAY = "GO_TO_TODAY";
+    public static final String EMAIL_TITLE = "Email";
+    public static final String NAME_TITLE = "Title";
     private static final String HOME = "Home";
     private static final String WEEK = "Week";
     private static final String MONTH = "Month";
@@ -76,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private WrapContentHeightViewPager mCalendarViewPager;
     private MonthToolbarPagerAdapter mAdapter;
+    private RealmResults<framgia.vn.framgiacrb.data.model.Calendar> mUserCalendar;
+    private SharedPreferences mSharedPreferences;
     public static String sAuthToken;
-    private User mUser;
 
     int currentMenuItemId;
     boolean isExpanded = false;
@@ -102,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        mUser = (User) intent.getSerializableExtra(Constant.KEY_NAME);
+        mUserCalendar = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
+        mSharedPreferences = getSharedPreferences(SHAREPREFF, Context.MODE_PRIVATE);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -113,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         updateDisplayView(mCurrentMenuItemPosition);
         currentMenuItemId = R.id.home;
-        mUser = (User) getIntent().getSerializableExtra(Constant.KEY_NAME);
     } // end of method onCreate
 
     private void initUi() {
@@ -177,15 +183,16 @@ public class MainActivity extends AppCompatActivity {
         mListMenu = new ArrayList<>();
         ItemLeftMenu header = new ItemLeftMenu();
         header.setImageResource(R.drawable.profile);
-        header.setTitle("Lucky Luke");
+        header.setTitle(mSharedPreferences.getString(NAME_TITLE, "Lucky Luke"));
+        header.setEmail(mSharedPreferences.getString(EMAIL_TITLE, "mddien1994@gmail.com"));
         ItemLeftMenu home = new ItemLeftMenu();
-        home.setImageResource(R.drawable.ic_home);
+        home.setImageResource(R.drawable.view_home);
         home.setTitle(HOME);
         ItemLeftMenu week = new ItemLeftMenu();
-        week.setImageResource(R.drawable.ic_view_week);
+        week.setImageResource(R.drawable.view_week);
         week.setTitle(WEEK);
         ItemLeftMenu month = new ItemLeftMenu();
-        month.setImageResource(R.drawable.ic_view_module_black_24dp);
+        month.setImageResource(R.drawable.view_month);
         month.setTitle(MONTH);
         ItemLeftMenu label = new ItemLeftMenu();
         label.setTitle(LABEL);
@@ -194,6 +201,12 @@ public class MainActivity extends AppCompatActivity {
         mListMenu.add(week);
         mListMenu.add(month);
         mListMenu.add(label);
+        for (int i = 0; i < mUserCalendar.size(); i++) {
+            ItemLeftMenu user = new ItemLeftMenu();
+            user.setImageResource(R.drawable.calendar);
+            user.setTitle(mUserCalendar.get(i).getName());
+            mListMenu.add(user);
+        }
         mListMenuAdapter = new ListMenuAdapter(this, mListMenu);
         mNavigationListView.setAdapter(mListMenuAdapter);
         //mNavigationListView

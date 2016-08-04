@@ -22,6 +22,7 @@ public class EventRepositoriesLocal implements EventRepository{
     public static final String START_DATE_FIELD = "mStartTime";
     public static final String ID_FIELD = "mId";
     public static final String EVENT_ID_FIELD = "mEventId";
+    public static final String CALENDAR_ID_FIELD = "mId";
 
     private Realm mRealm;
 
@@ -54,6 +55,33 @@ public class EventRepositoriesLocal implements EventRepository{
                 }
             }
         });
+    }
+
+    public void addCalendars(final List<Calendar> calendars, final Realm.Transaction.OnSuccess onSuccess) {
+        final List<Calendar> realmCalendars = new ArrayList<>();
+        for (int i = 0; i < calendars.size(); i++) {
+            if (!hasCalendar(calendars.get(i))) {
+                realmCalendars.add(calendars.get(i));
+            }
+        }
+
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(realmCalendars);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                if (onSuccess != null) {
+                    onSuccess.onSuccess();
+                }
+            }
+        });
+    }
+
+    public RealmResults<Calendar> getAllCalendars() {
+        return mRealm.where(Calendar.class).findAll();
     }
 
     @Override
@@ -94,5 +122,9 @@ public class EventRepositoriesLocal implements EventRepository{
     public boolean isExists(Event event) {
         return mRealm.where(Event.class).equalTo(EVENT_ID_FIELD, event.getEventId())
                 .equalTo(START_DATE_FIELD, event.getStartTime()).count() != 0;
+    }
+
+    public boolean hasCalendar(Calendar calendar) {
+        return mRealm.where(Calendar.class).equalTo(CALENDAR_ID_FIELD, calendar.getId()).count() != 0;
     }
 }
