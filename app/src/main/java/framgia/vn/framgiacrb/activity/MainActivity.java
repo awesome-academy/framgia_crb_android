@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private WrapContentHeightViewPager mCalendarViewPager;
     private MonthToolbarPagerAdapter mAdapter;
-    private User mUserLogin;
     public static String sAuthToken;
+    private User mUser;
 
     int currentMenuItemId;
     boolean isExpanded = false;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        mUserLogin = (User) intent.getSerializableExtra(Constant.KEY_NAME);
+        mUser = (User) intent.getSerializableExtra(Constant.KEY_NAME);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         updateDisplayView(mCurrentMenuItemPosition);
         currentMenuItemId = R.id.home;
-        mUserLogin = (User) getIntent().getSerializableExtra(Constant.KEY_NAME);
+        mUser = (User) getIntent().getSerializableExtra(Constant.KEY_NAME);
     } // end of method onCreate
 
     private void initUi() {
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    private void setSubTitle(String date) {
+    public void setSubTitle(String date) {
         if (null != mDatePickerTextView) {
             mDatePickerTextView.setText(date);
         }

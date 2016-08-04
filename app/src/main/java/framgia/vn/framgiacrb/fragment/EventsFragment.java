@@ -31,6 +31,7 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.object.EventParcelabler;
@@ -87,7 +88,7 @@ public class EventsFragment extends Fragment {
         });
 
         if (Connectivity.isConnected(getActivity())) {
-            mEventRepositories.getEventsByCalendar(MainActivity.sAuthToken, calendar, getActivity());
+            mEventRepositories.getEventsByCalendar(Session.sAuthToken, calendar, getActivity());
         } else {
             try {
                 initDatas();
@@ -127,8 +128,10 @@ public class EventsFragment extends Fragment {
         touchHelper.attachToRecyclerView(mRecyclerViewEvents);
         mAdapter.setOnEventSelectedListener(new ListEventAdapter.OnEventSelectedListener() {
             @Override
-            public void onSelected(int position) {
-                startDetailActivity(position);
+            public void onSelected(String idSelected) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra(Constant.ID_KEY, idSelected);
+                startActivity(intent);
             }
         });
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +154,7 @@ public class EventsFragment extends Fragment {
                 int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                 int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                 if (dy > 0) {
+                    setDateForCalendar(firstVisibleItem);
                     if (totalItemCount - 10 < lastVisibleItem + 1) {
                         if (!isLoading) {
                             isLoading = true;
@@ -164,6 +168,7 @@ public class EventsFragment extends Fragment {
                         }
                     }
                 } else {
+                    setDateForCalendar(firstVisibleItem);
                     if (10 > firstVisibleItem) {
 
                         if (!isLoading) {
@@ -302,5 +307,13 @@ public class EventsFragment extends Fragment {
         super.onDestroy();
         mRealm.close();
         getActivity().unregisterReceiver(mBroadcastReceiverToday);
+    }
+
+    private void setDateForCalendar(int position) {
+        Object object = mDatas.get(position);
+        if (object instanceof Date) {
+            Date date = (Date) object;
+            ((MainActivity)getActivity()).setSubTitle(TimeUtils.toStringDate(date, TimeUtils.DATE_FORMAT_TOOLBAR));
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
+import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.utils.NetworkUtil;
@@ -74,10 +75,10 @@ public class LoginActivity extends Activity {
                 if (response.body() == null) {
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
-                    User userLogin = response.body().getUser();
-                    MainActivity.sAuthToken = userLogin.getAuth_token();
+                    User user = response.body().getUser();
+                    Session.sAuthToken = user.getAuth_token();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra(Constant.KEY_NAME, userLogin);
+                    intent.putExtra(Constant.KEY_NAME, user);
                     startActivity(intent);
 
                 }
