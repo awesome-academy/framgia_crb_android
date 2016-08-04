@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -38,7 +37,6 @@ import framgia.vn.framgiacrb.data.model.CreateEventResponse;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.NewEvent;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
-import framgia.vn.framgiacrb.object.EventInWeek;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
 import retrofit2.Call;
@@ -66,8 +64,6 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
     private TextView mTxtOption, mTxtAttendee, mTxtPlace;
     private Spinner mSpinerCalendar;
 
-    ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
-    ArrayAdapter<EventInWeek> adapter = null;
     private Calendar mCal, mCalendarStart, mCalendarFinish;
     private Date mDateFinish, mHourFinish;
 
@@ -142,19 +138,6 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         });
 
 
-        adapter = new ArrayAdapter<EventInWeek>
-                (this, android.R.layout.simple_list_item_1, arrJob);
-
-        mListData = new ArrayList<>();
-        mListData.add("Lê Thị Thúy");
-        mListData.add("Cấn Văn Nghị");
-        mListData.add("Mai Đại Diện");
-        mListData.add("Đặng Anh Quân");
-        mListData.add("Nguyễn Văn Toàn");
-        mSpinerCalendar = (Spinner) findViewById(R.id.spin_Calendar);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mListData);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        mSpinerCalendar.setAdapter(adapter);
 
         mButtonSave = (ImageButton) findViewById(R.id.btn_Save);
         mButtonSave.setOnClickListener(new View.OnClickListener() {

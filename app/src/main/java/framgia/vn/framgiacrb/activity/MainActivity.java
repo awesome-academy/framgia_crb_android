@@ -40,7 +40,7 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
 import framgia.vn.framgiacrb.constant.Constant;
-import framgia.vn.framgiacrb.data.model.UserLogin;
+import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private WrapContentHeightViewPager mCalendarViewPager;
     private MonthToolbarPagerAdapter mAdapter;
-    private UserLogin mUserLogin;
+    private User mUserLogin;
     public static String sAuthToken;
 
     int currentMenuItemId;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        mUserLogin = (UserLogin) intent.getSerializableExtra(Constant.KEY_NAME);
+        mUserLogin = (User) intent.getSerializableExtra(Constant.KEY_NAME);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         updateDisplayView(mCurrentMenuItemPosition);
         currentMenuItemId = R.id.home;
-        mUserLogin = (UserLogin) getIntent().getSerializableExtra(Constant.KEY_NAME);
+        mUserLogin = (User) getIntent().getSerializableExtra(Constant.KEY_NAME);
     } // end of method onCreate
 
     private void initUi() {
