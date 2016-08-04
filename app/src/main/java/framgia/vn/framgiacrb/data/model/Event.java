@@ -2,8 +2,11 @@ package framgia.vn.framgiacrb.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -53,6 +56,24 @@ public class Event extends RealmObject {
     @SerializedName("color_id")
     private int mColorId;
 
+    @SerializedName("attendees")
+    private RealmList<Attendee> mAttendees;
+
+    @SerializedName("place")
+    private Place mPlace;
+
+    @SerializedName("calendar")
+    private String mCalendar;
+
+    @SerializedName("calendar_id")
+    private int mCalendarId;
+
+    @SerializedName("all_day")
+    private boolean mAll_day;
+
+    @SerializedName("user_id")
+    private int mUser_id;
+
     public int getColorId() {
         return mColorId;
     }
@@ -60,14 +81,6 @@ public class Event extends RealmObject {
     public void setColorId(int colorId) {
         mColorId = colorId;
     }
-    @SerializedName("all_day")
-    private boolean mAll_day;
-
-    @SerializedName("user_id")
-    private int mUser_id;
-
-    @SerializedName("calendar_id")
-    private int mCalendar_id;
 
     public String getId() {
         return mId;
@@ -178,15 +191,11 @@ public class Event extends RealmObject {
         return mUser_id;
     }
 
-    public void setUser_id(int mUser_id) {
-        this.mUser_id = mUser_id;
+    public int getCalendarId() {
+        return mCalendarId;
     }
 
-    public int getCalendar_id() {
-        return mCalendar_id;
-    }
-
-    public void setCalendar_id(int mCalendar_id) {
-        this.mCalendar_id = mCalendar_id;
+    public void setCalendarId(int calendarId) {
+        mCalendarId = calendarId;
     }
 }

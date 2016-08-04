@@ -521,7 +521,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         dateFinish = dateFinish.substring(0, dateFinish.length() - 2);
         dateFinish = dateFinish.trim();
         event.setFinishTime(TimeUtils.stringToDate(dateFinish, "dd-MM-yyyy H:mm"));
-        event.setCalendar_id(6);
+        event.setCalendarId(6);
         return new NewEvent(MainActivity.sAuthToken, event);
     }
 }

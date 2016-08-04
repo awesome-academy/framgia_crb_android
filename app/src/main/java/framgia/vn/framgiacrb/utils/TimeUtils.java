@@ -11,6 +11,7 @@ import java.util.Locale;
 public class TimeUtils {
     public static final String DATE_INPUT = "yyy-MM-dd";
     public static final String DATE_OUTPUT = "dd-MM-yyyy";
+    public static final String DATE_FORMAT_TOOLBAR = "dd MMM yyyy";
     public static String toStringDate(long milisec) {
         String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
         return dateString;
@@ -50,6 +51,10 @@ public class TimeUtils {
 
     public static String toStringDate(Date date) {
         return new SimpleDateFormat(DATE_OUTPUT).format(date);
+    }
+
+    public static String toStringDate(Date date, String format) {
+        return new SimpleDateFormat(format).format(date);
     }
 
     public static Date formatDate(Date date) throws ParseException {

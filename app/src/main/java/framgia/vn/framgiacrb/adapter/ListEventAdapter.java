@@ -81,7 +81,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case VIEW_TYPE_TIMELINE:
                 View itemViewTimeline = mLayoutInflater.inflate(R.layout.item_timeline, parent, false);
-                viewHolder = new EventViewHolder(itemViewTimeline);
+                viewHolder = new TimeLineViewHolder(itemViewTimeline);
                 break;
 
         }
@@ -114,6 +114,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (object instanceof Event){
             Event event = (Event) object;
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
+            eventViewHolder.setId(event.getId());
             eventViewHolder.tvTitleEvent.setText(event.getTitle());
             SimpleDateFormat format = new SimpleDateFormat("H:mm");
             Date startDate = event.getStartTime();
@@ -169,19 +170,24 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView tvTitleEvent;
         TextView tvTime;
         CardView cardView;
+        private String mId;
         public EventViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnEventSelectedListener != null) {
-                        mOnEventSelectedListener.onSelected(getLayoutPosition());
+                        mOnEventSelectedListener.onSelected(mId);
                     }
                 }
             });
             tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time);
             cardView = (CardView) itemView.findViewById(R.id.card_view_item_event);
+        }
+
+        public void setId(String id) {
+            mId = id;
         }
     }
 
@@ -193,6 +199,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public interface OnEventSelectedListener {
-        void onSelected (int position);
+        void onSelected (String idSelected);
     }
 }
