@@ -8,22 +8,25 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import java.util.Date;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
-import framgia.vn.framgiacrb.object.EventParcelabler;
+import framgia.vn.framgiacrb.object.RealmController;
+import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class DetailActivity extends AppCompatActivity {
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_detail);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -31,16 +34,26 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void findView() {
-        EventParcelabler eventParcelabler = getIntent()
-            .getParcelableExtra(Constant.INTENT_DATA);
-        TextView description = (TextView) findViewById(R.id.title_description);
-        description.setText(eventParcelabler.getDescription() == null ? "" : eventParcelabler.getDescription());
-        TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
-        startDate.setText(eventParcelabler.getStartTime() == null ? "" : eventParcelabler.getStartTime().toString());
-        TextView endDate = (TextView) findViewById(R.id.txt_DateFinish);
-        endDate.setText(eventParcelabler.getEndDate() == null ? "" : eventParcelabler.getEndDate().toString());
-        TextView title = (TextView) findViewById(R.id.title_event);
-        title.setText(eventParcelabler.getTitle() == null ? "" : eventParcelabler.getTitle());
+        String eventId = getIntent().getStringExtra(Constant.ID_KEY);
+        Event event = RealmController.with(this).getEventById(eventId);
+        if(event != null) {
+            TextView description = (TextView) findViewById(R.id.title_description);
+            description.setText(
+                event.getDescription() == null ? "" : event.getDescription());
+
+            TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
+            startDate.setText(TimeUtils.toStringDate(event.getStartTime()));
+            TextView startTime = (TextView) findViewById(R.id.txt_timeStart);
+            startTime.setText(TimeUtils.toStringTime(event.getStartTime()));
+
+            TextView endDate = (TextView) findViewById(R.id.txt_DateFinish);
+            endDate.setText(TimeUtils.toStringDate(event.getFinishTime()));
+            TextView endTime = (TextView) findViewById(R.id.txt_TimeFinish);
+            endTime.setText(TimeUtils.toStringTime(event.getFinishTime()));
+
+            TextView title = (TextView) findViewById(R.id.textview_event);
+            title.setText(event.getTitle() == null ? "" : event.getTitle());
+        }
     }
 
     @Override

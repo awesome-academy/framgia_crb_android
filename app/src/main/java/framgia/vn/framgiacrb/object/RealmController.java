@@ -44,4 +44,9 @@ public class RealmController implements EventField {
             .contains(EVENT_DESCRIPTION_FIELD, textSearch, Case.INSENSITIVE)
             .findAll();
     }
+    public Event getEventById(String id) {
+        return realm.where(Event.class)
+            .equalTo(EVENT_ID_FIELD, id)
+            .findFirst();
+    }
 }
