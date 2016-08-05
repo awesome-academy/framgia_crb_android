@@ -7,6 +7,7 @@ public class ItemLeftMenu {
     private int mImageResource;
     private String mTitle;
     private String mEmail;
+    private int mCalendarId;
 
     public ItemLeftMenu() {
     }
@@ -33,5 +34,13 @@ public class ItemLeftMenu {
 
     public String getEmail() {
         return mEmail;
+    }
+
+    public int getCalendarId() {
+        return mCalendarId;
+    }
+
+    public void setCalendarId(int mCalendarId) {
+        this.mCalendarId = mCalendarId;
     }
 }

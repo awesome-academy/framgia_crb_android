@@ -41,6 +41,7 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
+import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.fragment.EventsFragment;
 import framgia.vn.framgiacrb.fragment.MonthFragment;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MONTH = "Month";
     private static final String COLOR = "Color";
     private static final String LABEL = "Calendar";
+    private static final String LOGOUT = "Logout";
     private static final int ANIMATION_DURATION = 300;
     private static final int NUMBER_COLUMN = 5;
 
@@ -192,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
         month.setTitle(MONTH);
         ItemLeftMenu label = new ItemLeftMenu();
         label.setTitle(LABEL);
+        ItemLeftMenu logout = new ItemLeftMenu();
+        logout.setImageResource(R.drawable.logout);
+        logout.setTitle(LOGOUT);
         mListMenu.add(header);
         mListMenu.add(home);
         mListMenu.add(week);
@@ -201,8 +206,10 @@ public class MainActivity extends AppCompatActivity {
             ItemLeftMenu user = new ItemLeftMenu();
             user.setImageResource(R.drawable.calendar);
             user.setTitle(mUserCalendar.get(i).getName());
+            user.setCalendarId(mUserCalendar.get(i).getCalendarId());
             mListMenu.add(user);
         }
+        mListMenu.add(logout);
         mListMenuAdapter = new ListMenuAdapter(this, mListMenu);
         mNavigationListView.setAdapter(mListMenuAdapter);
         //mNavigationListView
@@ -261,6 +268,15 @@ public class MainActivity extends AppCompatActivity {
             case MONTH:
                 fragment = new MonthFragment();
                 break;
+            case LOGOUT:
+                new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(MainActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                MainActivity.this.finish();
+                return;
             case LABEL:
                 break;
         }
@@ -268,13 +284,17 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.frame, fragment).commit();
         }
-        if (position != 0 && position != 4) {
+        if (position != 0 && position < 4) {
             mDrawerLayout.closeDrawers();
             mCurrentMenuItemPosition = position;
-        } else {
+        } else if (position == 0 || position == 4){
             Toast.makeText(MainActivity.this, mCurrentMenuItemPosition+"", Toast.LENGTH_SHORT).show();
             mNavigationListView.setItemChecked(position, false);
             mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
+        } else if (position > 4) {
+            mDrawerLayout.closeDrawers();
+            Session.sCalendarId = item.getCalendarId();
+            Toast.makeText(MainActivity.this, ""+Session.sCalendarId, Toast.LENGTH_SHORT).show();
         }
     }
 
