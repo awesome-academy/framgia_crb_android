@@ -65,6 +65,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                         mProgressDialog.setMessage(Constant.LOADING);
                         mProgressDialog.show();
                         getDataFromInternet(user());
+
                     } else {
                         Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
                     }

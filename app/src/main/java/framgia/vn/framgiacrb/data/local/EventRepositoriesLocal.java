@@ -17,7 +17,7 @@ import io.realm.Sort;
 /**
  * Created by nghicv on 26/07/2016.
  */
-public class EventRepositoriesLocal implements EventRepository{
+public class EventRepositoriesLocal implements EventRepository {
 
     public static final String START_DATE_FIELD = "mStartTime";
     public static final String ID_FIELD = "mId";
