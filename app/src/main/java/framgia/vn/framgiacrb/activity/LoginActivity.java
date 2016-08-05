@@ -131,5 +131,6 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     public void onSuccess() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }
