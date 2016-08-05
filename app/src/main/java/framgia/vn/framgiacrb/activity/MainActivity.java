@@ -133,11 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 isExpanded = (verticalOffset == 0);
             }
         });
-//        mCustomMonthCalendarView = (CustomMonthCalendarView) findViewById(R.id.calendar_view);
-//        mCustomMonthCalendarView.setAdapter(getSupportFragmentManager());
         mDatePickerButton = (RelativeLayout) findViewById(R.id.date_picker_button);
-//        mCustomMonthCalendarView = (CustomMonthCalendarView) findViewById(R.id.calendar_view);
-//        mCustomMonthCalendarView.setAdapter(getSupportFragmentManager());
         mCalendarViewPager = (WrapContentHeightViewPager) findViewById(R.id.calendar_view_pager);
         mAdapter = new MonthToolbarPagerAdapter(this);
         mCalendarViewPager.setAdapter(mAdapter);
@@ -419,5 +415,10 @@ public class MainActivity extends AppCompatActivity {
                 closeToolbar();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -45,7 +45,7 @@ public class EventRepositoriesLocal implements EventRepository{
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealm(realmEvents);
+                realm.copyToRealmOrUpdate(realmEvents);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override

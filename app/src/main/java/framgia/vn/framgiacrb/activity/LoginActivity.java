@@ -19,6 +19,7 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
+import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.utils.NetworkUtil;
@@ -82,7 +83,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
                     User userLogin = response.body().getUser();
-                    MainActivity.sAuthToken = userLogin.getAuth_token();
+                    Session.sAuthToken = userLogin.getAuth_token();
                     List<Calendar> listUserCalendar = userLogin.getUserCalendars();
                     List<Calendar> listShareUserCalendar = userLogin.getShareUserCalendars();
                     List<Calendar> listCalendar = new ArrayList<Calendar>();
