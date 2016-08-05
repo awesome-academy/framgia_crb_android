@@ -74,4 +74,8 @@
     <dimen name="divide_width">1dp</dimen>
     <dimen name="divide_dashGap">20px</dimen>
     <dimen name="divide_dash_witdh">30px</dimen>
+    <dimen name="search_item_padding">20dp</dimen>
+    <dimen name="searh_item_margin">10dp</dimen>
+    <dimen name="search_item_text_size">15sp</dimen>
+    <dimen name="search_item_day_size">20sp</dimen>
 </resources>
