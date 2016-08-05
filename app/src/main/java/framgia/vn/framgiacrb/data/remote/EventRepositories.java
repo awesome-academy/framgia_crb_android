@@ -64,10 +64,15 @@ public class EventRepositories implements EventRepository{
                 response.body();
                 if (response.isSuccessful()) {
                     mEvents = response.body().getEvents();
-                    Realm realm = Realm.getDefaultInstance();
-                    new EventRepositoriesLocal(realm).addEvents(mEvents, mOnLoadEventListener);
+                    if (mEvents != null) {
+                        Realm realm = Realm.getDefaultInstance();
+                        new EventRepositoriesLocal(realm).addEvents(mEvents, mOnLoadEventListener);
+                    } else {
+                        mOnLoadEventListener.onSuccess();
+                    }
                 } else {
                     Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT);
+                    mOnLoadEventListener.onSuccess();
                 }
             }
 

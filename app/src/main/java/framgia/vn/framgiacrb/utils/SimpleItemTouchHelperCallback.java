@@ -43,10 +43,8 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
         if (viewHolder instanceof ListEventAdapter.EventViewHolder) {
-            return makeMovementFlags(dragFlags, swipeFlags);
+            return makeMovementFlags(0, ItemTouchHelper.END);
         }
         return 0;
     }

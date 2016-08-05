@@ -2,8 +2,6 @@ package framgia.vn.framgiacrb.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 

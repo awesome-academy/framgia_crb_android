@@ -130,7 +130,7 @@ public class EventsFragment extends Fragment {
             public void onSelected(String idSelected) {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra(Constant.ID_KEY, idSelected);
-                startActivity(intent);
+                getActivity().startActivity(intent);
             }
         });
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
