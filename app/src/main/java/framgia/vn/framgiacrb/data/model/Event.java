@@ -198,4 +198,16 @@ public class Event extends RealmObject {
     public void setCalendarId(int calendarId) {
         mCalendarId = calendarId;
     }
+
+    public String getCalendar() {
+        return mCalendar;
+    }
+
+    public void setCalendar(String mCalendar) {
+        this.mCalendar = mCalendar;
+    }
+
+    public RealmList<Attendee> getAttendees() {
+        return mAttendees;
+    }
 }

@@ -53,7 +53,7 @@
     <string name="action_delete_string">Delete</string>
     <string name="time_string">Thoi gian</string>
     <string name="event_string">Su kien</string>
-    <string name="loop_string">Lap lai</string>
+    <string name="loop_string">Repeat</string>
     <string name="description_string">Mieu ta</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -109,4 +109,5 @@
     <string name="message_not_connect">Not connection</string>
     <string name="error">Error</string>
     <string name="not_be_empty">Not be empty</string>
+    <string name="Attendee">Attendee</string>
 </resources>
