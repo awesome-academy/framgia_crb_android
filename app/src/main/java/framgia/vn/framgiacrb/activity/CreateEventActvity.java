@@ -36,6 +36,7 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.data.model.CreateEventResponse;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.NewEvent;
+import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
@@ -53,6 +54,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
     private final String FORMAT_TIME_A = "hh:mm a";
     private final String TIME_AM = "AM";
     private final String TIME_PM = "PM";
+    private final String SUCCESS = "Create Event Success!";
     private ImageButton mImageButtonBack;
     private EditText mEdtOption, mEdtTitle, mEdtDesciption;
     private ImageButton mButtonSave;
@@ -136,7 +138,6 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
                 startActivityForResult(intent, 2);
             }
         });
-
 
 
         mButtonSave = (ImageButton) findViewById(R.id.btn_Save);
@@ -499,6 +500,8 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
             public void onResponse(Call<CreateEventResponse> call, Response<CreateEventResponse> response) {
                 if (response.body() == null) {
                     Toast.makeText(CreateEventActvity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                } else if (response.body().getMessage().equals(SUCCESS)){
+                    Toast.makeText(CreateEventActvity.this, R.string.success, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -522,6 +525,6 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         dateFinish = dateFinish.trim();
         event.setFinishTime(TimeUtils.stringToDate(dateFinish, "dd-MM-yyyy H:mm"));
         event.setCalendarId(6);
-        return new NewEvent(MainActivity.sAuthToken, event);
+        return new NewEvent(Session.sAuthToken, event);
     }
 }
