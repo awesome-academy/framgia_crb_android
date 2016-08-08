@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,13 +34,17 @@ import java.util.Date;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.CreateEventResponse;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.NewEvent;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
+import framgia.vn.framgiacrb.object.EventInWeek;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +75,9 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
     private Date mDateFinish, mHourFinish;
 
     private ArrayList<String> mListData;
+
+    ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
+    ArrayAdapter<EventInWeek> adapter = null;
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -139,6 +147,22 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
             }
         });
 
+        adapter = new ArrayAdapter<EventInWeek>
+                (this, android.R.layout.simple_list_item_1, arrJob);
+
+        mListData = new ArrayList<>();
+        RealmResults<framgia.vn.framgiacrb.data.model.Calendar> result =
+                new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
+
+        for(int i = 0;  i<result.size(); i++){
+            mListData.add(result.get(i).getName());
+        }
+
+        mSpinerCalendar = (Spinner) findViewById(R.id.spin_Calendar);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,
+                mListData);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        mSpinerCalendar.setAdapter(adapter);
 
         mButtonSave = (ImageButton) findViewById(R.id.btn_Save);
         mButtonSave.setOnClickListener(new View.OnClickListener() {
