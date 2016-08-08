@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import framgia.vn.framgiacrb.R;
@@ -38,9 +39,13 @@ public class DetailActivity extends AppCompatActivity {
         String eventId = getIntent().getStringExtra(Constant.ID_KEY);
         Event event = RealmController.with(this).getEventById(eventId);
         if (event != null) {
-            TextView description = (TextView) findViewById(R.id.title_description);
-            description.setText(
-                event.getDescription() == null ? "" : event.getDescription());
+            if (event.getDescription() != null) {
+                TextView description = (TextView) findViewById(R.id.title_description);
+                description.setText(event.getDescription());
+            } else {
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_description);
+                relativeLayout.setVisibility(View.GONE);
+            }
             TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
             startDate.setText(TimeUtils.toStringDate(event.getStartTime()));
             TextView startTime = (TextView) findViewById(R.id.txt_timeStart);
@@ -53,15 +58,25 @@ public class DetailActivity extends AppCompatActivity {
             title.setText(event.getTitle() == null ? "" : event.getTitle());
             TextView calendar = (TextView) findViewById(R.id.textView_calendar);
             calendar.setText(event.getCalendar() == null ? "" : event.getCalendar());
-            TextView listAttendee = (TextView) findViewById(R.id.attendee_list);
-            listAttendee.setText(Attendee.getLisAttendee(event.getAttendees()));
+            if (Attendee.getLisAttendee(event.getAttendees()) != "") {
+                TextView listAttendee = (TextView) findViewById(R.id.attendee_list);
+                listAttendee.setText(Attendee.getLisAttendee(event.getAttendees()));
+            } else {
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_attendee);
+                relativeLayout.setVisibility(View.GONE);
+            }
             if (event.getColorId() > 0 && event.getColorId() <= 12) {
                 View color = (View) findViewById(R.id.view_color);
-                color.setBackgroundColor(Constant.color[event.getColorId()] - 1);
+                color.setBackgroundColor(getResources().getColor(Constant.color[event.getColorId
+                    () - 1]));
             }
-
-            TextView repeatTv = (TextView) findViewById(R.id.textView_repeat);
-            repeatTv.setText(event.getRepeatType() == null ? "": event.getRepeatType());
+            if (event.getRepeatType() != null) {
+                TextView repeatTv = (TextView) findViewById(R.id.textView_repeat);
+                repeatTv.setText(event.getRepeatType());
+            } else {
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_repeat);
+                relativeLayout.setVisibility(View.GONE);
+            }
         }
     }
 

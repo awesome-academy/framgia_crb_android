@@ -57,20 +57,24 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mAdapter.updateData(RealmController.with(SearchActivity.this)
-                    .searchEvent(query));
+                if(query != "") {
+                    mAdapter.updateData(RealmController.with(SearchActivity.this)
+                        .searchEvent(query));
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(mAdapter == null) {
-                    mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
-                        (SearchActivity.this).getAllEvent());
-                    mRecycler.setAdapter(mAdapter);
+                if(newText != "") {
+                    if (mAdapter == null) {
+                        mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
+                            (SearchActivity.this).searchEvent(newText));
+                        mRecycler.setAdapter(mAdapter);
+                    }
+                    mAdapter.updateData(RealmController.with(SearchActivity.this)
+                        .searchEvent(newText));
                 }
-                mAdapter.updateData(RealmController.with(SearchActivity.this)
-                    .searchEvent(newText));
                 return false;
             }
         });

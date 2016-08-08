@@ -169,6 +169,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_repeat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -211,6 +212,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/round_corner"
@@ -241,6 +243,7 @@
                 android:gravity="center_vertical"/>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/rl_attendee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -282,6 +285,7 @@
                 android:gravity="center_vertical" />
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/rl_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/round_corner"
