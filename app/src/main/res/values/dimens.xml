@@ -71,4 +71,7 @@
     <dimen name="item_timeline_margin_bottom">2dp</dimen>
     <dimen name="item_timeline_margin_left">54dp</dimen>
     <dimen name="text_label_size">14sp</dimen>
+    <dimen name="divide_width">1dp</dimen>
+    <dimen name="divide_dashGap">20px</dimen>
+    <dimen name="divide_dash_witdh">30px</dimen>
 </resources>

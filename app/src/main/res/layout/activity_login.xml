@@ -58,7 +58,8 @@
                     android:background="@drawable/edt_bacground"
                     android:hint="@string/hint_email_input"
                     android:inputType="textEmailAddress"
-                    android:padding="@dimen/padding" />
+                    android:padding="@dimen/padding"
+                    android:text="tran.tien.thanh@framgia.com"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -89,7 +90,8 @@
                     android:background="@drawable/edt_bacground"
                     android:hint="@string/hint_password_input"
                     android:inputType="textPassword"
-                    android:padding="@dimen/padding" />
+                    android:padding="@dimen/padding"
+                    android:text="12345678"/>
             </RelativeLayout>
 
             <Button
