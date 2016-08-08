@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,11 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     private Button mButtonLogin, mButtonLoginFb, mButtonLoginGg;
     private SharedPreferences mSharedPreferences;
     private ProgressDialog mProgressDialog;
+
+    private List<Calendar> mListUserCalendar;
+    private List<Calendar> mListShareUserCalendar;
+    private List<Calendar> mListCalendar;
+    private User mUserLogin;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -83,30 +89,18 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                 if (response.body() == null) {
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
-                    User userLogin = response.body().getUser();
-                    Session.sAuthToken = userLogin.getAuth_token();
-                    List<Calendar> listUserCalendar = userLogin.getUserCalendars();
-                    List<Calendar> listShareUserCalendar = userLogin.getShareUserCalendars();
-                    List<Calendar> listCalendar = new ArrayList<Calendar>();
-                    for (int i = 0; i < listUserCalendar.size(); i++) {
-                        Calendar calendar = new Calendar();
-                        calendar.setId(listUserCalendar.get(i).getId());
-                        calendar.setUserId(listUserCalendar.get(i).getUserId());
-                        calendar.setPermissionId(listUserCalendar.get(i).getPermissionId());
-                        calendar.setColorId(listUserCalendar.get(i).getColorId());
-                        calendar.setName(listShareUserCalendar.get(i).getName());
-                        calendar.setStatus(listShareUserCalendar.get(i).getStatus());
-                        calendar.setDefault(listShareUserCalendar.get(i).isDefault());
-                        calendar.setDescription(listShareUserCalendar.get(i).getDescription());
-                        listCalendar.add(calendar);
-                    }
-                    Realm realm = Realm.getDefaultInstance();
-                    new EventRepositoriesLocal(realm).addCalendars(listCalendar, LoginActivity.this);
-                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(MainActivity.NAME_TITLE, userLogin.getName());
-                    editor.putString(MainActivity.EMAIL_TITLE, userLogin.getEmail());
-                    editor.commit();
+                    mUserLogin = response.body().getUser();
+                    Session.sAuthToken = mUserLogin.getAuth_token();
+                    mListUserCalendar = mUserLogin.getUserCalendars();
+                    mListShareUserCalendar = mUserLogin.getShareUserCalendars();
+                    mListCalendar = new ArrayList<Calendar>();
+                    new EventRepositoriesLocal(Realm.getDefaultInstance()).clearCalendarFromDatabase(new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d("LoginActivity", "Clear Calendar from database success");
+                            saveCalendarToDatabase();
+                        }
+                    });
                 }
                 else {
                     Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
@@ -119,6 +113,30 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                 Toast.makeText(LoginActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void saveCalendarToDatabase() {
+        for (int i = 0; i < mListUserCalendar.size(); i++) {
+            Calendar calendar = new Calendar();
+            calendar.setId(mListUserCalendar.get(i).getId());
+            calendar.setUserId(mListUserCalendar.get(i).getUserId());
+            calendar.setPermissionId(mListUserCalendar.get(i).getPermissionId());
+            calendar.setColorId(mListUserCalendar.get(i).getColorId());
+            calendar.setCalendarId(mListUserCalendar.get(i).getCalendarId());
+            calendar.setName(mListShareUserCalendar.get(i).getName());
+            calendar.setStatus(mListShareUserCalendar.get(i).getStatus());
+            calendar.setDefault(mListShareUserCalendar.get(i).isDefault());
+            calendar.setDescription(mListShareUserCalendar.get(i).getDescription());
+            mListCalendar.add(calendar);
+        }
+        Realm realm = Realm.getDefaultInstance();
+        new EventRepositoriesLocal(realm).addCalendars(mListCalendar, LoginActivity.this);
+        Session.sCalendarId = mListUserCalendar.get(0).getCalendarId();
+        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(MainActivity.NAME_TITLE, mUserLogin.getName());
+        editor.putString(MainActivity.EMAIL_TITLE, mUserLogin.getEmail());
+        editor.commit();
     }
 
     public User user(){

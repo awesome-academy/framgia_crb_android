@@ -15,6 +15,9 @@ public class Calendar extends RealmObject{
     @SerializedName("name")
     private String mName;
 
+    @SerializedName("calendar_id")
+    private int mCalendarId;
+
     @SerializedName("permission_id")
     private int mPermissionId;
 
@@ -96,5 +99,13 @@ public class Calendar extends RealmObject{
 
     public void setStatus(String mStatus) {
         this.mStatus = mStatus;
+    }
+
+    public int getCalendarId() {
+        return mCalendarId;
+    }
+
+    public void setCalendarId(int mCalendarId) {
+        this.mCalendarId = mCalendarId;
     }
 }

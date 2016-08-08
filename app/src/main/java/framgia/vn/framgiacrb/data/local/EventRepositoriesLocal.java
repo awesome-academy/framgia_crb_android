@@ -84,6 +84,34 @@ public class EventRepositoriesLocal implements EventRepository {
         return mRealm.where(Calendar.class).findAll();
     }
 
+    public void clearCalendarFromDatabase(final Realm.Transaction.OnSuccess onSuccess) {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(Calendar.class);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                onSuccess.onSuccess();
+            }
+        });
+    }
+
+    public void clearDatabase(final Realm.Transaction.OnSuccess onSuccess) {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                onSuccess.onSuccess();
+            }
+        });
+    }
+
     @Override
     public void deleteEvent(Event event) {
 

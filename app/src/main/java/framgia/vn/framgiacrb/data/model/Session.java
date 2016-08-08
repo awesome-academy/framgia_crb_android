@@ -5,4 +5,5 @@ package framgia.vn.framgiacrb.data.model;
  */
 public class Session {
     public static String sAuthToken = "i-vC4XsqKMi8QQgxA66b";
+    public static int sCalendarId = -1;
 }
