@@ -116,14 +116,14 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
             eventViewHolder.setId(event.getId());
             eventViewHolder.tvTitleEvent.setText(event.getTitle());
-            SimpleDateFormat format = new SimpleDateFormat("H:mm");
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             Date startDate = event.getStartTime();
             Date finishDate = event.getFinishTime();
             String startTime = format.format(startDate);
             String finishTime = format.format(finishDate);
             String time = startTime + "-" + finishTime;
             eventViewHolder.tvTime.setText(time);
-            eventViewHolder.cardView.setCardBackgroundColor(mContext.getResources().getColor(Constant.color[event.getColorId()]));
+            eventViewHolder.cardView.setCardBackgroundColor(mContext.getResources().getColor(Constant.color[event.getColorId() - 1]));
         }
     }
 
