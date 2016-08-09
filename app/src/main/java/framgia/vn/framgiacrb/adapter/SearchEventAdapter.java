@@ -12,8 +12,10 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.activity.DetailActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.utils.SearchUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import io.realm.OrderedRealmCollection;
+import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 
 /**
@@ -21,12 +23,17 @@ import io.realm.RealmRecyclerViewAdapter;
  */
 public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEventAdapter
     .EventViewHolder> {
+    public static final int TYPE_YEAR = 0;
+    public static final int TYPE_EVENT = 1;
+    public static final int TEXT_YEAR_SIZE = 30;
+    public static final int TEXT_CONTENT_SIZE = 15;
     public final Activity mActivity;
-    public OrderedRealmCollection<Event> data;
+    public RealmList<Event> data;
     public SearchEventAdapter(Activity activity, OrderedRealmCollection<Event> data) {
         super(activity, data, true);
         this.mActivity = activity;
-        this.data = data;
+        this.data = SearchUtil.editListDataSearch(data);
+        updateData(data);
     }
 
     @Override
@@ -37,12 +44,28 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
 
     @Override
     public void onBindViewHolder(SearchEventAdapter.EventViewHolder holder, int position) {
-        Event obj = getData().get(position);
-        holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
-        holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
-        holder.content.setText(obj.getTitle());
-        holder.content.setBackgroundColor(
-            mActivity.getResources().getColor(Constant.color[obj.getColorId() - 1]));
+        Event obj = data.get(position);
+        if(obj.getTitle().equals(SearchUtil.DEFINE_YEAR)) {
+            holder.type = TYPE_YEAR;
+            holder.content.setText(obj.getDescription());
+            holder.content.setBackgroundColor(
+                mActivity.getResources().getColor(R.color.background_card));
+            holder.content.setTextColor(mActivity.getResources().getColor(R.color
+                .text_default_event_color));
+            holder.content.setTextSize(TEXT_YEAR_SIZE);
+            holder.day.setText("");
+            holder.month.setText("");
+        } else {
+            holder.type = TYPE_EVENT;
+            holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
+            holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
+            holder.content.setText(obj.getTitle());
+            holder.content.setTextColor(mActivity.getResources().getColor(
+                R.color.white));
+            holder.content.setBackgroundColor(
+                mActivity.getResources().getColor(Constant.color[obj.getColorId() - 1]));
+            holder.content.setTextSize(TEXT_CONTENT_SIZE);
+        }
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -50,6 +73,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
         public TextView content;
         public TextView month;
         public CardView cardView;
+        public int type = TYPE_EVENT;
 
         public EventViewHolder(View itemView) {
             super(itemView);
@@ -62,9 +86,11 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(mActivity, DetailActivity.class);
-            intent.putExtra(Constant.ID_KEY, data.get(getAdapterPosition()).getId());
-            mActivity.startActivity(intent);
+            if(type == TYPE_EVENT) {
+                Intent intent = new Intent(mActivity, DetailActivity.class);
+                intent.putExtra(Constant.ID_KEY, data.get(getAdapterPosition()).getId());
+                mActivity.startActivity(intent);
+            }
         }
     }
 }

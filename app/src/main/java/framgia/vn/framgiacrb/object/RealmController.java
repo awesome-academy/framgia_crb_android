@@ -9,6 +9,7 @@ import framgia.vn.framgiacrb.data.model.Event;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by framgia on 26/07/2016.
@@ -42,7 +43,7 @@ public class RealmController implements EventField {
             .contains(EVENT_TITLE_FIELD, textSearch, Case.INSENSITIVE)
             .or()
             .contains(EVENT_DESCRIPTION_FIELD, textSearch, Case.INSENSITIVE)
-            .findAll();
+            .findAllSorted(EVENT_START_DATE_FIELD, Sort.ASCENDING);
     }
     public Event getEventById(String id) {
         return realm.where(Event.class)

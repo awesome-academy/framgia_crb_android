@@ -25,7 +25,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="11"
                 android:textSize="@dimen/search_item_day_size"/>
 
             <TextView
@@ -34,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_day"
                 android:gravity="center_horizontal"
-                android:text="Aug"
                 android:textSize="@dimen/search_item_text_size"/>
         </LinearLayout>
 
