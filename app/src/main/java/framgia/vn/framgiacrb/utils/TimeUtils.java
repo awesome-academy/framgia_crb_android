@@ -15,6 +15,7 @@ public class TimeUtils {
     public static final String TIME_FORMAT = "HH:mm";
     public static final String DAY_FORMAT = "d";
     public static final String MONTH_FORMAT = "MMM";
+    public static final String YEAR_FORMAT = "yyyy";
     public static String toStringDate(long milisec) {
         String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
         return dateString;
@@ -72,5 +73,8 @@ public class TimeUtils {
     }
     public static String toMonth(Date date) {
         return new SimpleDateFormat(MONTH_FORMAT).format(date);
+    }
+    public static String toYear(Date date) {
+        return new SimpleDateFormat(YEAR_FORMAT).format(date);
     }
 }

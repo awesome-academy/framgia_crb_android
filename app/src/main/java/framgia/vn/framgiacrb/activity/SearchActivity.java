@@ -58,8 +58,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(query != "") {
-                    mAdapter.updateData(RealmController.with(SearchActivity.this)
-                        .searchEvent(query));
+                    mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
+                        (SearchActivity.this).searchEvent(query));
+                    mRecycler.setAdapter(mAdapter);
                 }
                 return false;
             }
@@ -67,13 +68,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(newText != "") {
-                    if (mAdapter == null) {
                         mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
                             (SearchActivity.this).searchEvent(newText));
                         mRecycler.setAdapter(mAdapter);
-                    }
-                    mAdapter.updateData(RealmController.with(SearchActivity.this)
-                        .searchEvent(newText));
                 }
                 return false;
             }
