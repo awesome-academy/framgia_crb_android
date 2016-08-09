@@ -34,6 +34,7 @@ import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
+import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.utils.Connectivity;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -60,9 +61,10 @@ public class EventsFragment extends Fragment {
     private EventRepositoriesLocal mEventRepositoriesLocal;
     private Realm mRealm;
     private BroadcastReceiver mBroadcastReceiverToday;
+    private BroadcastReceiver mBroadcastReceiverToDate;
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mViewEvents = inflater.inflate(R.layout.fragment_events, container, false);
         initViews();
         framgia.vn.framgiacrb.data.model.Calendar calendar = new framgia.vn.framgiacrb.data.model.Calendar();
@@ -111,7 +113,30 @@ public class EventsFragment extends Fragment {
                 }
             }
         };
+        mBroadcastReceiverToDate = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(MainActivity.ACTION_SCROLL_DAY)) {
+                    String timeString = intent.getStringExtra(MonthView.TITLE);
+                    //Date timeDate = TimeUtils.stringToDate(timeString, TimeUtils.DATE_FORMAT_TOOLBAR);
+                    for (int i = 0; i < mDatas.size(); i++) {
+                        if (mDatas.get(i) instanceof Date) {
+                            Date date = TimeUtils.convertDateFormat(((Date)mDatas.get(i)).toString(),
+                                    TimeUtils.DATE_INPUT, TimeUtils.DATE_FORMAT_TOOLBAR);
+                            String time = MainActivity.dateFormat.format(date);
+                            Toast.makeText(EventsFragment.this.getContext(), time, Toast.LENGTH_SHORT).show();
+                            if (time.equals(timeString)) {
+                                Toast.makeText(EventsFragment.this.getContext(), "position "+i, Toast.LENGTH_SHORT).show();
+                                mRecyclerViewEvents.scrollToPosition(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        };
         getActivity().registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
+        getActivity().registerReceiver(mBroadcastReceiverToDate, new IntentFilter(MainActivity.ACTION_SCROLL_DAY));
         return mViewEvents;
     }
 
@@ -285,6 +310,7 @@ public class EventsFragment extends Fragment {
         super.onDestroy();
         mRealm.close();
         getActivity().unregisterReceiver(mBroadcastReceiverToday);
+        getActivity().unregisterReceiver(mBroadcastReceiverToDate);
     }
 
     private void setDateForCalendar(int position) {
