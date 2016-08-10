@@ -92,9 +92,9 @@ public class DetailActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_edit:
                 Intent intent = new Intent(this, EditActivity.class);
+                intent.putExtra(Constant.ID_KEY, getIntent().getStringExtra(Constant.ID_KEY));
                 startActivity(intent);
-                this.finish();
-                break;
+                return true;
             case R.id.action_delete:
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
                 builder.setTitle(R.string.question);
