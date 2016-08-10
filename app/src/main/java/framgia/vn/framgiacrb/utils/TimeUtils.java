@@ -11,11 +11,13 @@ import java.util.Locale;
 public class TimeUtils {
     public static final String DATE_INPUT = "yyy-MM-dd";
     public static final String DATE_OUTPUT = "dd-MM-yyyy";
-    public static final String DATE_FORMAT_TOOLBAR = "dd MMM yyyy";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String DAY_FORMAT = "d";
     public static final String MONTH_FORMAT = "MMM";
     public static final String YEAR_FORMAT = "yyyy";
+    public static final String DATE_FORMAT_TOOLBAR = "d MMMM yyyy";
+    //public static final String TIME_FORMAT = "HH:mm:ss";
+
     public static String toStringDate(long milisec) {
         String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
         return dateString;
@@ -32,7 +34,7 @@ public class TimeUtils {
     }
 
     public static Date stringToDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT, Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT, Locale.ENGLISH);
         Date date = new Date();
         try {
             date = dateFormat.parse(dateString);
@@ -43,7 +45,7 @@ public class TimeUtils {
     }
 
     public static Date stringToDate(String dateString, String dateInput) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.ENGLISH);
         Date date = new Date();
         try {
             date = dateFormat.parse(dateString);
@@ -76,5 +78,28 @@ public class TimeUtils {
     }
     public static String toYear(Date date) {
         return new SimpleDateFormat(YEAR_FORMAT).format(date);
+    }
+
+    public static Date convertDateFormat(String date, String givenFormat, String resultFormat) {
+        String result = "";
+        Date resultDate;
+        SimpleDateFormat sdf;
+        SimpleDateFormat sdf1;
+
+        try {
+            sdf = new SimpleDateFormat(givenFormat);
+            sdf1 = new SimpleDateFormat(resultFormat);
+            result = sdf1.format(sdf.parse(date));
+            resultDate = sdf1.parse(result);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            return new Date();
+        }
+        finally {
+            sdf=null;
+            sdf1=null;
+        }
+        return resultDate;
     }
 }

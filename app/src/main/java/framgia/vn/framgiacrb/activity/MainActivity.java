@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CURRENT_MENU_ITEM = "currentMenuItem";
     public static final String ACTION_BROADCAST = "DAY_CLICKED";
     public static final String ACTION_TODAY = "GO_TO_TODAY";
+    public static final String ACTION_SCROLL_DAY = "framgia.vn.framgiacrb.gotospecifyday";
     public static final String EMAIL_TITLE = "Email";
     public static final String NAME_TITLE = "Title";
     private static final String HOME = "Home";
@@ -433,9 +434,17 @@ public class MainActivity extends AppCompatActivity {
                 X = intent.getIntExtra(MonthView.X_AXIS, 0);
                 Y = intent.getIntExtra(MonthView.Y_AXIS, 0);
                 setCalendarCheck(year, month);
+                sendBroadcastGotoToday(intent.getStringExtra(MonthView.TITLE));
                 closeToolbar();
             }
         }
+    }
+
+    private void sendBroadcastGotoToday(String time) {
+        Intent intent = new Intent();
+        intent.setAction(MainActivity.ACTION_SCROLL_DAY);
+        intent.putExtra(MonthView.TITLE, time);
+        MainActivity.this.sendBroadcast(intent);
     }
 
     @Override
