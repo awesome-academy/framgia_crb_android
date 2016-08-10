@@ -18,9 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -35,6 +32,7 @@ import org.xdty.preference.colorpicker.ColorPickerSwatch;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
@@ -154,6 +152,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, position / 12 + MonthToolbarPagerAdapter.MIN_YEAR);
+                calendar.set(Calendar.MONTH, position % 12);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                Date date = calendar.getTime();
+                setSubTitle(MainActivity.dateFormat.format(date));
                 if (position == mPreviousSelected) {
                     MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
                     mv.setSelected(false);
@@ -301,25 +305,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openToolbar() {
-        RotateAnimation anim = new RotateAnimation(currentRotation, currentRotation - 180.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        currentRotation = (currentRotation - 180.0f) % 360.0f;
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setFillAfter(true);
-        anim.setFillEnabled(true);
-        anim.setDuration(ANIMATION_DURATION);
-        mArrow.startAnimation(anim);
         mAppBarLayout.setExpanded(true, true);
         isExpanded = true;
     }
 
     private void closeToolbar() {
-        RotateAnimation anim = new RotateAnimation(currentRotation, currentRotation + 180.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        currentRotation = (currentRotation + 180.0f) % 360.0f;
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setFillAfter(true);
-        anim.setFillEnabled(true);
-        anim.setDuration(ANIMATION_DURATION);
-        mArrow.startAnimation(anim);
         mAppBarLayout.setExpanded(false, true);
         isExpanded = false;
     }
