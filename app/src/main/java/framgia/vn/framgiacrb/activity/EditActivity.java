@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,11 +27,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.object.RealmController;
 
 /**
  * Created by lethuy on 06/07/2016.
  */
-public class EditActivity extends Activity implements View.OnTouchListener{
+public class EditActivity extends AppCompatActivity implements View.OnTouchListener {
     private ImageButton mImageButtonBack, mImageButtonAlarm, mImageButtonRepeat, mIamgeButtonSave;
     private EditText mEdtEvent, mEdtDesciption;
     private Switch mSwitchAlarm;
@@ -36,11 +43,13 @@ public class EditActivity extends Activity implements View.OnTouchListener{
 
     ArrayList<String> lstData;
 
+    private Toolbar mToolbar;
+
     private Calendar mCal;
     private Date mDateFinish, mHourFinish;
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
@@ -48,6 +57,12 @@ public class EditActivity extends Activity implements View.OnTouchListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_event);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mEdtEvent = (EditText) findViewById(R.id.edit_Title_New_Event);
         mTxtDateStart = (TextView) findViewById(R.id.txt_DateStart);
@@ -62,19 +77,41 @@ public class EditActivity extends Activity implements View.OnTouchListener{
 
         mTxtEditEvent.setText(R.string.edit_event);
 
-        mImageButtonBack = (ImageButton) findViewById(R.id.btn_back);
-        mImageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        mEdtEvent.setText(R.string.event_edit);
-
+        findView();
         getDefaultInfor();
         addEventFormWidgets();
     }
+
+    private void findView() {
+        String eventId = getIntent().getStringExtra(Constant.ID_KEY);
+        Event event = RealmController.with(this).getEventById(eventId);
+        mEdtEvent.setText(event.getTitle() == null ? "" : event.getTitle());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.event_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_Save:
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     public void getDefaultInfor() {
         mCal = Calendar.getInstance();
         SimpleDateFormat dft = null;
@@ -184,7 +221,7 @@ public class EditActivity extends Activity implements View.OnTouchListener{
                 if (hourTam > 12)
                     hourTam = hourTam - 12;
                 mTxtTimeStart.setText
-                        (hourTam + ":" + minute + (hourOfDay>12?" PM":" AM"));
+                        (hourTam + ":" + minute + (hourOfDay > 12 ? " PM" : " AM"));
                 mTxtTimeStart.setTag(s);
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);
@@ -211,7 +248,7 @@ public class EditActivity extends Activity implements View.OnTouchListener{
                 if (hourTam > 12)
                     hourTam = hourTam - 12;
                 mTxtTimeFinish.setText
-                        (hourTam + ":" + minute + (hourOfDay>12?" PM":" AM"));
+                        (hourTam + ":" + minute + (hourOfDay > 12 ? " PM" : " AM"));
                 mTxtTimeFinish.setTag(s);
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);

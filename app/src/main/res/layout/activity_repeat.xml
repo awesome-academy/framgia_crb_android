@@ -38,7 +38,7 @@
                 android:id="@+id/radio1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_left_linear"
+                android:layout_margin="@dimen/padding_left_item_search"
                 android:text="@string/no_repeat"
                 android:textSize="@dimen/text_size_or" />
 

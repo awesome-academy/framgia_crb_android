@@ -34,7 +34,6 @@
     <dimen name="width_edt_background">1dp</dimen>
     <dimen name="layout_width_imgbt">45dp</dimen>
     <dimen name="layout_height_linear">110dp</dimen>
-    <dimen name="padding_left_linear">5dp</dimen>
     <dimen name="height_linear">200dp</dimen>
     <dimen name="height_linear_cardview2">250dp</dimen>
     <dimen name="layout_width_textview">130dp</dimen>

@@ -10,8 +10,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -52,7 +56,7 @@ import retrofit2.Response;
 /**
  * Created by lethuy on 05/07/2016.
  */
-public class CreateEventActvity extends Activity implements View.OnTouchListener {
+public class CreateEventActvity extends AppCompatActivity implements View.OnTouchListener {
     private final String MESSAGE = "MESSAGE";
     private final String FORMAT_DATE = "dd-MM-yyyy";
     private final String FORMAT_TIME = "HH:mm";
@@ -76,6 +80,8 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
 
     private ArrayList<String> mListData;
 
+    private Toolbar mToolbar;
+
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
     ArrayAdapter<EventInWeek> adapter = null;
 
@@ -88,6 +94,12 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_event);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mCalendarStart = Calendar.getInstance();
         mCalendarFinish = Calendar.getInstance();
@@ -105,20 +117,13 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         mTxtPlace = (TextView) findViewById(R.id.txt_Place);
 
         mEdtTitle = (EditText) findViewById(R.id.edit_Title_New_Event);
-        mEdtDesciption = (EditText) findViewById(R.id.title_description);
+        mEdtDesciption = (EditText) findViewById(R.id.edt_Detail);
 
         CardView cardView = (CardView) findViewById(R.id.card_view2);
         cardView.setOnTouchListener(this);
 
         mTxtNewEvent.setText(R.string.new_event);
 
-        mImageButtonBack = (ImageButton) findViewById(R.id.btn_back);
-        mImageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         mSwitchAlarm.setChecked(false);
         mSwitchAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,10 +169,22 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSpinerCalendar.setAdapter(adapter);
 
-        mButtonSave = (ImageButton) findViewById(R.id.btn_Save);
-        mButtonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        getDefaultInfor();
+        addEventFormWidgets();
+        selectRepeat();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.event_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_Save:
                 String title = mEdtTitle.getText().toString();
                 if (!title.equals("")) {
                     getDataFromService(createEvent());
@@ -175,13 +192,19 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
                 } else {
                     Toast.makeText(CreateEventActvity.this, R.string.not_be_empty, Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        getDefaultInfor();
-        addEventFormWidgets();
-        selectRepeat();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

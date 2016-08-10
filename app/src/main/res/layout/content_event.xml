@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadeScrollbars="false"
+    android:fillViewport="true"
+    android:scrollbars="vertical">
+
+    <LinearLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        style="@style/Theme.SWitch"
+        android:id="@+id/linearlayout_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/layout_margin_item_search"
+
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_fb"
+            android:layout_margin="@dimen/margin_cardview"
+            card_view:cardCornerRadius="@dimen/cardCornerRadius_cardview">
+
+            <LinearLayout
+                android:id="@+id/linear_create_event_02"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height_linear"
+                android:layout_below="@+id/linear_create_event_01"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/padding_left_item_search">
+
+                <EditText
+                    android:id="@+id/edit_Title_New_Event"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/layout_margin_5dp"
+                    android:layout_marginBottom="@dimen/margin_bottom"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="@string/hint_create_event_input"
+                    android:padding="@dimen/padding"
+                    android:focusableInTouchMode="true"
+                    android:textSize="@dimen/text_size_search" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btn_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_event" />
+
+                    <TextView
+                        android:id="@+id/edit_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/margin_bottom"
+                        android:text="@string/event_name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_search" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_linear_cardview2"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_cardview"
+            card_view:cardCornerRadius="@dimen/cardCornerRadius_cardview">
+
+            <LinearLayout
+                android:id="@+id/linear_create_event_03"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_linear_cardview2"
+                android:layout_below="@+id/linear_create_event_02"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:layout_marginTop="@dimen/layout_margin_5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/layout_margin_item_search">
+
+                    <ImageButton
+                        android:id="@+id/btn_Alarm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_alarm" />
+
+                    <TextView
+                        android:id="@+id/txt_AllDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/padding"
+                        android:text="@string/all_day"
+                        android:textSize="@dimen/text_size_search" />
+
+                    <Switch
+                        android:id="@+id/sw_SwitchAlarm"
+                        style="@style/Theme.SWitch"
+                        android:layout_width="@dimen/layout_width_imgbt"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_dateStart"
+                        android:layout_width="@dimen/margin_top"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/layout_width_imgbt_item_search"
+                        android:text="@string/start"
+                        android:textSize="@dimen/text_size_search" />
+
+                    <TextView
+                        android:id="@+id/txt_DateStart"
+                        android:layout_width="@dimen/layout_width_textview"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="center_horizontal"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:text="@string/date" />
+
+                    <TextView
+                        android:id="@+id/txt_timeStart"
+                        android:layout_width="@dimen/layout_width_imgbt_item_search"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/padding"
+                        android:text="@string/time_start"
+                        android:textSize="@dimen/text_size_search" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_dateFinish"
+                        android:layout_width="@dimen/margin_top"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/margin_top_button"
+                        android:text="@string/finish"
+                        android:textSize="@dimen/text_size_search" />
+
+                    <TextView
+                        android:id="@+id/txt_DateFinish"
+                        android:layout_width="@dimen/layout_width_textview"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="center_horizontal"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:text="@string/date" />
+
+                    <TextView
+                        android:id="@+id/txt_TimeFinish"
+                        android:layout_width="@dimen/margin_top_button"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/padding"
+                        android:text="@string/time_finish"
+                        android:textSize="@dimen/text_size_search" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_left_item_search">
+
+                    <ImageButton
+                        android:id="@+id/btn_Repeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_repeat" />
+
+                    <TextView
+                        android:id="@+id/txt_Repeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/padding"
+                        android:text="@string/no_repeat"
+                        android:textSize="@dimen/text_size_search" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_left_item_search">
+
+                    <ImageButton
+                        android:id="@+id/btn_Place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/layout_height_fb"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_place" />
+
+                    <TextView
+                        android:id="@+id/txt_Place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/padding"
+                        android:text="@string/place"
+                        android:textSize="@dimen/text_size_search" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_cardview"
+            card_view:cardCornerRadius="@dimen/cardCornerRadius_cardview">
+
+            <LinearLayout
+                android:id="@+id/linear_create_event_04"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linear_create_event_02"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:layout_marginTop="@dimen/layout_margin_5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_left_calendar">
+
+                    <ImageButton
+                        android:id="@+id/btn_Calendar"
+                        android:layout_width="@dimen/width_imgButton"
+                        android:layout_height="@dimen/height_imgButton"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_calendar" />
+
+                    <TextView
+                        android:id="@+id/txt_Calendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="left|center"
+                        android:paddingLeft="@dimen/padding"
+                        android:text="@string/calendar_name"
+                        android:textSize="@dimen/text_size_search" />
+                </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/spin_Calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="left|center"
+                    android:textSize="@dimen/text_size_search" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height_fb"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/layout_margin_5dp"
+            card_view:cardCornerRadius="@dimen/cardCornerRadius_cardview">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height_fb"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/padding_left_item_search">
+
+                <ImageButton
+                    android:id="@+id/btn_invited"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/layout_height_fb"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_invited" />
+
+                <TextView
+                    android:id="@+id/txt_Attendee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:paddingLeft="@dimen/padding"
+                    android:text="@string/invite"
+                    android:textSize="@dimen/text_size_search" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_5dp"
+            android:paddingTop="@dimen/layout_margin_5dp"
+            card_view:cardCornerRadius="@dimen/cardCornerRadius_cardview">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/padding_left_item_search">
+
+                <EditText
+                    android:id="@+id/edt_Detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="@string/desciption"
+                    android:lines="5"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingTop="@dimen/layout_margin_5dp"
+                    android:textSize="@dimen/text_size_search" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>

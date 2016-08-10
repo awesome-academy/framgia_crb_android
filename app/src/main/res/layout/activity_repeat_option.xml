@@ -51,14 +51,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_left_linear"
+            android:layout_margin="@dimen/padding_left_item_search"
             android:orientation="vertical">
 
             <RadioGroup
                 android:id="@+id/radioGroup1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_left_linear">
+                android:layout_margin="@dimen/padding_left_item_search">
 
                 <RadioButton
                     android:id="@+id/radioPhut"
@@ -66,7 +66,7 @@
                     android:checked="true"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/padding_left_linear"
+                    android:layout_margin="@dimen/padding_left_item_search"
                     android:layoutDirection="rtl"
                     android:text="@string/minutes"
                     android:textAlignment="textStart" />
@@ -76,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/padding_left_linear"
+                    android:layout_margin="@dimen/padding_left_item_search"
                     android:layoutDirection="rtl"
                     android:text="@string/hour"
                     android:textAlignment="textStart" />
@@ -86,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/padding_left_linear"
+                    android:layout_margin="@dimen/padding_left_item_search"
                     android:layoutDirection="rtl"
                     android:text="@string/day"
                     android:textAlignment="textStart" />
@@ -96,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/padding_left_linear"
+                    android:layout_margin="@dimen/padding_left_item_search"
                     android:layoutDirection="rtl"
                     android:text="@string/week"
                     android:textAlignment="textStart" />
@@ -115,14 +115,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/padding_left_linear"
+            android:layout_margin="@dimen/padding_left_item_search"
             android:orientation="vertical">
 
             <RadioGroup
                 android:id="@+id/radioGroup2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_left_linear">
+                android:layout_margin="@dimen/padding_left_item_search">
 
                 <RadioButton
                     android:id="@+id/radioNotifi"
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/padding_left_linear"
+                    android:layout_margin="@dimen/padding_left_item_search"
                     android:layoutDirection="rtl"
                     android:text="@string/via_notification"
                     android:textAlignment="textStart" />
@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/padding_left_linear"
+                    android:layout_margin="@dimen/padding_left_item_search"
                     android:layoutDirection="rtl"
                     android:text="@string/via_email"
                     android:textAlignment="textStart" />
