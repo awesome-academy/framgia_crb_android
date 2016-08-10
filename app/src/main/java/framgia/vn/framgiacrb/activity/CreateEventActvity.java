@@ -171,6 +171,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
                 String title = mEdtTitle.getText().toString();
                 if (!title.equals("")) {
                     getDataFromService(createEvent());
+                    finish();
                 } else {
                     Toast.makeText(CreateEventActvity.this, R.string.not_be_empty, Toast.LENGTH_LONG).show();
                 }
@@ -548,7 +549,7 @@ public class CreateEventActvity extends Activity implements View.OnTouchListener
         dateFinish = dateFinish.substring(0, dateFinish.length() - 2);
         dateFinish = dateFinish.trim();
         event.setFinishTime(TimeUtils.stringToDate(dateFinish, "dd-MM-yyyy H:mm"));
-        event.setCalendarId(6);
+        event.setCalendarId(Session.sCalendarId);
         return new NewEvent(Session.sAuthToken, event);
     }
 }

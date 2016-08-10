@@ -57,7 +57,7 @@ public class DetailActivity extends AppCompatActivity {
             TextView title = (TextView) findViewById(R.id.textview_event);
             title.setText(event.getTitle() == null ? "" : event.getTitle());
             TextView calendar = (TextView) findViewById(R.id.textView_calendar);
-            calendar.setText(event.getCalendar() == null ? "" : event.getCalendar());
+           // calendar.setText(event.getCalendar() == null ? "" : event.getCalendar());
             if (Attendee.getLisAttendee(event.getAttendees()) != "") {
                 TextView listAttendee = (TextView) findViewById(R.id.attendee_list);
                 listAttendee.setText(Attendee.getLisAttendee(event.getAttendees()));
