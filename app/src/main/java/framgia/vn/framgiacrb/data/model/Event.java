@@ -59,9 +59,6 @@ public class Event extends RealmObject {
     @SerializedName("place")
     private Place mPlace;
 
-    @SerializedName("calendar")
-    private String mCalendar;
-
     @SerializedName("calendar_id")
     private int mCalendarId;
 
@@ -194,14 +191,6 @@ public class Event extends RealmObject {
 
     public void setCalendarId(int calendarId) {
         mCalendarId = calendarId;
-    }
-
-    public String getCalendar() {
-        return mCalendar;
-    }
-
-    public void setCalendar(String mCalendar) {
-        this.mCalendar = mCalendar;
     }
 
     public RealmList<Attendee> getAttendees() {

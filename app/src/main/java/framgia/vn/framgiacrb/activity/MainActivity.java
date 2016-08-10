@@ -275,7 +275,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
                     }
                 });
-                MainActivity.this.finish();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
                 return;
             case LABEL:
                 break;
