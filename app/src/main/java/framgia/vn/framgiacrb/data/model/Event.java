@@ -196,4 +196,8 @@ public class Event extends RealmObject {
     public RealmList<Attendee> getAttendees() {
         return mAttendees;
     }
+
+    public Place getPlace() {
+        return mPlace;
+    }
 }

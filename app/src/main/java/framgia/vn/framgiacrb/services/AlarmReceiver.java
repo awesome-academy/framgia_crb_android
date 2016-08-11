@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.utils.NotificationUtil;
 
 /**
@@ -16,6 +17,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationUtil.pushNotification(context, intent.getStringExtra(INTENT_TITLE), intent
-            .getStringExtra(INTENT_CONTENT));
+            .getStringExtra(INTENT_CONTENT), intent.getStringExtra(Constant.ID_KEY));
     }
 }

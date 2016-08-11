@@ -45,6 +45,7 @@ import framgia.vn.framgiacrb.data.model.NewEvent;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.object.EventInWeek;
+import framgia.vn.framgiacrb.utils.NotificationUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.Realm;
@@ -542,7 +543,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         time.show();
     }
 
-    public void getDataFromService(NewEvent newEvent) {
+    public void getDataFromService(final NewEvent newEvent) {
         ServiceBuilder.getService().createEvent(newEvent).enqueue(new Callback<CreateEventResponse>() {
             @Override
             public void onResponse(Call<CreateEventResponse> call, Response<CreateEventResponse> response) {

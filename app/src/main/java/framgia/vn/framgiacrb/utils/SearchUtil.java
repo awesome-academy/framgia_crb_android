@@ -15,6 +15,9 @@ public class SearchUtil {
         RealmList<Event> list = new RealmList();
         list.addAll(data);
         Event yearInSearch = new Event();
+        if(list.size() == 0) {
+            return list;
+        }
         String startYear = TimeUtils.toYear(list.get(0).getStartTime());
         yearInSearch.setTitle(DEFINE_YEAR);
         yearInSearch.setDescription(TimeUtils.toYear(list.get(0).getStartTime()));
