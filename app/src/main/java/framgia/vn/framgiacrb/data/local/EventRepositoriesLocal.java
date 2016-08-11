@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import framgia.vn.framgiacrb.CrbApplication;
 import framgia.vn.framgiacrb.data.EventRepository;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.utils.NotificationUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -40,6 +42,12 @@ public class EventRepositoriesLocal implements EventRepository {
         for (int i = 0; i < events.size(); i++) {
             if (!isExists(events.get(i))) {
                 realmEvents.add(events.get(i));
+                Event event = events.get(i);
+                NotificationUtil.registerNotificationEventTime(CrbApplication.getInstanceContext(),
+                    event.getStartTime(),
+                    event.getTitle(),
+                    event.getDescription(),
+                    event.getId());
             }
         }
         mRealm.executeTransactionAsync(new Realm.Transaction() {

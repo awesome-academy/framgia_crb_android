@@ -16,6 +16,7 @@ import android.widget.TextView;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Attendee;
+import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.object.RealmController;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -38,45 +39,55 @@ public class DetailActivity extends AppCompatActivity {
     private void findView() {
         String eventId = getIntent().getStringExtra(Constant.ID_KEY);
         Event event = RealmController.with(this).getEventById(eventId);
-        if (event != null) {
-            if (event.getDescription() != null) {
-                TextView description = (TextView) findViewById(R.id.title_description);
-                description.setText(event.getDescription());
-            } else {
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_description);
-                relativeLayout.setVisibility(View.GONE);
-            }
-            TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
-            startDate.setText(TimeUtils.toStringDate(event.getStartTime()));
-            TextView startTime = (TextView) findViewById(R.id.txt_timeStart);
-            startTime.setText(TimeUtils.toStringTime(event.getStartTime()));
-            TextView endDate = (TextView) findViewById(R.id.txt_DateFinish);
-            endDate.setText(TimeUtils.toStringDate(event.getFinishTime()));
-            TextView endTime = (TextView) findViewById(R.id.txt_TimeFinish);
-            endTime.setText(TimeUtils.toStringTime(event.getFinishTime()));
-            TextView title = (TextView) findViewById(R.id.textview_event);
-            title.setText(event.getTitle() == null ? "" : event.getTitle());
-            TextView calendar = (TextView) findViewById(R.id.textView_calendar);
-           // calendar.setText(event.getCalendar() == null ? "" : event.getCalendar());
-            if (Attendee.getLisAttendee(event.getAttendees()) != "") {
-                TextView listAttendee = (TextView) findViewById(R.id.attendee_list);
-                listAttendee.setText(Attendee.getLisAttendee(event.getAttendees()));
-            } else {
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_attendee);
-                relativeLayout.setVisibility(View.GONE);
-            }
-            if (event.getColorId() > 0 && event.getColorId() <= 12) {
-                View color = (View) findViewById(R.id.view_color);
-                color.setBackgroundColor(getResources().getColor(Constant.color[event.getColorId
-                    () - 1]));
-            }
-            if (event.getRepeatType() != null) {
-                TextView repeatTv = (TextView) findViewById(R.id.textView_repeat);
-                repeatTv.setText(event.getRepeatType());
-            } else {
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_repeat);
-                relativeLayout.setVisibility(View.GONE);
-            }
+        if (event == null) {
+            return;
+        }
+        if (event.getDescription() != null) {
+            TextView description = (TextView) findViewById(R.id.title_description);
+            description.setText(event.getDescription());
+        } else {
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_description);
+            relativeLayout.setVisibility(View.GONE);
+        }
+        TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
+        startDate.setText(TimeUtils.toStringDate(event.getStartTime()));
+        TextView startTime = (TextView) findViewById(R.id.txt_timeStart);
+        startTime.setText(TimeUtils.toStringTime(event.getStartTime()));
+        TextView endDate = (TextView) findViewById(R.id.txt_DateFinish);
+        endDate.setText(TimeUtils.toStringDate(event.getFinishTime()));
+        TextView endTime = (TextView) findViewById(R.id.txt_TimeFinish);
+        endTime.setText(TimeUtils.toStringTime(event.getFinishTime()));
+        TextView title = (TextView) findViewById(R.id.textview_event);
+        title.setText(event.getTitle() == null ? "" : event.getTitle());
+        TextView calendarTv = (TextView) findViewById(R.id.textView_calendar);
+        Calendar calendar = RealmController.with(this)
+            .getCalenderByid(event.getCalendarId());
+        calendarTv.setText(calendar.getName());
+        if (Attendee.getLisAttendee(event.getAttendees()) != "") {
+            TextView listAttendee = (TextView) findViewById(R.id.attendee_list);
+            listAttendee.setText(Attendee.getLisAttendee(event.getAttendees()));
+        } else {
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_attendee);
+            relativeLayout.setVisibility(View.GONE);
+        }
+        if (event.getColorId() > 0 && event.getColorId() <= 12) {
+            View color = (View) findViewById(R.id.view_color);
+            color.setBackgroundColor(getResources().getColor(Constant.color[event.getColorId
+                () - 1]));
+        }
+        if (event.getRepeatType() != null) {
+            TextView repeatTv = (TextView) findViewById(R.id.textView_repeat);
+            repeatTv.setText(event.getRepeatType());
+        } else {
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_repeat);
+            relativeLayout.setVisibility(View.GONE);
+        }
+        if(event.getPlace() != null) {
+            TextView placeTv = (TextView) findViewById(R.id.textView_place);
+            placeTv.setText(event.getPlace().getAddress());
+        } else {
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_place);
+            relativeLayout.setVisibility(View.GONE);
         }
     }
 

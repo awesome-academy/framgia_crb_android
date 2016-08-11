@@ -20,4 +20,8 @@ public class Place extends RealmObject {
 
     @SerializedName("user_id")
     private  int mUserId;
+
+    public String getAddress() {
+        return mAddress;
+    }
 }

@@ -5,6 +5,7 @@ import android.app.Application;
 
 import java.util.Date;
 
+import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import io.realm.Case;
 import io.realm.Realm;
@@ -14,7 +15,7 @@ import io.realm.Sort;
 /**
  * Created by framgia on 26/07/2016.
  */
-public class RealmController implements EventField {
+public class RealmController implements EventField, CalendarField {
     private static RealmController instance;
     private final Realm realm;
 
@@ -48,6 +49,11 @@ public class RealmController implements EventField {
     public Event getEventById(String id) {
         return realm.where(Event.class)
             .equalTo(EVENT_ID_FIELD, id)
+            .findFirst();
+    }
+    public Calendar getCalenderByid(int calendarId) {
+        return realm.where(Calendar.class)
+            .equalTo(CALENDAR_ID_FIELD, calendarId)
             .findFirst();
     }
 }

@@ -17,4 +17,8 @@ public class NewEvent {
         this.mAuthToken = mAuthToken;
         this.mEvent = mEvent;
     }
+
+    public Event getEvent() {
+        return mEvent;
+    }
 }
