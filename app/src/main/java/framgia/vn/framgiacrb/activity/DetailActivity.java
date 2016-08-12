@@ -84,7 +84,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         if(event.getPlace() != null) {
             TextView placeTv = (TextView) findViewById(R.id.textView_place);
-            placeTv.setText(event.getPlace().getAddress());
+            placeTv.setText(event.getPlace().getName());
         } else {
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_place);
             relativeLayout.setVisibility(View.GONE);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -48,6 +49,7 @@ public class EventsFragment extends Fragment {
     private View mViewEvents;
     private RecyclerView mRecyclerViewEvents;
     private FloatingActionButton mFloatingActionButton;
+    private SwipeRefreshLayout mRefreshLayout;
     private ListEventAdapter mAdapter;
     private List<Object> mDatas = new ArrayList<>();
     private int mFirstMonth;
@@ -62,13 +64,15 @@ public class EventsFragment extends Fragment {
     private Realm mRealm;
     private BroadcastReceiver mBroadcastReceiverToday;
     private BroadcastReceiver mBroadcastReceiverToDate;
+    private framgia.vn.framgiacrb.data.model.Calendar mCalendar;
+
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mViewEvents = inflater.inflate(R.layout.fragment_events, container, false);
         initViews();
-        framgia.vn.framgiacrb.data.model.Calendar calendar = new framgia.vn.framgiacrb.data.model.Calendar();
-        calendar.setId(Session.sCalendarId);
+        mCalendar = new framgia.vn.framgiacrb.data.model.Calendar();
+        mCalendar.setId(Session.sCalendarId);
         mRealm = Realm.getDefaultInstance();
         mEventRepositoriesLocal = new EventRepositoriesLocal(mRealm);
         mEventRepositories = new EventRepositories();
@@ -77,6 +81,7 @@ public class EventsFragment extends Fragment {
             public void onSuccess() {
                 try {
                     initDatas();
+                    setRefreshing(false);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -88,17 +93,7 @@ public class EventsFragment extends Fragment {
             }
         });
 
-        if (Connectivity.isConnected(getActivity())) {
-            mEventRepositories.getEventsByCalendar(Session.sAuthToken, calendar, getActivity());
-        } else {
-            try {
-                initDatas();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
-        }
-
+        loadDatas();
         mBroadcastReceiverToday = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -121,12 +116,12 @@ public class EventsFragment extends Fragment {
                     //Date timeDate = TimeUtils.stringToDate(timeString, TimeUtils.DATE_FORMAT_TOOLBAR);
                     for (int i = 0; i < mDatas.size(); i++) {
                         if (mDatas.get(i) instanceof Date) {
-                            Date date = TimeUtils.convertDateFormat(((Date)mDatas.get(i)).toString(),
+                            Date date = TimeUtils.convertDateFormat(((Date) mDatas.get(i)).toString(),
                                     TimeUtils.DATE_INPUT, TimeUtils.DATE_FORMAT_TOOLBAR);
                             String time = MainActivity.dateFormat.format(date);
                             Toast.makeText(EventsFragment.this.getContext(), time, Toast.LENGTH_SHORT).show();
                             if (time.equals(timeString)) {
-                                Toast.makeText(EventsFragment.this.getContext(), "position "+i, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EventsFragment.this.getContext(), "position " + i, Toast.LENGTH_SHORT).show();
                                 mRecyclerViewEvents.scrollToPosition(i);
                                 break;
                             }
@@ -140,7 +135,23 @@ public class EventsFragment extends Fragment {
         return mViewEvents;
     }
 
+    private void loadDatas() {
+        mDatas.clear();
+        if (Connectivity.isConnected(getActivity()) && Connectivity.isConnectedFast(getActivity())) {
+            mEventRepositories.getEventsByCalendar(Session.sAuthToken, mCalendar, getActivity());
+        } else {
+            try {
+                initDatas();
+                setRefreshing(false);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void initViews() {
+        mRefreshLayout = (SwipeRefreshLayout) mViewEvents.findViewById(R.id.swipe_refresh_layout_events);
         mRecyclerViewEvents = (RecyclerView) mViewEvents.findViewById(R.id.rv_events);
         mRecyclerViewEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         mFloatingActionButton = (FloatingActionButton) mViewEvents.findViewById(R.id.fab);
@@ -204,12 +215,12 @@ public class EventsFragment extends Fragment {
                             }
                             isLoading = false;
                         }
-
                     }
                 }
             }
         });
     }
+
 
     private void initDatas() throws ParseException {
         mDatas.clear();
@@ -245,7 +256,6 @@ public class EventsFragment extends Fragment {
             } else {
                 mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
             }
-
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
@@ -317,7 +327,21 @@ public class EventsFragment extends Fragment {
         Object object = mDatas.get(position);
         if (object instanceof Date) {
             Date date = (Date) object;
-            ((MainActivity)getActivity()).setSubTitle(TimeUtils.toStringDate(date, TimeUtils.DATE_FORMAT_TOOLBAR));
+            ((MainActivity) getActivity()).setSubTitle(TimeUtils.toStringDate(date, TimeUtils.DATE_FORMAT_TOOLBAR));
         }
+    }
+
+    public void refreshData() {
+        setRefreshing(true);
+        loadDatas();
+    }
+
+    private void setRefreshing(final boolean isRefreshing) {
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(isRefreshing);
+            }
+        });
     }
 }

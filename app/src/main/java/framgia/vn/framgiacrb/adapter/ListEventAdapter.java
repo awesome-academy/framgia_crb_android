@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -124,6 +125,12 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             String time = startTime + "-" + finishTime;
             eventViewHolder.tvTime.setText(time);
             eventViewHolder.cardView.setCardBackgroundColor(mContext.getResources().getColor(Constant.color[event.getColorId() - 1]));
+            if (event.getPlace() != null) {
+                eventViewHolder.tvLocation.setText(event.getPlace().getName());
+                eventViewHolder.linearLayoutLocation.setVisibility(View.VISIBLE);
+            } else {
+                eventViewHolder.linearLayoutLocation.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -170,6 +177,8 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView tvTitleEvent;
         TextView tvTime;
         CardView cardView;
+        LinearLayout linearLayoutLocation;
+        TextView tvLocation;
         private String mId;
         public EventViewHolder(View itemView) {
             super(itemView);
@@ -184,6 +193,8 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
             tvTime = (TextView) itemView.findViewById(R.id.tv_time);
             cardView = (CardView) itemView.findViewById(R.id.card_view_item_event);
+            linearLayoutLocation = (LinearLayout) itemView.findViewById(R.id.ll_location);
+            tvLocation = (TextView) itemView.findViewById(R.id.tv_location);
         }
 
         public void setId(String id) {

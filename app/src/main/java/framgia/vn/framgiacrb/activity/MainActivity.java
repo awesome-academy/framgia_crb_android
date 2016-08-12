@@ -26,9 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.xdty.preference.colorpicker.ColorPickerDialog;
-import org.xdty.preference.colorpicker.ColorPickerSwatch;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String HOME = "Home";
     private static final String WEEK = "Week";
     private static final String MONTH = "Month";
-    private static final String COLOR = "Color";
     private static final String LABEL = "Calendar";
     private static final String LOGOUT = "Logout";
     private static final int ANIMATION_DURATION = 300;
@@ -84,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private MonthToolbarPagerAdapter mAdapter;
     private RealmResults<framgia.vn.framgiacrb.data.model.Calendar> mUserCalendar;
     private SharedPreferences mSharedPreferences;
-    public static String sAuthToken;
 
     int currentMenuItemId;
     boolean isExpanded = false;
@@ -101,12 +96,16 @@ public class MainActivity extends AppCompatActivity {
     private int Y;
     private int mCurrentMenuItemPosition;
     private int mTotalToolbarRange;
+    private Fragment mCurrentFragment;
+    private Fragment mEventFollowWeekFragment;
+    private FragmentManager mFragmentManager;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFragmentManager = getSupportFragmentManager();
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         mUserCalendar = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
@@ -121,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         updateDisplayView(mCurrentMenuItemPosition);
         currentMenuItemId = R.id.home;
+
     } // end of method onCreate
 
     private void initUi() {
@@ -186,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
         mListMenu = new ArrayList<>();
         ItemLeftMenu header = new ItemLeftMenu();
         header.setImageResource(R.drawable.profile);
-        header.setTitle(mSharedPreferences.getString(NAME_TITLE, "Lucky Luke"));
-        header.setEmail(mSharedPreferences.getString(EMAIL_TITLE, "mddien1994@gmail.com"));
+        header.setTitle(mSharedPreferences.getString(NAME_TITLE, null));
+        header.setEmail(mSharedPreferences.getString(EMAIL_TITLE, null));
         ItemLeftMenu home = new ItemLeftMenu();
         home.setImageResource(R.drawable.view_home);
         home.setTitle(HOME);
@@ -262,26 +262,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateDisplayView(int position) {
         ItemLeftMenu item = mListMenu.get(position);
-        Fragment fragment = null;
         switch (item.getTitle()) {
             case HOME:
-                fragment = new EventsFragment();
+                mCurrentFragment = new EventsFragment();
                 break;
             case WEEK:
-                fragment = new EventFollowWeekFragment();
+                mCurrentFragment = new EventFollowWeekFragment();
                 break;
             case MONTH:
-                fragment = new MonthFragment();
+                mCurrentFragment = new MonthFragment();
                 break;
             case LOGOUT:
                 logout();
+                new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(MainActivity.this, getString(R.string.message_logout), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
                 return;
             case LABEL:
                 break;
         }
-        if (fragment != null) {
+        if (mCurrentFragment != null) {
             FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.frame, fragment).commit();
+            fm.beginTransaction().replace(R.id.frame, mCurrentFragment).commit();
         }
         if (position != 0 && position < 4) {
             mDrawerLayout.closeDrawers();
@@ -357,24 +364,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));
                 break;
-            case R.id.color:
-                int[] mColors = getResources().getIntArray(R.array.default_rainbow);
-                final ColorPickerDialog dialog = ColorPickerDialog.newInstance(R.string.color_picker_default_title,
-                        mColors,
-                        mSelectedColor,
-                        NUMBER_COLUMN,
-                        ColorPickerDialog.SIZE_SMALL);
-                dialog.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
-
-                    @Override
-                    public void onColorSelected(int color) {
-                        mSelectedColor = color;
-                    }
-                });
-                dialog.show(getFragmentManager(), "color_dialog_test");
-                break;
-            case R.id.action_settings:
-                // TODO: 08/07/2016
+            case R.id.action_refresh:
+                if (mCurrentFragment instanceof EventsFragment) {
+                    ((EventsFragment) mCurrentFragment).refreshData();
+                }
                 break;
         }
 
