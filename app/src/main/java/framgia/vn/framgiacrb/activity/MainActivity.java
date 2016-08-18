@@ -274,14 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new MonthFragment();
                 break;
             case LOGOUT:
-                new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(MainActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+                logout();
                 return;
             case LABEL:
                 break;
@@ -302,6 +295,22 @@ public class MainActivity extends AppCompatActivity {
             Session.sCalendarId = item.getCalendarId();
             Toast.makeText(MainActivity.this, ""+Session.sCalendarId, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void logout() {
+        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void openToolbar() {
