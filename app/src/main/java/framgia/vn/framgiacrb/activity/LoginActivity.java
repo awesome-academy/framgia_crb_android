@@ -49,6 +49,15 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(Session.AUTHTOKEN)) {
+            Session.sAuthToken = sharedPreferences.getString(Session.AUTHTOKEN, null);
+            Session.sCalendarId = sharedPreferences.getInt(Session.CALENDAR_ID, -1);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         mEditTextEmail = (EditText) findViewById(R.id.edit_email);
         mEditTextPassword = (EditText) findViewById(R.id.edit_password);
         mButtonLogin = (Button) findViewById(R.id.btn_login);
@@ -91,6 +100,10 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                 } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
                     mUserLogin = response.body().getUser();
                     Session.sAuthToken = mUserLogin.getAuth_token();
+                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Session.AUTHTOKEN, Session.sAuthToken);
+                    editor.commit();
                     mListUserCalendar = mUserLogin.getUserCalendars();
                     mListShareUserCalendar = mUserLogin.getShareUserCalendars();
                     mListCalendar = new ArrayList<Calendar>();
@@ -136,6 +149,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MainActivity.NAME_TITLE, mUserLogin.getName());
         editor.putString(MainActivity.EMAIL_TITLE, mUserLogin.getEmail());
+        editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
         editor.commit();
     }
 

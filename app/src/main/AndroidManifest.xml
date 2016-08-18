@@ -52,7 +52,8 @@
 
         <activity
             android:name=".activity.AttendeeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activity.CreateEventActvity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.CreateEventActvity" />
@@ -60,7 +61,8 @@
 
         <activity
             android:name=".activity.PlaceActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activity.CreateEventActvity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.CreateEventActvity" />
