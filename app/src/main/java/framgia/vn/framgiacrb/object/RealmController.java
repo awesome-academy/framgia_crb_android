@@ -29,6 +29,13 @@ public class RealmController implements EventField, CalendarField {
         }
         return instance;
     }
+    public static RealmController with(Application application) {
+
+        if (instance == null) {
+            instance = new RealmController(application);
+        }
+        return instance;
+    }
     public static RealmController getInstance() {
         return instance;
     }

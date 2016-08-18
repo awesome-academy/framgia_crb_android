@@ -57,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(query != "") {
+                if(!query.equals("")) {
                     mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
                         (SearchActivity.this).searchEvent(query));
                     mRecycler.setAdapter(mAdapter);
@@ -67,7 +67,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText != "") {
+                if(!newText.equals("")) {
                         mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
                             (SearchActivity.this).searchEvent(newText));
                         mRecycler.setAdapter(mAdapter);

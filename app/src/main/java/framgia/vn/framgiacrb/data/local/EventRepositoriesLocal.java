@@ -42,12 +42,6 @@ public class EventRepositoriesLocal implements EventRepository {
         for (int i = 0; i < events.size(); i++) {
             if (!isExists(events.get(i))) {
                 realmEvents.add(events.get(i));
-                Event event = events.get(i);
-                NotificationUtil.registerNotificationEventTime(CrbApplication.getInstanceContext(),
-                    event.getStartTime(),
-                    event.getTitle(),
-                    event.getDescription(),
-                    event.getId());
             }
         }
         mRealm.executeTransactionAsync(new Realm.Transaction() {
