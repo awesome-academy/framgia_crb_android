@@ -28,8 +28,7 @@ import framgia.vn.framgiacrb.R;
  * Created by lucky_luke on 7/5/2016.
  */
 public class CalendarFragment extends Fragment {
-    private static final int MIN_YEAR = 1970;
-    private static final int MAX_YEAR = 2050;
+
     // how many days to show, default to six weeks, 42 days
     private static final int DAYS_COUNT = 42;
     public static final String TITLE = "time";

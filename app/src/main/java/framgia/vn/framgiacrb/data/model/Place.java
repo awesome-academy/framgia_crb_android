@@ -24,4 +24,8 @@ public class Place extends RealmObject {
     public String getAddress() {
         return mAddress;
     }
+
+    public String getName() {
+        return mName;
+    }
 }

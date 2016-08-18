@@ -50,10 +50,11 @@
     <!--home screen-->
     <dimen name="item_month_height">40dp</dimen>
     <dimen name="item_date_height">72dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_normal">8dp</dimen>
     <dimen name="padding_lager">16dp</dimen>
     <dimen name="item_event_min_height">48dp</dimen>
-    <dimen name="item_event_margin_left">64dp</dimen>
+    <dimen name="item_event_margin_left">60dp</dimen>
 
     <dimen name="width_imgButton">16dp</dimen>
     <dimen name="height_imgButton">16dp</dimen>
@@ -68,7 +69,7 @@
     <dimen name="time_line_height">10dp</dimen>
     <dimen name="item_month_margin_top">56dp</dimen>
     <dimen name="item_timeline_margin_bottom">2dp</dimen>
-    <dimen name="item_timeline_margin_left">54dp</dimen>
+    <dimen name="item_timeline_margin_left">50dp</dimen>
     <dimen name="text_label_size">14sp</dimen>
     <dimen name="divide_width">1dp</dimen>
     <dimen name="divide_dashGap">20px</dimen>
@@ -77,4 +78,7 @@
     <dimen name="searh_item_margin">10dp</dimen>
     <dimen name="search_item_text_size">15sp</dimen>
     <dimen name="search_item_day_size">20sp</dimen>
+    <dimen name="text_size_tv_location">11sp</dimen>
+    <dimen name="secondary_text_size">14sp</dimen>
+    <dimen name="primary_text_size">16sp</dimen>
 </resources>
