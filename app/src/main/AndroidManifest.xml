@@ -52,20 +52,12 @@
 
         <activity
             android:name=".activity.AttendeeActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".activity.CreateEventActvity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CreateEventActvity" />
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
             android:name=".activity.PlaceActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".activity.CreateEventActvity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CreateEventActvity" />
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <receiver android:name=".services.AlarmReceiver">

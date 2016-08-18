@@ -293,6 +293,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (position > 4) {
             mDrawerLayout.closeDrawers();
             Session.sCalendarId = item.getCalendarId();
+            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
+            editor.commit();
             Toast.makeText(MainActivity.this, ""+Session.sCalendarId, Toast.LENGTH_SHORT).show();
         }
     }

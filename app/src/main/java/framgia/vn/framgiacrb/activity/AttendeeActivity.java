@@ -1,33 +1,43 @@
 package framgia.vn.framgiacrb.activity;
 
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.object.RealmController;
+import io.realm.Realm;
 
 /**
  * Created by lethuy on 19/07/2016.
  */
 public class AttendeeActivity extends AppCompatActivity {
-    private ListView mListAttendee;
+    private RecyclerView mRecycler;
+    private RecyclerView.LayoutManager layoutManager;
     private EditText mEditAttendee;
     private Toolbar mToolbar;
     private final String MESSAGE = "MESSAGE";
+    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee);
+
+        mEditAttendee = (EditText) findViewById(R.id.edtAttendee);
+        init();
+    }
+
+    private void init() {
+        mRealm = RealmController.with(this).getRealm();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_repeat);
         setSupportActionBar(mToolbar);
@@ -35,8 +45,10 @@ public class AttendeeActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mEditAttendee = (EditText) findViewById(R.id.edtAttendee);
-        mListAttendee = (ListView) findViewById(R.id.lvAttendee);
+        mRecycler = (RecyclerView) findViewById(R.id.recycler);
+        layoutManager = new LinearLayoutManager(this);
+        mRecycler.setLayoutManager(layoutManager);
+        mRecycler.setHasFixedSize(true);
     }
 
     @Override
@@ -50,16 +62,26 @@ public class AttendeeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                String message = mEditAttendee.getText().toString();
-                Intent intent = new Intent();
-                intent.putExtra(MESSAGE, message);
-                setResult(2, intent);
+                setMessageResult(true);
                 finish();
                 break;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                setMessageResult(false);
+                onBackPressed();
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setMessageResult(boolean isSave) {
+        if (!isSave) {
+            setResult(Activity.RESULT_CANCELED);
+            return;
+        }
+        String message = mEditAttendee.getText().toString();
+        Intent intent = new Intent();
+        intent.putExtra(MESSAGE, message);
+        setResult(Activity.RESULT_OK, intent);
     }
 }
