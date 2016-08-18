@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, position / 12 + MonthToolbarPagerAdapter.MIN_YEAR);
                 calendar.set(Calendar.MONTH, position % 12);
                 calendar.set(Calendar.DAY_OF_MONTH, 1);
+                sendBroadcastGotoToday(MainActivity.dateFormat.format(calendar.getTime()));
                 Date date = calendar.getTime();
                 setSubTitle(MainActivity.dateFormat.format(date));
                 if (position == mPreviousSelected) {
