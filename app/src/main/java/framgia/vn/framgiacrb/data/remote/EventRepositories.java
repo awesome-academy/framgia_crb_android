@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsynTask;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.EventRepository;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
@@ -16,7 +17,9 @@ import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.ResposeDTO;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
+import framgia.vn.framgiacrb.object.RealmController;
 import framgia.vn.framgiacrb.utils.DialogUtils;
+import framgia.vn.framgiacrb.utils.NotificationUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -67,6 +70,9 @@ public class EventRepositories implements EventRepository{
                     if (mEvents != null) {
                         Realm realm = Realm.getDefaultInstance();
                         new EventRepositoriesLocal(realm).addEvents(mEvents, mOnLoadEventListener);
+                        RegisterNotificationAsynTask registerNotificationAsynTask
+                            = new RegisterNotificationAsynTask();
+                        registerNotificationAsynTask.execute(mEvents);
                     } else {
                         mOnLoadEventListener.onSuccess();
                     }
