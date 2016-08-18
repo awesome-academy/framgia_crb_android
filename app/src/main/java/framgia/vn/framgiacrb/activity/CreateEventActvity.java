@@ -45,7 +45,6 @@ import framgia.vn.framgiacrb.data.model.NewEvent;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.object.EventInWeek;
-import framgia.vn.framgiacrb.utils.NotificationUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.Realm;
@@ -141,7 +140,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateEventActvity.this, PlaceActivity.class);
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, 3);
             }
         });
 
@@ -209,10 +208,15 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2) {
-            String message = data.getStringExtra(MESSAGE);
-            mTxtAttendee.setText(message);
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 2) {
+                String message = data.getStringExtra(MESSAGE);
+                mTxtAttendee.setText(message);
+            } else if (requestCode == 3){
+                String message = data.getStringExtra(MESSAGE);
+                mTxtPlace.setText(message);
+            }
         }
     }
 

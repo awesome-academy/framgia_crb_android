@@ -20,7 +20,7 @@
     <string name="send_string">Invites</string>
     <string name="color">Color</string>
     <string name="setting_string">Settings</string>
-    <string name="new_event">New Event</string>
+    <string name="new_event">Title</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -107,8 +107,9 @@
     <string name="error_response_data">Error response data!</string>
     <string name="msg_no_internet">No internet!</string>
     <string name="message_not_connect">Not connection</string>
-    <string name="error">Error</string>
+    <string name="error">Not connect</string>
     <string name="success">Create event success!</string>
     <string name="not_be_empty">Not be empty</string>
     <string name="Attendee">Attendee</string>
+    <string name="attendee_search">Attendee</string>
 </resources>

@@ -68,7 +68,7 @@ public class EventsFragment extends Fragment {
         mViewEvents = inflater.inflate(R.layout.fragment_events, container, false);
         initViews();
         framgia.vn.framgiacrb.data.model.Calendar calendar = new framgia.vn.framgiacrb.data.model.Calendar();
-        calendar.setId(6);
+        calendar.setId(Session.sCalendarId);
         mRealm = Realm.getDefaultInstance();
         mEventRepositoriesLocal = new EventRepositoriesLocal(mRealm);
         mEventRepositories = new EventRepositories();
