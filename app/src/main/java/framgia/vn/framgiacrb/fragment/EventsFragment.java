@@ -12,11 +12,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -113,20 +115,29 @@ public class EventsFragment extends Fragment {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(MainActivity.ACTION_SCROLL_DAY)) {
                     String timeString = intent.getStringExtra(MonthView.TITLE);
-                    //Date timeDate = TimeUtils.stringToDate(timeString, TimeUtils.DATE_FORMAT_TOOLBAR);
-                    for (int i = 0; i < mDatas.size(); i++) {
-                        if (mDatas.get(i) instanceof Date) {
-                            Date date = TimeUtils.convertDateFormat(((Date) mDatas.get(i)).toString(),
-                                    TimeUtils.DATE_INPUT, TimeUtils.DATE_FORMAT_TOOLBAR);
-                            String time = MainActivity.dateFormat.format(date);
-                            Toast.makeText(EventsFragment.this.getContext(), time, Toast.LENGTH_SHORT).show();
-                            if (time.equals(timeString)) {
-                                Toast.makeText(EventsFragment.this.getContext(), "position " + i, Toast.LENGTH_SHORT).show();
-                                mRecyclerViewEvents.scrollToPosition(i);
-                                break;
-                            }
+                    Date date = TimeUtils.stringToDate(timeString, "d MMM yyyy");
+                    int month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
+                    int year = Integer.parseInt(DateFormat.format("yyyy", date).toString());
+                    int position = -1;
+                    if ((month > mLastMonth && year == mLastYear) || (month == 1 && year > mLastYear)) {
+                        try {
+                            position = mDatas.size();
+                            loadDatasForNextMonth();
+                            mAdapter.notifyDataSetChanged();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
+                    } else if ((month < mFirstMonth && year == mFirstYear) || (month == 12 && year < mFirstYear)) {
+                        position = 0;
+                        try {
+                            loadDatasForPrevMonth();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        position = findPositionByDate(date);
                     }
+                    mRecyclerViewEvents.smoothScrollToPosition(position);
                 }
             }
         };
@@ -267,7 +278,7 @@ public class EventsFragment extends Fragment {
         mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
     }
 
-    private void loadDatasForNextMonth() throws ParseException {
+    private synchronized void loadDatasForNextMonth() throws ParseException {
         Calendar calendar = Calendar.getInstance();
         if (mLastMonth < 12) {
             mLastMonth += 1;
@@ -289,7 +300,7 @@ public class EventsFragment extends Fragment {
         }
     }
 
-    private void loadDatasForPrevMonth() throws ParseException {
+    private synchronized void loadDatasForPrevMonth() throws ParseException {
         mOldDataSize = mDatas.size();
         Calendar calendar = Calendar.getInstance();
         if (mFirstMonth > 1) {
@@ -343,5 +354,20 @@ public class EventsFragment extends Fragment {
                 mRefreshLayout.setRefreshing(isRefreshing);
             }
         });
+    }
+
+    private int findPositionByDate(Date date) {
+        int i;
+        for (i = 0; i < mDatas.size(); i++) {
+            try {
+                if (mDatas.get(i) instanceof Date) {
+                    if (TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                        break;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return i;
     }
 }
