@@ -33,6 +33,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,7 +69,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     private final String TIME_AM = "AM";
     private final String TIME_PM = "PM";
     private final String SUCCESS = "Create Event Success!";
-    private final String NOT_AUTHENTICATION = "Not Authentication";
+    private final String NOT_AUTHENTICATION = "Not authenticated";
     private final String MESSAGE_NOT_AUTHENTICATION = "This account has been login in other device";
     private ImageButton mImageButtonBack;
     private EditText mEdtOption, mEdtTitle, mEdtDesciption;
@@ -163,7 +166,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         RealmResults<framgia.vn.framgiacrb.data.model.Calendar> result =
                 new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
 
-        for(int i = 0;  i<result.size(); i++){
+        for (int i = 0; i < result.size(); i++) {
             mListData.add(result.get(i).getName());
         }
 
@@ -217,7 +220,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
             if (requestCode == 2) {
                 String message = data.getStringExtra(MESSAGE);
                 mTxtAttendee.setText(message);
-            } else if (requestCode == 3){
+            } else if (requestCode == 3) {
                 String message = data.getStringExtra(MESSAGE);
                 mTxtPlace.setText(message);
             }
@@ -504,9 +507,9 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 String s = hourOfDay + ":" + minute;
                 int hourTam = hourOfDay;
                 if (hourTam > 12)
-                    hourTam = hourTam - 12;
+                    hourTam -= 12;
                 mTxtTimeStart.setText
-                        (Utils.formatTime(hourOfDay, minute) + (hourOfDay > 12 ? TIME_PM : TIME_AM));
+                        (Utils.formatTime(hourTam, minute) + (hourOfDay > 12 ? TIME_PM : TIME_AM));
                 mTxtTimeStart.setTag(s);
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);
@@ -533,7 +536,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 if (hourTam > 12)
                     hourTam = hourTam - 12;
                 mTxtTimeFinish.setText
-                        (Utils.formatTime(hourOfDay, minute) + (hourOfDay > 12 ? TIME_PM : TIME_AM));
+                        (Utils.formatTime(hourTam, minute) + (hourOfDay > 12 ? TIME_PM : TIME_AM));
                 mTxtTimeFinish.setTag(s);
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);
@@ -556,11 +559,21 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
             @Override
             public void onResponse(Call<CreateEventResponse> call, Response<CreateEventResponse> response) {
                 if (response.body() == null) {
-                    Toast.makeText(CreateEventActvity.this, R.string.error, Toast.LENGTH_SHORT).show();
-                } else if (response.body().getMessage().equals(SUCCESS)){
+                    String error = null;
+                    try {
+                        error = Utils.getStringFromJson(response.errorBody().string());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (error.equals(NOT_AUTHENTICATION)) {
+                        logout();
+                    } else {
+                        Toast.makeText(CreateEventActvity.this, R.string.create_error, Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.body().getMessage().equals(SUCCESS)) {
                     Toast.makeText(CreateEventActvity.this, R.string.success, Toast.LENGTH_SHORT).show();
-                } else if (response.body().getMessage().equals(NOT_AUTHENTICATION)) {
-                    logout();
                 }
             }
 
