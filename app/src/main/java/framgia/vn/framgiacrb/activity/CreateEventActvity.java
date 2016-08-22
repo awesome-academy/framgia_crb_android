@@ -5,8 +5,10 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -64,6 +66,8 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     private final String TIME_AM = "AM";
     private final String TIME_PM = "PM";
     private final String SUCCESS = "Create Event Success!";
+    private final String NOT_AUTHENTICATION = "Not Authentication";
+    private final String MESSAGE_NOT_AUTHENTICATION = "This account has been login in other device";
     private ImageButton mImageButtonBack;
     private EditText mEdtOption, mEdtTitle, mEdtDesciption;
     private ImageButton mButtonSave;
@@ -555,6 +559,8 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                     Toast.makeText(CreateEventActvity.this, R.string.error, Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage().equals(SUCCESS)){
                     Toast.makeText(CreateEventActvity.this, R.string.success, Toast.LENGTH_SHORT).show();
+                } else if (response.body().getMessage().equals(NOT_AUTHENTICATION)) {
+                    logout();
                 }
             }
 
@@ -563,6 +569,23 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
 
             }
         });
+    }
+
+    private void logout() {
+        Toast.makeText(CreateEventActvity.this, MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
+        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(CreateEventActvity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+        Intent intent = new Intent(CreateEventActvity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public NewEvent createEvent() {
