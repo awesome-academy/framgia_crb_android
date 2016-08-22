@@ -28,12 +28,16 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
     public static final int TEXT_YEAR_SIZE = 30;
     public static final int TEXT_CONTENT_SIZE = 15;
     public final Activity mActivity;
-    public RealmList<Event> data;
+    public RealmList<Event> data = new RealmList<>();
     public SearchEventAdapter(Activity activity, OrderedRealmCollection<Event> data) {
         super(activity, data, true);
         this.mActivity = activity;
         this.data = SearchUtil.editListDataSearch(data);
-        updateData(data);
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
     }
 
     @Override
