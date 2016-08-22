@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import java.util.Calendar;
 import java.util.Date;
 
+import framgia.vn.framgiacrb.CrbApplication;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.activity.DetailActivity;
 import framgia.vn.framgiacrb.constant.Constant;
@@ -67,5 +68,11 @@ public class NotificationUtil {
         NotificationManager notificationManager =
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(notificationNumber, builder.build());
+    }
+    public static void clearNotification() {
+        NotificationManager notificationManager = (NotificationManager)
+            CrbApplication.getInstanceContext().
+            getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
 }

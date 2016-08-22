@@ -45,6 +45,7 @@ import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
 import framgia.vn.framgiacrb.utils.DrawableUtil;
+import framgia.vn.framgiacrb.utils.NotificationUtil;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -274,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                 mCurrentFragment = new MonthFragment();
                 break;
             case LOGOUT:
+                NotificationUtil.clearNotification();
                 logout();
                 new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
                     @Override

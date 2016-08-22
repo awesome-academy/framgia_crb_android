@@ -61,6 +61,8 @@ public class SearchActivity extends AppCompatActivity {
                     mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
                         (SearchActivity.this).searchEvent(query));
                     mRecycler.setAdapter(mAdapter);
+                } else {
+                    mRecycler.setAdapter(null);
                 }
                 return false;
             }
@@ -71,6 +73,8 @@ public class SearchActivity extends AppCompatActivity {
                         mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
                             (SearchActivity.this).searchEvent(newText));
                         mRecycler.setAdapter(mAdapter);
+                } else {
+                    mRecycler.setAdapter(null);
                 }
                 return false;
             }
