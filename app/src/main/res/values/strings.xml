@@ -108,6 +108,7 @@
     <string name="msg_no_internet">No internet!</string>
     <string name="message_not_connect">Not connection</string>
     <string name="error">Not connect</string>
+    <string name="create_error">Error</string>
     <string name="success">Create event success!</string>
     <string name="not_be_empty">Not be empty</string>
     <string name="Attendee">Attendee</string>

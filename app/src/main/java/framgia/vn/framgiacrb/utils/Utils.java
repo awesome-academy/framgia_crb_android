@@ -1,9 +1,13 @@
 package framgia.vn.framgiacrb.utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by lethuy on 19/07/2016.
  */
 public class Utils {
+    public static final String ERROR_JSON = "errors";
 
     public static String formatTime(int hourOfDay, int minutes) {
         String formatHour, formatMinute;
@@ -35,6 +39,12 @@ public class Utils {
             formatMonth = "0" + String.valueOf(monthOfYear);
         }
         return formatDay + "-" + formatMonth  + "-" + year;
+    }
+
+    public static String getStringFromJson(String stringJson) throws JSONException {
+        JSONObject errorJson = new JSONObject(stringJson);
+        String error = errorJson.getString(ERROR_JSON);
+        return error;
     }
 
 }
