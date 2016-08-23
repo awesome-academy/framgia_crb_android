@@ -20,6 +20,8 @@
     <dimen name="layout_with_fb">300dp</dimen>
     <dimen name="layout_height_fb">50dp</dimen>
     <dimen name="text_size_search">15sp</dimen>
+    <dimen name="padding_left_start">35dp</dimen>
+    <dimen name="padding_left_spinner">15dp</dimen>
     <dimen name="padding_left_item_search">8dp</dimen>
     <dimen name="padding_right_item_search">8dp</dimen>
     <dimen name="layout_width_item_search">0dp</dimen>
