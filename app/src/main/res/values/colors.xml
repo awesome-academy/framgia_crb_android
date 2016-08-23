@@ -44,4 +44,5 @@
     <color name="color_event_11">#FBE983</color>
     <color name="color_event_12">#FAD165</color>
     <color name="color_divide">#ccc</color>
+    <color name="color_grey600">#757575</color>
 </resources>

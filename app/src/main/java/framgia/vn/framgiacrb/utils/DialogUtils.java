@@ -102,12 +102,25 @@ public class DialogUtils {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param message
+     * @param listener call back for positiveButton
+     */
     public static void showAlertAction(Context context, int message, DialogInterface.OnClickListener listener) {
+        dimissAlertAction();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getResources().getString(message));
         builder.setPositiveButton(R.string.ok, listener);
         builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
+        sAlert = builder.create();
+        sAlert.show();
+    }
+
+    public static void dimissAlertAction() {
+        if (sAlert != null && sAlert.isShowing())
+            sAlert.dismiss();
     }
 
     public static void showAlertAction(Context context, int message, DialogInterface.OnClickListener possitiveListener, DialogInterface.OnClickListener negativeListener) {

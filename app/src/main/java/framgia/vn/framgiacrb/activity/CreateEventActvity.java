@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -71,9 +72,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     private final String SUCCESS = "Create Event Success!";
     private final String NOT_AUTHENTICATION = "Not authenticated";
     private final String MESSAGE_NOT_AUTHENTICATION = "This account has been login in other device";
-    private ImageButton mImageButtonBack;
     private EditText mEdtOption, mEdtTitle, mEdtDesciption;
-    private ImageButton mButtonSave;
     private RadioButton mRadioPhut, mRadioGio, mRadioNgay, mRadioTuan, mRadioTB, mRadioEmail;
     private Switch mSwitchAlarm;
     private RadioGroup mRadioGroup;
@@ -171,6 +170,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         }
 
         mSpinerCalendar = (Spinner) findViewById(R.id.spin_Calendar);
+        mSpinerCalendar.getBackground().setColorFilter(Color.parseColor("#757575"), PorterDuff.Mode.SRC_ATOP);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,
                 mListData);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);

@@ -31,8 +31,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/padding_normal"
-                android:textSize="@dimen/secondary_text_size"
+                android:textSize="@dimen/primary_text_size"
                 android:text="9:00-12:00"
+                android:gravity="center"
                 android:textColor="@android:color/white"/>
             <LinearLayout
                 android:orientation="vertical"
@@ -45,7 +46,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
-                    android:textSize="@dimen/primary_text_size"/>
+                    android:textSize="@dimen/primary_text_size"
+                    android:gravity="center"/>
                 <LinearLayout
                     android:id="@+id/ll_location"
                     android:orientation="horizontal"
@@ -64,7 +66,6 @@
                         android:id="@+id/tv_location"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="Phung thuong - phuc tho - Ha noi"
                         android:textColor="@color/white"
                         android:textSize="@dimen/secondary_text_size"
                         android:layout_gravity="center"/>

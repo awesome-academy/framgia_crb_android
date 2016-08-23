@@ -191,18 +191,18 @@ public class MainActivity extends AppCompatActivity {
         header.setTitle(mSharedPreferences.getString(NAME_TITLE, null));
         header.setEmail(mSharedPreferences.getString(EMAIL_TITLE, null));
         ItemLeftMenu home = new ItemLeftMenu();
-        home.setImageResource(R.drawable.view_home);
+        home.setImageResource(R.drawable.ic_home);
         home.setTitle(HOME);
         ItemLeftMenu week = new ItemLeftMenu();
         week.setImageResource(R.drawable.view_week);
         week.setTitle(WEEK);
         ItemLeftMenu month = new ItemLeftMenu();
-        month.setImageResource(R.drawable.view_month);
+        month.setImageResource(R.drawable.ic_view_month);
         month.setTitle(MONTH);
         ItemLeftMenu label = new ItemLeftMenu();
         label.setTitle(LABEL);
         ItemLeftMenu logout = new ItemLeftMenu();
-        logout.setImageResource(R.drawable.logout);
+        logout.setImageResource(R.drawable.ic_logout);
         logout.setTitle(LOGOUT);
         mListMenu.add(header);
         mListMenu.add(home);
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         mListMenu.add(label);
         for (int i = 0; i < mUserCalendar.size(); i++) {
             ItemLeftMenu user = new ItemLeftMenu();
-            user.setImageResource(R.drawable.calendar);
+            user.setImageResource(R.drawable.ic_calendar_grey600);
             user.setTitle(mUserCalendar.get(i).getName());
             user.setCalendarId(mUserCalendar.get(i).getCalendarId());
             mListMenu.add(user);
