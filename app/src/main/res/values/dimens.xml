@@ -27,7 +27,7 @@
     <dimen name="layout_width_item_search">0dp</dimen>
     <dimen name="layout_width_imgbt_item_search">30dp</dimen>
     <dimen name="layout_height_imgbt_item_search">30dp</dimen>
-    <dimen name="layout_margin_item_search">8dp</dimen>
+    <dimen name="layout_margin_item_search">16dp</dimen>
     <dimen name="bottom_edt_background">1dp</dimen>
     <dimen name="left_edt_background">1dp</dimen>
     <dimen name="right_edt_background">1dp</dimen>
@@ -60,7 +60,7 @@
 
     <dimen name="width_imgButton">16dp</dimen>
     <dimen name="height_imgButton">16dp</dimen>
-    <dimen name="padding_left_calendar">7dp</dimen>
+    <dimen name="padding_left_calendar">8dp</dimen>
 
     <!--week screen-->
     <dimen name="text_header_event_size">12sp</dimen>
@@ -83,4 +83,7 @@
     <dimen name="text_size_tv_location">11sp</dimen>
     <dimen name="secondary_text_size">14sp</dimen>
     <dimen name="primary_text_size">16sp</dimen>
+    <dimen name="item_create_event_margin_vertical">16dp</dimen>
+    <dimen name="item_create_event_start_date_margin_left">56dp</dimen>
+    <dimen name="item_sprinner_calendar_margin">40dp</dimen>
 </resources>
