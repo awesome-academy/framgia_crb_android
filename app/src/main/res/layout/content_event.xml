@@ -146,7 +146,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:paddingLeft="@dimen/layout_width_imgbt_item_search"
+                        android:paddingLeft="@dimen/padding_left_start"
                         android:text="@string/start"
                         android:textSize="@dimen/text_size_search" />
 
@@ -188,7 +188,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:paddingLeft="@dimen/margin_top_button"
+                        android:paddingLeft="@dimen/padding_left_start"
                         android:text="@string/finish"
                         android:textSize="@dimen/text_size_search" />
 
@@ -331,6 +331,7 @@
                     android:layout_height="@dimen/layout_height_fb"
                     android:layout_gravity="center_vertical"
                     android:gravity="left|center"
+                    android:paddingLeft="@dimen/padding_left_spinner"
                     android:textSize="@dimen/text_size_search" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
