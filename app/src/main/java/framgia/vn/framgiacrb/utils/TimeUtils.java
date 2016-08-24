@@ -23,8 +23,7 @@ public class TimeUtils {
     private static final String FORMAT_TODAY = "HH:mm";
 
     public static String toStringDate(long milisec) {
-        String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
-        return dateString;
+        return new SimpleDateFormat(DATE_OUTPUT, Locale.getDefault()).format(new Date(milisec));
     }
 
     public static long toTime(String dateString) {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 
 import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.R;
@@ -43,7 +44,7 @@ public class CalendarFragment extends Fragment {
     LayoutInflater inflater;
 
     // season's rainbow
-    int[] rainbow = new int[] {
+    final int[] rainbow = new int[] {
             R.color.summer,
             R.color.fall,
             R.color.winter,
@@ -109,7 +110,7 @@ public class CalendarFragment extends Fragment {
         // a good place to customize how days are displayed is the Adapter
         mGrid.setAdapter(new CalendarAdapter(getContext(), cells, null));
         // update title
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy", Locale.getDefault());
         mTxtDate.setText(sdf.format(calendar.getTime()));
         // set mHeader color according to current season
         int month = calendar.get(Calendar.MONTH);

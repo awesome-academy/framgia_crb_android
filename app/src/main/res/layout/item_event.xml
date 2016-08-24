@@ -31,45 +31,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/padding_normal"
-                android:textSize="@dimen/primary_text_size"
-                android:text="9:00-12:00"
                 android:gravity="center"
-                android:textColor="@android:color/white"/>
+                android:text="9:00-12:00"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/primary_text_size"/>
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_normal">
+                android:layout_marginBottom="@dimen/padding_normal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/map_marker"/>
+
+                    <TextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/primary_text_size"/>
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tv_title_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:textColor="@android:color/white"
-                    android:textStyle="bold"
                     android:textSize="@dimen/primary_text_size"
-                    android:gravity="center"/>
-                <LinearLayout
-                    android:id="@+id/ll_location"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_small">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/map_marker"
-                        android:layout_gravity="center"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_location"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/secondary_text_size"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
+                    android:textStyle="bold"/>
             </LinearLayout>
 
         </LinearLayout>

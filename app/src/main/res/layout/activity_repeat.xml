@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_left_item_search"
                 android:text="@string/no_repeat"
-                android:textSize="@dimen/text_size_or" />
+                android:textSize="@dimen/text_size_or"
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/radio2"

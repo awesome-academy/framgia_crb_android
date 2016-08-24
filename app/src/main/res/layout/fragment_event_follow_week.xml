@@ -13,7 +13,7 @@
         app:textSize="@dimen/text_header_event_size"
         app:hourHeight="@dimen/column_hour_height"
         app:headerColumnPadding="@dimen/padding_normal"
-        app:headerColumnTextColor="@color/black"
+        app:headerColumnTextColor="@color/color_grey800"
         app:headerRowPadding="@dimen/header_row_padding"
         app:columnGap="@dimen/padding_normal"
         app:noOfVisibleDays="3"

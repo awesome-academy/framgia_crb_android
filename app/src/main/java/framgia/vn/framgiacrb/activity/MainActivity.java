@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mEventFollowWeekFragment;
     private FragmentManager mFragmentManager;
 
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", /*Locale.getDefault()*/Locale.ENGLISH);
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
-            editor.commit();
+            editor.apply();
             Toast.makeText(MainActivity.this, ""+Session.sCalendarId, Toast.LENGTH_SHORT).show();
         }
     }
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
