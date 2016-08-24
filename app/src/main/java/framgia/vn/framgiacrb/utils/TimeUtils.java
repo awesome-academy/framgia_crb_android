@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,7 +17,10 @@ public class TimeUtils {
     public static final String MONTH_FORMAT = "MMM";
     public static final String YEAR_FORMAT = "yyyy";
     public static final String DATE_FORMAT_TOOLBAR = "d MMMM yyyy";
-    //public static final String TIME_FORMAT = "HH:mm:ss";
+    private static final String DEVIDE_TIME = "-";
+    private static final String FORMAT_OTHER_YEAR = "HH:mm dd mm yyyy";
+    private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm dd mm";
+    private static final String FORMAT_TODAY = "HH:mm";
 
     public static String toStringDate(long milisec) {
         String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
@@ -101,5 +105,20 @@ public class TimeUtils {
             sdf1=null;
         }
         return resultDate;
+    }
+
+    public static String getTimeStringBeauty(Date date) {
+        if(date.getYear() != Calendar.getInstance().get(Calendar.YEAR)) {
+            return new SimpleDateFormat(FORMAT_OTHER_YEAR).format(date);
+        }
+        if(date.getMonth() == Calendar.getInstance().get(Calendar.MONTH)
+            && date.getDay() == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+            return new SimpleDateFormat(FORMAT_TODAY).format(date);
+        }
+        return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY).format(date);
+    }
+
+    public static String createAmountTime(Date startDate, Date endDate) {
+        return getTimeStringBeauty(startDate) + DEVIDE_TIME + getTimeStringBeauty(endDate);
     }
 }

@@ -9,13 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.adapter.CustomRecyclerAdapter;
 import framgia.vn.framgiacrb.adapter.SearchEventAdapter;
-import framgia.vn.framgiacrb.data.Data;
 import framgia.vn.framgiacrb.object.RealmController;
 import io.realm.Realm;
 
