@@ -19,8 +19,7 @@ public class TimeUtils {
     //public static final String TIME_FORMAT = "HH:mm:ss";
 
     public static String toStringDate(long milisec) {
-        String dateString = new SimpleDateFormat(DATE_OUTPUT).format(new Date(milisec));
-        return dateString;
+        return new SimpleDateFormat(DATE_OUTPUT, Locale.getDefault()).format(new Date(milisec));
     }
 
     public static long toTime(String dateString) {

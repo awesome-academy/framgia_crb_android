@@ -1,5 +1,6 @@
 package framgia.vn.framgiacrb.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -293,7 +294,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            View v = inflater.inflate(R.layout.activity_repeat, null, false);
+            @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.activity_repeat, null, false);
             mRadioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
             mRadioButton1 = (RadioButton) v.findViewById(R.id.radio1);
             mRadioButton2 = (RadioButton) v.findViewById(R.id.radio2);
@@ -595,7 +596,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
         Intent intent = new Intent(CreateEventActvity.this, LoginActivity.class);
         startActivity(intent);
         finish();

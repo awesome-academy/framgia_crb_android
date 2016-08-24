@@ -77,7 +77,7 @@ public class EventRepositories implements EventRepository{
                         mOnLoadEventListener.onSuccess();
                     }
                 } else {
-                    Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT);
+                    Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT).show();
                     mOnLoadEventListener.onSuccess();
                 }
             }
@@ -87,7 +87,7 @@ public class EventRepositories implements EventRepository{
                 if (mOnLoadEventListener != null) {
                     mOnLoadEventListener.onSuccess();
                 }
-                Toast.makeText(context, context.getString(R.string.message_not_connect), Toast.LENGTH_SHORT);
+                Toast.makeText(context, context.getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
             }
         });
     }

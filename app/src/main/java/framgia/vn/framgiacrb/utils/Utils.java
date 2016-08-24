@@ -43,8 +43,7 @@ public class Utils {
 
     public static String getStringFromJson(String stringJson) throws JSONException {
         JSONObject errorJson = new JSONObject(stringJson);
-        String error = errorJson.getString(ERROR_JSON);
-        return error;
+        return errorJson.getString(ERROR_JSON);
     }
 
 }

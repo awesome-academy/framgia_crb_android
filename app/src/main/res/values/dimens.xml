@@ -82,7 +82,7 @@
     <dimen name="search_item_day_size">20sp</dimen>
     <dimen name="text_size_tv_location">11sp</dimen>
     <dimen name="secondary_text_size">14sp</dimen>
-    <dimen name="primary_text_size">16sp</dimen>
+    <dimen name="primary_text_size">14sp</dimen>
     <dimen name="item_create_event_margin_vertical">16dp</dimen>
     <dimen name="item_create_event_start_date_margin_left">56dp</dimen>
     <dimen name="item_sprinner_calendar_margin">40dp</dimen>

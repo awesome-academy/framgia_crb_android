@@ -103,7 +103,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                     SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(Session.AUTHTOKEN, Session.sAuthToken);
-                    editor.commit();
+                    editor.apply();
                     mListUserCalendar = mUserLogin.getUserCalendars();
                     mListShareUserCalendar = mUserLogin.getShareUserCalendars();
                     mListCalendar = new ArrayList<Calendar>();
@@ -150,7 +150,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         editor.putString(MainActivity.NAME_TITLE, mUserLogin.getName());
         editor.putString(MainActivity.EMAIL_TITLE, mUserLogin.getEmail());
         editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
-        editor.commit();
+        editor.apply();
     }
 
     public User user(){

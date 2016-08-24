@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
@@ -117,7 +118,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
             eventViewHolder.setId(event.getId());
             eventViewHolder.tvTitleEvent.setText(event.getTitle());
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             Date startDate = event.getStartTime();
             Date finishDate = event.getFinishTime();
             String startTime = format.format(startDate);

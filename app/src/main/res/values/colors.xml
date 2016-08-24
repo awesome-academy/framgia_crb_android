@@ -7,6 +7,7 @@
     <color name="bg_btn_login_pressed">#0876f4</color>
     <color name="actionbar">#e7f8f8</color>
     <color name="white">#ffffff</color>
+    <color name="color_grey800">#212121</color>
     <color name="black">#000</color>
     <color name="blue">#0b32f2</color>
     <color name="header">#ed1b26</color>

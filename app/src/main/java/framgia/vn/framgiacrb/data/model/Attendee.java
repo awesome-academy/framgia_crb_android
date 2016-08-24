@@ -29,7 +29,7 @@ public class Attendee extends RealmObject {
         return attendees;
     }
 
-    public String getEmail() {
+    private String getEmail() {
         return mEmail;
     }
 }
