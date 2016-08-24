@@ -17,4 +17,5 @@ public class Constant {
             R.color.color_event_12};
     public static final String INTENT_DATA = "intent_data";
     public static final String ID_KEY ="id_event";
+    public static final String LINE_BREAK = "\n";
 }

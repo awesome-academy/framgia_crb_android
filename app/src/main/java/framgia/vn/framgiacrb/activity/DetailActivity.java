@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,20 +24,29 @@ import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class DetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_activity);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_detail);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         findView();
     }
 
     private void findView() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_detail);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
+        mFab = (FloatingActionButton) findViewById(R.id.fab_edit);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailActivity.this, EditActivity.class);
+                intent.putExtra(Constant.ID_KEY, getIntent().getStringExtra(Constant.ID_KEY));
+                startActivity(intent);
+            }
+        });
         String eventId = getIntent().getStringExtra(Constant.ID_KEY);
         Event event = RealmController.with(this).getEventById(eventId);
         if (event == null) {
@@ -49,16 +59,9 @@ public class DetailActivity extends AppCompatActivity {
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_description);
             relativeLayout.setVisibility(View.GONE);
         }
-        TextView startDate = (TextView) findViewById(R.id.txt_DateStart);
-        startDate.setText(TimeUtils.toStringDate(event.getStartTime()));
-        TextView startTime = (TextView) findViewById(R.id.txt_timeStart);
-        startTime.setText(TimeUtils.toStringTime(event.getStartTime()));
-        TextView endDate = (TextView) findViewById(R.id.txt_DateFinish);
-        endDate.setText(TimeUtils.toStringDate(event.getFinishTime()));
-        TextView endTime = (TextView) findViewById(R.id.txt_TimeFinish);
-        endTime.setText(TimeUtils.toStringTime(event.getFinishTime()));
-        TextView title = (TextView) findViewById(R.id.textview_event);
-        title.setText(event.getTitle() == null ? "" : event.getTitle());
+        TextView timeText = (TextView) findViewById(R.id.textView_time);
+        timeText.setText(TimeUtils.createAmountTime(event.getStartTime(), event.getEndDate()));
+        getSupportActionBar().setTitle(event.getTitle() == null ? "" : event.getTitle());
         TextView calendarTv = (TextView) findViewById(R.id.textView_calendar);
         Calendar calendar = RealmController.with(this)
             .getCalenderByid(event.getCalendarId());
@@ -82,7 +85,7 @@ public class DetailActivity extends AppCompatActivity {
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_repeat);
             relativeLayout.setVisibility(View.GONE);
         }
-        if(event.getPlace() != null) {
+        if (event.getPlace() != null) {
             TextView placeTv = (TextView) findViewById(R.id.textView_place);
             placeTv.setText(event.getPlace().getName());
         } else {
@@ -101,11 +104,6 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_edit:
-                Intent intent = new Intent(this, EditActivity.class);
-                intent.putExtra(Constant.ID_KEY, getIntent().getStringExtra(Constant.ID_KEY));
-                startActivity(intent);
-                return true;
             case R.id.action_delete:
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
                 builder.setTitle(R.string.question);
