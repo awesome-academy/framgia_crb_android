@@ -19,64 +19,129 @@
             android:textSize="@dimen/text_size_or" />
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/linear_02"
-        android:layout_width="wrap_content"
+    <GridLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="@dimen/activity_horizontal_margin"
+        android:columnCount="4"
+        android:rowCount="4">
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
+        <TextView
+            android:text="@string/repeat_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_gravity="right" />
+
+        <Spinner
+            android:entries="@array/repeat_choice"
+            android:id="@+id/repeat_spinner"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <TextView
+            android:text="@string/repeat_every_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_column="0"
+            android:layout_gravity="right" />
+
+        <Spinner
+            android:entries="@array/repeat_every"
+            android:id="@+id/repeat_every_spinner"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/start_on_string"
+            android:layout_column="0"
+            android:layout_gravity="right"/>
+
+        <EditText
+            android:id="@+id/start_edittext"
+            android:ems="10"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:enabled="false"
+            android:text="8/25/2016"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+        <TextView
+            android:text="@string/end_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_column="0"
+            android:layout_gravity="right" />
+
+        <EditText
+            android:id="@+id/end_edittext"
+            android:ems="10"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:editable="false"
+            android:textIsSelectable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+    </GridLayout>
+
+    <HorizontalScrollView
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/day_of_week_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_vertical"
-            android:gravity="left|center"
-            android:paddingLeft="@dimen/layout_height">
-
-            <RadioButton
-                android:id="@+id/radio1"
+            android:orientation="horizontal">
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/sun_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding_left_item_search"
-                android:text="@string/no_repeat"
-                android:textSize="@dimen/text_size_or"
-                android:checked="true"/>
+                android:text="@string/sun"
+                android:onClick="clickCheckBox"/>
 
-            <RadioButton
-                android:id="@+id/radio2"
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/mon_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_cardview"
-                android:text="@string/fiftyminutes"
-                android:textSize="@dimen/text_size_or" />
+                android:text="@string/mon"
+                android:onClick="clickCheckBox"/>
 
-            <RadioButton
-                android:id="@+id/radio3"
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/tue_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_cardview"
-                android:text="@string/thirtyminutes"
-                android:textSize="@dimen/text_size_or" />
-
-            <RadioButton
-                android:id="@+id/radio4"
+                android:text="@string/tue"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/wed_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_cardview"
-                android:text="@string/onehours"
-                android:textSize="@dimen/text_size_or" />
-
-            <TextView
-                android:id="@+id/txtOption"
+                android:text="@string/wed"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/thu_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_cardview"
-                android:text="@string/option"
-                android:paddingLeft="@dimen/padding_attendee_option"
-                android:textSize="@dimen/text_size_or" />
-        </RadioGroup>
-
-    </LinearLayout>
+                android:text="@string/thu"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/fri_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fri"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/sat_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sat"
+                android:onClick="clickCheckBox"/>
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </LinearLayout>
