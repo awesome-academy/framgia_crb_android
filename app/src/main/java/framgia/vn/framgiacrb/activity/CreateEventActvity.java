@@ -1,8 +1,8 @@
 package framgia.vn.framgiacrb.activity;
 
 import android.annotation.SuppressLint;
+import android.animation.Animator;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
@@ -23,10 +23,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -38,6 +40,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 
 import java.io.IOException;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +68,9 @@ import retrofit2.Response;
  * Created by lethuy on 05/07/2016.
  */
 public class CreateEventActvity extends AppCompatActivity implements View.OnTouchListener {
+    public static final String WEEKLY = "weekly";
+    public static final int SHOW_DURATION = 1000;
+    public static final int HIDE_DURATION = 500;
     private final String MESSAGE = "MESSAGE";
     private final String FORMAT_DATE = "dd-MM-yyyy";
     private final String FORMAT_TIME = "HH:mm";
@@ -73,13 +80,16 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     private final String SUCCESS = "Create Event Success!";
     private final String NOT_AUTHENTICATION = "Not authenticated";
     private final String MESSAGE_NOT_AUTHENTICATION = "This account has been login in other device";
-    private EditText mEdtOption, mEdtTitle, mEdtDesciption;
+    private ImageButton mImageButtonBack;
+    private EditText mEdtOption, mEdtTitle, mEdtDesciption, mStartEditText, mEndEditText;
+    private ImageButton mButtonSave;
     private RadioButton mRadioPhut, mRadioGio, mRadioNgay, mRadioTuan, mRadioTB, mRadioEmail;
     private Switch mSwitchAlarm;
-    private RadioGroup mRadioGroup;
-    private RadioButton mRadioButton1, mRadioButton2, mRadioButton3, mRadioButton4;
+    private Spinner mRepeatSpinner, mRepeatEverySpinner;
+    private DatePickerDialog mDatePickerDialog;
+    private LinearLayout mDayOfWeekLinearLayout;
     private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat, mTxtNewEvent;
-    private TextView mTxtOption, mTxtAttendee, mTxtPlace;
+    private TextView mTxtAttendee, mTxtPlace;
     private Spinner mSpinerCalendar;
 
     private Calendar mCal, mCalendarStart, mCalendarFinish;
@@ -91,6 +101,8 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
 
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
     ArrayAdapter<EventInWeek> adapter = null;
+
+    private int mCurrentIndexOfSpinnerChoice = 0;
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -255,7 +267,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         mTxtRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyDialogRepeat md = new MyDialogRepeat();
+                MyDialogRepeat md = new MyDialogRepeat(mCurrentIndexOfSpinnerChoice);
                 md.show(CreateEventActvity.this.getFragmentManager(), MESSAGE);
             }
         });
@@ -289,54 +301,59 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         }
     }
 
-    private class MyDialogRepeat extends DialogFragment {
+    private class MyDialogRepeat extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        private int mCurrentItemSelectedOnSpinnerChoice;
+
+        public MyDialogRepeat(int currentIndex) {
+            this.mCurrentItemSelectedOnSpinnerChoice = currentIndex;
+        }
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.activity_repeat, null, false);
-            mRadioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
-            mRadioButton1 = (RadioButton) v.findViewById(R.id.radio1);
-            mRadioButton2 = (RadioButton) v.findViewById(R.id.radio2);
-            mRadioButton3 = (RadioButton) v.findViewById(R.id.radio3);
-            mRadioButton4 = (RadioButton) v.findViewById(R.id.radio4);
-            mTxtOption = (TextView) v.findViewById(R.id.txtOption);
-            mTxtOption.setOnClickListener(new View.OnClickListener() {
+            View v = inflater.inflate(R.layout.activity_repeat, null, false);
+            mRepeatSpinner      = (Spinner) v.findViewById(R.id.repeat_spinner);
+            mRepeatEverySpinner = (Spinner) v.findViewById(R.id.repeat_every_spinner);
+            mRepeatSpinner.setSelection(this.mCurrentItemSelectedOnSpinnerChoice);
+            // Setup listener
+            mRepeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    mCurrentItemSelectedOnSpinnerChoice = position;
+                    boolean isShowDayOfWeek = mRepeatSpinner.getSelectedItem().equals(WEEKLY) ? true : false;
+                    showDayOfWeek(isShowDayOfWeek);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            mStartEditText = (EditText) v.findViewById(R.id.start_edittext);
+            mEndEditText   = (EditText) v.findViewById(R.id.end_edittext);
+            mEndEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyDialogOption mdo = new MyDialogOption();
-                    mdo.show(CreateEventActvity.this.getFragmentManager(), MESSAGE);
-                    Toast.makeText(CreateEventActvity.this, MESSAGE, Toast.LENGTH_SHORT).show();
-                    MyDialogRepeat.this.dismiss();
+                    Calendar now = Calendar.getInstance();
+                    mDatePickerDialog = DatePickerDialog.newInstance(
+                            MyDialogRepeat.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    mDatePickerDialog.show(getActivity().getFragmentManager(), "Datepickerdialog");
                 }
             });
-            mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    switch (checkedId) {
-                        case R.id.radio1:
-                            mTxtRepeat.setText(mRadioButton1.getText().toString());
-                            break;
-                        case R.id.radio2:
-                            mTxtRepeat.setText(mRadioButton2.getText().toString());
-                            break;
-                        case R.id.radio3:
-                            mTxtRepeat.setText(mRadioButton3.getText().toString());
-                            break;
-                        case R.id.radio4:
-                            mTxtRepeat.setText(mRadioButton4.getText().toString());
-                            break;
-                        case R.id.txtOption:
-                            Toast.makeText(CreateEventActvity.this, MESSAGE, Toast.LENGTH_SHORT).toString();
-                            break;
-                    }
-                }
-            });
+            mDayOfWeekLinearLayout = (LinearLayout) v.findViewById(R.id.day_of_week_container);
+            if (!mRepeatSpinner.getSelectedItem().equals(WEEKLY)) mDayOfWeekLinearLayout.setVisibility(View.INVISIBLE);
 
             builder.setView(v)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
+                            mCurrentIndexOfSpinnerChoice = mCurrentItemSelectedOnSpinnerChoice;
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -345,6 +362,70 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                         }
                     });
             return builder.create();
+        }
+
+        private void showDayOfWeek(boolean isShow) {
+            if (isShow) {
+                mDayOfWeekLinearLayout.animate().alpha(1.0f).setDuration(SHOW_DURATION).setListener(
+                        new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                mDayOfWeekLinearLayout.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        }
+                );
+            } else {
+                mDayOfWeekLinearLayout.animate().alpha(0.0f).setDuration(HIDE_DURATION).setListener(
+                        new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                mDayOfWeekLinearLayout.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        }
+                );
+            }
+        }
+
+        @Override
+        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+            mEndEditText.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
+        }
+    }
+
+    public void clickCheckBox(View v) {
+        Toast.makeText(CreateEventActvity.this, "Clicked on checkbox on Dialog", Toast.LENGTH_SHORT).show();
+        switch (v.getId()) {
+            // TODO: 8/25/2016
         }
     }
 
@@ -440,7 +521,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     }
 
     public void showDateStartPickerDialog() {
-        DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+        android.app.DatePickerDialog.OnDateSetListener callback = new android.app.DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year,
                                   int monthOfYear,
                                   int dayOfMonth) {
@@ -461,44 +542,44 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         int ngay = Integer.parseInt(strArrtmp[0]);
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
-        DatePickerDialog pic = new DatePickerDialog(
-                CreateEventActvity.this,
-                callback, nam, thang, ngay);
-        pic.setTitle(R.string.select_date_start);
-        pic.show();
+//        android.app.DatePickerDialog pic = new DatePickerDialog(
+//                CreateEventActvity.this,
+//                callback, nam, thang, ngay);
+//        pic.setTitle(R.string.select_date_start);
+//        pic.show();
     }
 
     public void showDateFinishPickerDialog() {
-        DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year,
-                                  int monthOfYear,
-                                  int dayOfMonth) {
-                mTxtDateFinish.setText(
-                        (Utils.formatDate(dayOfMonth, (monthOfYear + 1), year)));
-                mCal.set(year, monthOfYear, dayOfMonth);
-                mDateFinish = mCal.getTime();
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                mCalendarFinish = (Calendar) calendar.clone();
-                if (mCalendarFinish.compareTo(mCalendarStart) < 0) {
-                    Toast.makeText(CreateEventActvity.this, R.string.unable, Toast.LENGTH_SHORT).show();
-                    mTxtDateFinish.setText(Utils.formatDate(mCalendarStart.get(Calendar.DAY_OF_MONTH),
-                            mCalendarStart.get(Calendar.MONTH) + 1, mCalendarStart.get(Calendar.YEAR)));
-                }
-            }
-        };
-        String s = mTxtDateFinish.getText() + "";
-        String strArrtmp[] = s.split("-");
-        int ngay = Integer.parseInt(strArrtmp[0]);
-        int thang = Integer.parseInt(strArrtmp[1]) - 1;
-        int nam = Integer.parseInt(strArrtmp[2]);
-        DatePickerDialog pic = new DatePickerDialog(
-                CreateEventActvity.this,
-                callback, nam, thang, ngay);
-        pic.setTitle(R.string.select_date_finish);
-        pic.show();
+//        DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+//            public void onDateSet(DatePicker view, int year,
+//                                  int monthOfYear,
+//                                  int dayOfMonth) {
+//                mTxtDateFinish.setText(
+//                        (Utils.formatDate(dayOfMonth, (monthOfYear + 1), year)));
+//                mCal.set(year, monthOfYear, dayOfMonth);
+//                mDateFinish = mCal.getTime();
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.set(Calendar.YEAR, year);
+//                calendar.set(Calendar.MONTH, monthOfYear);
+//                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                mCalendarFinish = (Calendar) calendar.clone();
+//                if (mCalendarFinish.compareTo(mCalendarStart) < 0) {
+//                    Toast.makeText(CreateEventActvity.this, R.string.unable, Toast.LENGTH_SHORT).show();
+//                    mTxtDateFinish.setText(Utils.formatDate(mCalendarStart.get(Calendar.DAY_OF_MONTH),
+//                            mCalendarStart.get(Calendar.MONTH) + 1, mCalendarStart.get(Calendar.YEAR)));
+//                }
+//            }
+//        };
+//        String s = mTxtDateFinish.getText() + "";
+//        String strArrtmp[] = s.split("-");
+//        int ngay = Integer.parseInt(strArrtmp[0]);
+//        int thang = Integer.parseInt(strArrtmp[1]) - 1;
+//        int nam = Integer.parseInt(strArrtmp[2]);
+//        DatePickerDialog pic = new DatePickerDialog(
+//                CreateEventActvity.this,
+//                callback, nam, thang, ngay);
+//        pic.setTitle(R.string.select_date_finish);
+//        pic.show();
     }
 
     public void showTimeStartPickerDialog() {
