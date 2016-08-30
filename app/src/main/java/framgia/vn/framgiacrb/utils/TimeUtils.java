@@ -18,8 +18,8 @@ public class TimeUtils {
     public static final String YEAR_FORMAT = "yyyy";
     public static final String DATE_FORMAT_TOOLBAR = "d MMMM yyyy";
     private static final String DEVIDE_TIME = "-";
-    private static final String FORMAT_OTHER_YEAR = "HH:mm dd mm yyyy";
-    private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm dd mm";
+    private static final String FORMAT_OTHER_YEAR = "HH:mm dd/MM/yyyy";
+    private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm dd/MM";
     private static final String FORMAT_TODAY = "HH:mm";
 
     public static String toStringDate(long milisec) {
@@ -107,11 +107,16 @@ public class TimeUtils {
     }
 
     public static String getTimeStringBeauty(Date date) {
-        if(date.getYear() != Calendar.getInstance().get(Calendar.YEAR)) {
+        if(date == null) {
+            return "";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        if(calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)) {
             return new SimpleDateFormat(FORMAT_OTHER_YEAR).format(date);
         }
-        if(date.getMonth() == Calendar.getInstance().get(Calendar.MONTH)
-            && date.getDay() == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+        if(calendar.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)
+            && calendar.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
             return new SimpleDateFormat(FORMAT_TODAY).format(date);
         }
         return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY).format(date);

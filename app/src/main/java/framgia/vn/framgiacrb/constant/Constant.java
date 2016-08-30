@@ -18,4 +18,5 @@ public class Constant {
     public static final String INTENT_DATA = "intent_data";
     public static final String ID_KEY ="id_event";
     public static final String LINE_BREAK = "\n";
+    public static final String AMOUNT_DEVIDE = "-";
 }

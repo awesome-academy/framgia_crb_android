@@ -40,9 +40,8 @@ public class NotificationUtil {
         alarmIntent.putExtra(AlarmReceiver.INTENT_TITLE, event.getTitle());
         alarmIntent.putExtra(AlarmReceiver.INTENT_NOTIFICATION_ID, notificationNumber);
         alarmIntent.putExtra(Constant.ID_KEY, event.getId());
-        String content = TimeUtils.createAmountTime(timeReal,
-            event.getEndDate()) + Constant.LINE_BREAK +
-            event.getPlace().getName();
+        String content = TimeUtils.createAmountTime(timeReal, event.getFinishTime())
+            + (event.getPlace() == null ? "" : Constant.LINE_BREAK + event.getPlace().getName());
         alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context
             , notificationNumber, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);

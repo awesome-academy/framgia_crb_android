@@ -64,8 +64,10 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
             holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
             holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
             String content = obj.getTitle() + Constant.LINE_BREAK +
-                TimeUtils.createAmountTime(obj.getStartTime(), obj.getEndDate()) + Constant
-                .LINE_BREAK + obj.getPlace().getName();
+                TimeUtils.toStringTime(obj.getStartTime())
+                +Constant.AMOUNT_DEVIDE
+                + TimeUtils.toStringTime(obj.getFinishTime())
+                + (obj.getPlace() == null ? "" : Constant.LINE_BREAK + obj.getPlace().getName());
             holder.content.setText(content);
             holder.content.setTextColor(mActivity.getResources().getColor(
                 R.color.white));
