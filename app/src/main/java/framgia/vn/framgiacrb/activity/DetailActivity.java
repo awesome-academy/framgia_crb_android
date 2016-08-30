@@ -60,7 +60,7 @@ public class DetailActivity extends AppCompatActivity {
             relativeLayout.setVisibility(View.GONE);
         }
         TextView timeText = (TextView) findViewById(R.id.textView_time);
-        timeText.setText(TimeUtils.createAmountTime(event.getStartTime(), event.getEndDate()));
+        timeText.setText(TimeUtils.createAmountTime(event.getStartTime(), event.getFinishTime()));
         getSupportActionBar().setTitle(event.getTitle() == null ? "" : event.getTitle());
         TextView calendarTv = (TextView) findViewById(R.id.textView_calendar);
         Calendar calendar = RealmController.with(this)

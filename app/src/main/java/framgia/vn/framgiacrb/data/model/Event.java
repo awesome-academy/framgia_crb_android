@@ -140,10 +140,6 @@ public class Event extends RealmObject {
         mRepeatEvery = repeatEvery;
     }
 
-    public Date getEndDate() {
-        return mEndDate;
-    }
-
     public void setEndDate(Date endDate) {
         mEndDate = endDate;
     }

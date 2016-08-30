@@ -47,7 +47,6 @@
         app:layout_anchor="@id/collapsing_toolbar"
         app:layout_anchorGravity="bottom|left|end"
         android:src="@drawable/ic_create_white_24dp"
-        app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"/>
 
 </android.support.design.widget.CoordinatorLayout>
