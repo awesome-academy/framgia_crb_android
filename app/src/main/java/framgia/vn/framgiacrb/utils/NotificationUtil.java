@@ -50,7 +50,7 @@ public class NotificationUtil {
         SharedPreferences.Editor editor = prefs.edit();
         notificationNumber++;
         editor.putInt(NOTIFICATION_ID, notificationNumber);
-        editor.commit();
+        editor.apply();
     }
 
     public static void pushNotification(Context context, String title, String content, String
