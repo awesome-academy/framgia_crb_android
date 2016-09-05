@@ -1,6 +1,5 @@
 package framgia.vn.framgiacrb.activity;
 
-import android.annotation.SuppressLint;
 import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
@@ -37,11 +36,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
 import org.json.JSONException;
 
 import java.io.IOException;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -321,7 +320,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mCurrentItemSelectedOnSpinnerChoice = position;
-                    boolean isShowDayOfWeek = mRepeatSpinner.getSelectedItem().equals(WEEKLY) ? true : false;
+                    boolean isShowDayOfWeek = mRepeatSpinner.getSelectedItem().equals(WEEKLY);
                     showDayOfWeek(isShowDayOfWeek);
                 }
 
