@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/thongbao"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_or" />
+    </android.support.v7.widget.Toolbar>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:columnCount="4"
+        android:rowCount="4">
+
+        <TextView
+            android:text="@string/repeat_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_gravity="right" />
+
+        <Spinner
+            android:entries="@array/repeat_choice"
+            android:id="@+id/repeat_spinner"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <TextView
+            android:text="@string/repeat_every_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_column="0"
+            android:layout_gravity="right" />
+
+        <Spinner
+            android:entries="@array/repeat_every"
+            android:id="@+id/repeat_every_spinner"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/start_on_string"
+            android:layout_column="0"
+            android:layout_gravity="right"/>
+
+        <EditText
+            android:id="@+id/start_edittext"
+            android:ems="10"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:enabled="false"
+            android:text="8/25/2016"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+        <TextView
+            android:text="@string/end_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_column="0"
+            android:layout_gravity="right" />
+
+        <EditText
+            android:id="@+id/end_edittext"
+            android:ems="10"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:editable="false"
+            android:textIsSelectable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+    </GridLayout>
+
+    <HorizontalScrollView
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/day_of_week_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/sun_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sun"
+                android:onClick="clickCheckBox"/>
+
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/mon_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mon"
+                android:onClick="clickCheckBox"/>
+
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/tue_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tue"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/wed_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wed"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/thu_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thu"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/fri_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fri"
+                android:onClick="clickCheckBox"/>
+            <CheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/sat_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sat"
+                android:onClick="clickCheckBox"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>

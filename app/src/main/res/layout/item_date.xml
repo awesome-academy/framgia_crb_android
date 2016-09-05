@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/ll_date"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_date_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_lager">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_date"
+            android:textSize="@dimen/text_size_date"
+            android:text="4"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_day"
+            android:id="@+id/tv_day"
+            android:text="Th2" />
+    </LinearLayout>
+    <ImageView
+        android:layerType="software"
+        android:layout_marginLeft="@dimen/padding_lager"
+        android:layout_marginRight="@dimen/padding_normal"
+        android:layout_toRightOf="@id/ll_date"
+        android:layout_alignParentRight="true"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:src="@drawable/bg_dot"/>
+</RelativeLayout>

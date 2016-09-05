@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadeScrollbars="false"
+    android:fillViewport="true"
+    android:scrollbars="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linear_01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_linear">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:layout_marginTop="@dimen/margin_top"
+                android:text="@string/title_login"
+                android:textColor="@color/color_grey800"
+                android:textSize="@dimen/textview_textsize" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/padding_top">
+
+                <ImageView
+                    android:layout_width="@dimen/layout_width"
+                    android:layout_height="@dimen/layout_height"
+                    android:src="@drawable/ic_email" />
+
+                <TextView
+                    android:id="@+id/text_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding_left"
+                    android:textColor="@color/color_grey800"
+                    android:text="@string/email" />
+
+                <EditText
+                    android:id="@+id/edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_email"
+                    android:layout_marginBottom="@dimen/margin_bottom"
+                    android:layout_marginTop="@dimen/margin_top_edit_text"
+                    android:background="@drawable/edt_bacground"
+                    android:hint="@string/hint_email_input"
+                    android:inputType="textEmailAddress"
+                    android:padding="@dimen/padding"
+                    android:text="mai.dai.dien@framgia.com"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/layout_width"
+                    android:layout_height="@dimen/layout_height"
+                    android:src="@drawable/ic_password" />
+
+                <TextView
+                    android:id="@+id/text_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding_left"
+                    android:textColor="@color/color_grey800"
+                    android:text="@string/pass" />
+
+                <EditText
+                    android:id="@+id/edit_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_password"
+                    android:layout_marginBottom="@dimen/margin_bottom"
+                    android:layout_marginTop="@dimen/margin_top_edit_text"
+                    android:background="@drawable/edt_bacground"
+                    android:hint="@string/hint_password_input"
+                    android:inputType="textPassword"
+                    android:padding="@dimen/padding"
+                    android:text="12345678"/>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_button"
+                android:background="@drawable/button_selector"
+                android:paddingLeft="@dimen/padding_left"
+                android:paddingRight="@dimen/padding_right"
+                android:text="@string/label_login"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/linear_01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+           >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:text="@string/or"
+                android:textColor="@color/color_grey800"
+                android:textSize="@dimen/text_size_or"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_facebook"
+                android:layout_width="@dimen/layout_with_fb"
+                android:layout_height="@dimen/layout_height_fb"
+                android:background="@drawable/button_login_facebook_selector"
+                android:text="@string/login_with_fb"
+                android:paddingLeft="@dimen/padding_left"
+                android:paddingRight="@dimen/padding_right"
+                android:textColor="@color/white" />
+
+            <Button
+                android:layout_below="@+id/btn_facebook"
+                android:layout_marginTop="@dimen/padding_top"
+                android:id="@+id/btn_google"
+                android:layout_width="@dimen/layout_with_fb"
+                android:layout_height="@dimen/layout_height_fb"
+                android:background="@drawable/button_login_google_selector"
+                android:text="@string/login_with_gg"
+                android:paddingLeft="@dimen/padding_left"
+                android:paddingRight="@dimen/padding_right"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</ScrollView>

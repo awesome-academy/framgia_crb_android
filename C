@@ -1,0 +1,10 @@
+XFixCreateEvent
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch FixCreateEvent4
+# Changes to be committed:
+#	modified:   app/src/main/java/framgia/vn/framgiacrb/activity/CreateEventActvity.java
+#	modified:   app/src/main/java/framgia/vn/framgiacrb/utils/Utils.java
+#	modified:   app/src/main/res/values/strings.xml
+#
