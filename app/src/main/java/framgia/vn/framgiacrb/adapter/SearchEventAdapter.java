@@ -14,9 +14,11 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.utils.SearchUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
+import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
+import io.realm.internal.Util;
 
 /**
  * Created by framgia on 26/07/2016.
@@ -52,8 +54,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
         if(obj.getTitle().equals(SearchUtil.DEFINE_YEAR)) {
             holder.type = TYPE_YEAR;
             holder.content.setText(obj.getDescription());
-            holder.content.setBackgroundColor(
-                mActivity.getResources().getColor(R.color.background_card));
+            holder.content.setBackgroundColor(Utils.getColor(mActivity, R.color.bg_default));
             holder.content.setTextColor(mActivity.getResources().getColor(R.color
                 .text_default_event_color));
             holder.content.setTextSize(TEXT_YEAR_SIZE);
@@ -81,7 +82,6 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
         public TextView day;
         public TextView content;
         public TextView month;
-        public CardView cardView;
         public int type = TYPE_EVENT;
 
         public EventViewHolder(View itemView) {
@@ -89,7 +89,6 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
             day = (TextView) itemView.findViewById(R.id.text_day);
             month = (TextView) itemView.findViewById(R.id.text_month);
             content = (TextView) itemView.findViewById(R.id.text_title);
-            cardView = (CardView) itemView.findViewById(R.id.card_view_search);
             itemView.setOnClickListener(this);
         }
 

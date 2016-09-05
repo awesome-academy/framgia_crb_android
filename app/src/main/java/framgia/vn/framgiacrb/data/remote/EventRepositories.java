@@ -66,7 +66,7 @@ public class EventRepositories implements EventRepository{
                         Realm realm = Realm.getDefaultInstance();
                         new EventRepositoriesLocal(realm).addEvents(mEvents, mOnLoadEventListener);
                         RegisterNotificationAsyncTask registerNotificationAsynTask
-                            = new RegisterNotificationAsyncTask();
+                            = new RegisterNotificationAsyncTask(true);
                         registerNotificationAsynTask.execute(mEvents);
                     } else {
                         mOnLoadEventListener.onSuccess();
