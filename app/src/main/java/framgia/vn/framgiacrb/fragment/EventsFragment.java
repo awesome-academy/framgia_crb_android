@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +37,7 @@ import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.ui.MonthView;
+import framgia.vn.framgiacrb.ui.listener.OnCloseToolbarListener;
 import framgia.vn.framgiacrb.utils.Connectivity;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -67,6 +67,7 @@ public class EventsFragment extends Fragment {
     private BroadcastReceiver mBroadcastReceiverToday;
     private BroadcastReceiver mBroadcastReceiverToDate;
     private framgia.vn.framgiacrb.data.model.Calendar mCalendar;
+    private OnCloseToolbarListener mOnCloseToolbarListener;
 
     @Nullable
     @Override
@@ -146,6 +147,10 @@ public class EventsFragment extends Fragment {
         return mViewEvents;
     }
 
+    public void setOnCloseToolbarListener(OnCloseToolbarListener listener) {
+        mOnCloseToolbarListener = listener;
+    }
+
     private void loadDatas() {
         mDatas.clear();
         if (Connectivity.isConnected(getActivity()) && Connectivity.isConnectedFast(getActivity())) {
@@ -196,6 +201,7 @@ public class EventsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                mOnCloseToolbarListener.onCloseToolbar(true);
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                 int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                 int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();

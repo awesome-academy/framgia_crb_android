@@ -10,7 +10,7 @@
 
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
-    <android.support.design.widget.CoordinatorLayout
+    <framgia.vn.framgiacrb.ui.DisableCoorditorLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +24,7 @@
 
         <include layout="@layout/tool_bar" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </framgia.vn.framgiacrb.ui.DisableCoorditorLayout>
 
     <ListView
         android:id="@+id/navigation_view"

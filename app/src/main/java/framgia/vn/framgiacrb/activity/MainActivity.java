@@ -44,6 +44,7 @@ import framgia.vn.framgiacrb.fragment.item.ItemLeftMenu;
 import framgia.vn.framgiacrb.ui.CustomMonthCalendarView;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
+import framgia.vn.framgiacrb.ui.listener.OnCloseToolbarListener;
 import framgia.vn.framgiacrb.utils.DrawableUtil;
 import framgia.vn.framgiacrb.utils.NotificationUtil;
 import io.realm.Realm;
@@ -267,6 +268,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getTitle()) {
             case HOME:
                 mCurrentFragment = new EventsFragment();
+                ((EventsFragment) mCurrentFragment).setOnCloseToolbarListener(new OnCloseToolbarListener() {
+                    @Override
+                    public void onCloseToolbar(boolean isClose) {
+                        if (isClose) closeToolbar();
+                    }
+                });
                 break;
             case WEEK:
                 mCurrentFragment = new EventFollowWeekFragment();
