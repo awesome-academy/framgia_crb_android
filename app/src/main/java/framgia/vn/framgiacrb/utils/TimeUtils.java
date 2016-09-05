@@ -113,13 +113,13 @@ public class TimeUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         if(calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)) {
-            return new SimpleDateFormat(FORMAT_OTHER_YEAR).format(date);
+            return new SimpleDateFormat(FORMAT_OTHER_YEAR, Locale.US).format(date);
         }
         if(calendar.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)
             && calendar.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
-            return new SimpleDateFormat(FORMAT_TODAY).format(date);
+            return new SimpleDateFormat(FORMAT_TODAY, Locale.US).format(date);
         }
-        return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY).format(date);
+        return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY, Locale.US).format(date);
     }
 
     public static String createAmountTime(Date startDate, Date endDate) {

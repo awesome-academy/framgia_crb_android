@@ -16,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceBuilder {
 
-    public static final String BASE_URL = "http://10.0.1.89:8080/api/";
     public static final int READ_TIMEOUT = 5;
     public static final int REQUEST_TIMEOUT = 2;
 

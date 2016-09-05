@@ -20,7 +20,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(BOOT_COMPLETED_INTENT) ||
             intent.getAction().equals(REBOOT_COMPLETED_INTENT)) {
             RegisterNotificationAsyncTask registerNotificationAsyncTask =
-                new RegisterNotificationAsyncTask();
+                new RegisterNotificationAsyncTask(false);
             registerNotificationAsyncTask
                 .execute(Realm.getDefaultInstance().where(Event.class).findAll());
         }
