@@ -48,8 +48,8 @@ public class TimeUtils {
     }
 
     public static Date stringToDate(String dateString, String dateInput) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput);
-        Date date;
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
+        Date date = new Date();
         try {
             date = dateFormat.parse(dateString);
         } catch (ParseException e) {

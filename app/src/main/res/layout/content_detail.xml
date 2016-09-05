@@ -1,238 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background">
 
-    <LinearLayout
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/icon_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_clock_grey600_24dp"/>
+
+        <TextView
+            android:id="@+id/textView_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner"
-            android:elevation="@dimen/card_elevation"
-            android:paddingBottom="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_horizontal_margin">
+            android:layout_alignBottom="@+id/icon_time"
+            android:layout_alignTop="@+id/icon_time"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/icon_time"
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/icon_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_clock_grey600_24dp"/>
+    <RelativeLayout
+        android:id="@+id/rl_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:id="@+id/textView_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/icon_time"
-                android:layout_alignTop="@+id/icon_time"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/icon_time"
-                android:gravity="center_vertical"/>
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/icon_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_map_marker_grey"/>
 
-        <RelativeLayout
-            android:id="@+id/rl_place"
+        <TextView
+            android:id="@+id/textView_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner"
-            android:elevation="@dimen/card_elevation"
-            android:paddingBottom="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_horizontal_margin">
+            android:layout_alignBottom="@+id/icon_place"
+            android:layout_alignTop="@+id/icon_place"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/icon_place"
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/icon_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_map_marker_grey"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/textView_place"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/icon_place"
-                android:layout_alignTop="@+id/icon_place"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/icon_place"
-                android:gravity="center_vertical"/>
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/icon_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_calendar_grey600"/>
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/textView_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon_event"
+            android:layout_alignTop="@+id/icon_event"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/icon_event"
+            android:gravity="center_vertical"/>
+
+        <View
+            android:id="@+id/view_color"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView_calendar"
+            android:layout_alignTop="@+id/textView_calendar"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/textView_calendar"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ImageView
+            android:id="@+id/icon_loop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_repeat_grey"/>
+
+        <TextView
+            android:id="@+id/title_loop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon_loop"
+            android:layout_alignTop="@+id/icon_loop"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/icon_loop"
+            android:gravity="center_vertical"
+            android:text="@string/loop_string"/>
+
+        <TextView
+            android:id="@+id/textView_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/title_loop"
+            android:layout_below="@+id/title_loop"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner"
-            android:elevation="@dimen/card_elevation"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/icon_event"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_calendar_grey600"/>
+    <RelativeLayout
+        android:id="@+id/rl_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:id="@+id/textView_calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/icon_event"
-                android:layout_alignTop="@+id/icon_event"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/icon_event"
-                android:gravity="center_vertical"/>
+        <ImageView
+            android:id="@+id/icon_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_note_text"/>
 
-            <View
-                android:id="@+id/view_color"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/textView_calendar"
-                android:layout_alignTop="@+id/textView_calendar"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/textView_calendar"
-                android:gravity="center_vertical"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_repeat"
+        <TextView
+            android:id="@+id/title_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon_description"
+            android:layout_alignTop="@+id/icon_description"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/icon_description"
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_attendee"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner"
+        android:elevation="@dimen/card_elevation"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ImageView
+            android:id="@+id/icon_attendee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_account_multiple_plus_grey"/>
+
+        <TextView
+            android:id="@+id/id_Attendee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon_attendee"
+            android:layout_alignTop="@+id/icon_attendee"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/icon_attendee"
+            android:gravity="center_vertical"
+            android:text="@string/Attendee"/>
+
+        <TextView
+            android:id="@+id/attendee_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/id_Attendee"
+            android:layout_below="@+id/id_Attendee"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner"
-            android:elevation="@dimen/card_elevation"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
-
-            <ImageView
-                android:id="@+id/icon_loop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_repeat_grey"/>
-
-            <TextView
-                android:id="@+id/title_loop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/icon_loop"
-                android:layout_alignTop="@+id/icon_loop"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/icon_loop"
-                android:gravity="center_vertical"
-                android:text="@string/loop_string"/>
-
-            <TextView
-                android:id="@+id/textView_repeat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/title_loop"
-                android:layout_below="@+id/title_loop"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:gravity="center_vertical"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner"
-            android:elevation="@dimen/card_elevation"
-            android:paddingBottom="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_horizontal_margin">
-
-            <ImageView
-                android:id="@+id/icon_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_note_text"/>
-
-            <TextView
-                android:id="@+id/title_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/icon_description"
-                android:layout_alignTop="@+id/icon_description"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/icon_description"
-                android:gravity="center_vertical"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_attendee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner"
-            android:elevation="@dimen/card_elevation"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
-
-            <ImageView
-                android:id="@+id/icon_attendee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_account_multiple_plus_grey"/>
-
-            <TextView
-                android:id="@+id/id_Attendee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/icon_attendee"
-                android:layout_alignTop="@+id/icon_attendee"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@+id/icon_attendee"
-                android:gravity="center_vertical"
-                android:text="@string/Attendee"/>
-
-            <TextView
-                android:id="@+id/attendee_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/id_Attendee"
-                android:layout_below="@+id/id_Attendee"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:gravity="center_vertical"/>
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
+</LinearLayout>

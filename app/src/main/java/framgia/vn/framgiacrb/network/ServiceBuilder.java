@@ -15,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by nghicv on 18/07/2016.
  */
 public class ServiceBuilder {
+
     public static final int READ_TIMEOUT = 5;
     public static final int REQUEST_TIMEOUT = 2;
 

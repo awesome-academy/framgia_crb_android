@@ -86,4 +86,5 @@
     <dimen name="item_create_event_margin_vertical">16dp</dimen>
     <dimen name="item_create_event_start_date_margin_left">56dp</dimen>
     <dimen name="item_sprinner_calendar_margin">40dp</dimen>
+    <dimen name="app_bar_show_event_height">150dp</dimen>
 </resources>
