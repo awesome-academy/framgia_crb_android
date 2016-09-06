@@ -17,9 +17,9 @@ public class TimeUtils {
     public static final String MONTH_FORMAT = "MMM";
     public static final String YEAR_FORMAT = "yyyy";
     public static final String DATE_FORMAT_TOOLBAR = "d MMMM yyyy";
-    private static final String DEVIDE_TIME = "-";
-    private static final String FORMAT_OTHER_YEAR = "HH:mm dd/MM/yyyy";
-    private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm dd/MM";
+    private static final String DEVIDE_TIME = " - ";
+    private static final String FORMAT_OTHER_YEAR = "HH:mm EEE dd MMM yyyy";
+    private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm EEE dd MMM";
     private static final String FORMAT_TODAY = "HH:mm";
 
     public static String toStringDate(long milisec) {
