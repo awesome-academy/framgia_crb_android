@@ -625,6 +625,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                     }
                 } else if (response.body().getMessage().equals(Constant.SUCCESS)) {
                     Toast.makeText(CreateEventActvity.this, R.string.success, Toast.LENGTH_SHORT).show();
+                    CreateEventActvity.this.finish();
                 }
             }
 
