@@ -7,7 +7,7 @@ import framgia.vn.framgiacrb.R;
  */
 public class Constant {
     public static final String LOGIN_SUCCESS = "Login Success!";
-    public static final String BASE_URL = "http://4d9d7dd4.ngrok.io/api/";
+    public static final String BASE_URL = "http://9f234c47.ngrok.io/api/";
     public static final String LOADING = "Loading...";
     public static final String KEY_NAME = "name";
     public static final String AUTH_TOKEN = "tpz7gT9NxK53Qe_su4Mm";
@@ -19,4 +19,22 @@ public class Constant {
     public static final String ID_KEY ="id_event";
     public static final String LINE_BREAK = "\n";
     public static final String AMOUNT_DEVIDE = "-";
+
+    public static final String SUNDAY = "1";
+    public static final String MONDAY = "2";
+    public static final String TUESDAY = "3";
+    public static final String WEDNESDAY = "4";
+    public static final String THURDAY = "5";
+    public static final String FRIDAY = "6";
+    public static final String SATURDAY = "7";
+    public static final String WEEKLY = "Weekly";
+    public static final String NO_REPEAT = "No Repeat";
+    public static final int SHOW_DURATION = 1000;
+    public static final int HIDE_DURATION = 500;
+    public static final String MESSAGE = "MESSAGE";
+    public static final String FORMAT_DATE = "dd-MM-yyyy";
+    public static final String FORMAT_TIME = "HH:mm";
+    public static final String SUCCESS = "Create Event Success!";
+    public static final String NOT_AUTHENTICATION = "Not authenticated";
+    public static final String MESSAGE_NOT_AUTHENTICATION = "This account has been login in other device";
 }

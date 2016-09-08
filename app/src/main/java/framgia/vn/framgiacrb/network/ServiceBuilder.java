@@ -15,7 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by nghicv on 18/07/2016.
  */
 public class ServiceBuilder {
-
     public static final int READ_TIMEOUT = 5;
     public static final int REQUEST_TIMEOUT = 2;
 
@@ -39,7 +38,6 @@ public class ServiceBuilder {
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
-
         return sInstance;
     }
 
@@ -47,7 +45,6 @@ public class ServiceBuilder {
         if (sService == null) {
             sService = getRetrofit().create(CrbService.class);
         }
-
         return sService;
     }
 }

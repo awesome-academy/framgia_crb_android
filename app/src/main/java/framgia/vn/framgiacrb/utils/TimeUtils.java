@@ -48,8 +48,8 @@ public class TimeUtils {
     }
 
     public static Date stringToDate(String dateString, String dateInput) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.ENGLISH);
-        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput);
+        Date date;
         try {
             date = dateFormat.parse(dateString);
         } catch (ParseException e) {
@@ -124,5 +124,12 @@ public class TimeUtils {
 
     public static String createAmountTime(Date startDate, Date endDate) {
         return getTimeStringBeauty(startDate) + DEVIDE_TIME + getTimeStringBeauty(endDate);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Date formatDateTime(Date date, Date time) {
+        date.setHours(time.getHours());
+        date.setMinutes(time.getMinutes());
+        return date;
     }
 }

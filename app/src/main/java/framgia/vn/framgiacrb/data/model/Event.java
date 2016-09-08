@@ -63,10 +63,19 @@ public class Event extends RealmObject {
     private int mCalendarId;
 
     @SerializedName("all_day")
-    private boolean mAll_day;
+    private boolean mAllDay;
+
+    @SerializedName("start_repeat")
+    private Date mStartRepeat;
+
+    @SerializedName("end_repeat")
+    private Date mEndRepeat;
 
     @SerializedName("user_id")
-    private int mUser_id;
+    private int mUserId;
+
+    @SerializedName("repeat_ons_attributes")
+    private RepeatOnAttribute mRepeatOnAttribute;
 
     public int getColorId() {
         return mColorId;
@@ -169,16 +178,16 @@ public class Event extends RealmObject {
     }
 
 
-    public boolean isAll_day() {
-        return mAll_day;
+    public boolean isAllday() {
+        return mAllDay;
     }
 
-    public void setAll_day(boolean mAll_day) {
-        this.mAll_day = mAll_day;
+    public void setAllday(boolean mAllday) {
+        this.mAllDay = mAllday;
     }
 
-    public int getUser_id() {
-        return mUser_id;
+    public int getUserid() {
+        return mUserId;
     }
 
     public int getCalendarId() {
@@ -195,5 +204,29 @@ public class Event extends RealmObject {
 
     public Place getPlace() {
         return mPlace;
+    }
+
+    public Date getStartRepeat() {
+        return mStartRepeat;
+    }
+
+    public void setStartRepeat(Date mStartRepeat) {
+        this.mStartRepeat = mStartRepeat;
+    }
+
+    public Date getEndRepeat() {
+        return mEndRepeat;
+    }
+
+    public void setEndRepeat(Date mEndRepeat) {
+        this.mEndRepeat = mEndRepeat;
+    }
+
+    public RepeatOnAttribute getRepeatOnAttribute() {
+        return mRepeatOnAttribute;
+    }
+
+    public void setRepeatOnAttribute(RepeatOnAttribute mRepeatOnAttribute) {
+        this.mRepeatOnAttribute = mRepeatOnAttribute;
     }
 }

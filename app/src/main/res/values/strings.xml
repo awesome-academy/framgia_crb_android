@@ -34,9 +34,9 @@
     <string name="sat">SAT</string>
     <string name="start">Start</string>
     <string name="date">04-07-2016</string>
-    <string name="time_start">02:00 AM</string>
+    <string name="time_start">02:00</string>
     <string name="finish">Finish</string>
-    <string name="time_finish">02:30 AM</string>
+    <string name="time_finish">02:30</string>
     <string name="no_repeat">No Repeat</string>
     <string name="invite">Attendee</string>
     <string name="desciption">Desciption</string>
@@ -77,10 +77,11 @@
     </string-array>
 
     <string-array name="repeat_choice">
-        <item>daily</item>
-        <item>weekly</item>
-        <item>monthly</item>
-        <item>yearly</item>
+        <item>No Repeat</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
     </string-array>
     <string-array name="repeat_every">
         <item>1</item>
@@ -159,4 +160,5 @@
     <string name="Attendee">Attendee</string>
     <string name="attendee_search">Attendee</string>
     <string name="message_logout">Logout Success!</string>
+    <string name="time_picker_default">%1$02d:%2$02d</string>
 </resources>

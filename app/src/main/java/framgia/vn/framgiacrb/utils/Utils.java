@@ -5,12 +5,6 @@ import android.support.v4.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
-
-import framgia.vn.framgiacrb.data.model.Event;
-import io.realm.Realm;
-
 /**
  * Created by lethuy on 19/07/2016.
  */
