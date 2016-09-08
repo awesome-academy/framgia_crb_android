@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.activity.CreateEventActvity;
+import framgia.vn.framgiacrb.activity.CreateEventActivity;
 import framgia.vn.framgiacrb.activity.DetailActivity;
 import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.adapter.ListEventAdapter;
@@ -191,8 +191,7 @@ public class EventsFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getActivity(), CreateEventActvity.class), REQUEST_CODE);
-
+                startActivityForResult(new Intent(getActivity(), CreateEventActivity.class), REQUEST_CODE);
             }
         });
 
