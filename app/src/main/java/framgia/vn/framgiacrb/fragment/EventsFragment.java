@@ -100,7 +100,7 @@ public class EventsFragment extends Fragment {
             }
         });
 
-        loadDatas();
+        refreshData();
         mBroadcastReceiverToday = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -156,7 +156,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void loadDatas() {
-        mDatas.clear();
+
         if (Connectivity.isConnected(getActivity()) && Connectivity.isConnectedFast(getActivity())) {
             mEventRepositories.getEventsByCalendar(Session.sAuthToken, mCalendar, getActivity());
         } else {
@@ -212,7 +212,7 @@ public class EventsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                //mOnCloseToolbarListener.onCloseToolbar(true);
+
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                 int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                 int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();

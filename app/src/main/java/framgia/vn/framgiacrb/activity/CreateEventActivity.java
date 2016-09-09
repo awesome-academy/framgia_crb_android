@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -646,7 +647,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
             @Override
             public void onFailure(Call<CreateEventResponse> call, Throwable t) {
-
+                DialogUtils.dismissProgressDialog();
+                DialogUtils.showErrorAlert(CreateEventActivity.this, getString(R.string.error_create_event));
             }
         });
     }
