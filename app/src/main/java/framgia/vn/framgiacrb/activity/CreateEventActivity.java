@@ -68,7 +68,7 @@ import retrofit2.Response;
 /**
  * Created by lethuy on 05/07/2016.
  */
-public class CreateEventActvity extends AppCompatActivity implements View.OnTouchListener {
+public class CreateEventActivity extends AppCompatActivity implements View.OnTouchListener {
     private ImageButton mImageButtonBack;
     private EditText mEdtOption, mEdtTitle, mEdtDesciption, mStartEditText, mEndEditText;
     private ImageButton mButtonSave;
@@ -154,7 +154,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         mTxtPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateEventActvity.this, PlaceActivity.class);
+                Intent intent = new Intent(CreateEventActivity.this, PlaceActivity.class);
                 startActivityForResult(intent, 3);
             }
         });
@@ -162,7 +162,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         mTxtAttendee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateEventActvity.this, AttendeeActivity.class);
+                Intent intent = new Intent(CreateEventActivity.this, AttendeeActivity.class);
                 startActivityForResult(intent, 2);
             }
         });
@@ -205,7 +205,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 if (!title.equals("")) {
                     getDataFromService(createEvent());
                 } else {
-                    Toast.makeText(CreateEventActvity.this, R.string.not_be_empty, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateEventActivity.this, R.string.not_be_empty, Toast.LENGTH_LONG).show();
                 }
                 break;
             case android.R.id.home:
@@ -263,7 +263,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
             @Override
             public void onClick(View v) {
                 MyDialogRepeat md = new MyDialogRepeat(mCurrentIndexOfSpinnerChoice);
-                md.show(CreateEventActvity.this.getFragmentManager(), Constant.MESSAGE);
+                md.show(CreateEventActivity.this.getFragmentManager(), Constant.MESSAGE);
             }
         });
     }
@@ -271,7 +271,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (!(v instanceof EditText)) {
-            hideSoftKeyboard(CreateEventActvity.this);
+            hideSoftKeyboard(CreateEventActivity.this);
         }
         return false;
     }
@@ -345,6 +345,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 }
             });
             Calendar now = Calendar.getInstance();
+            if (mDateStart != null) now.setTime(mDateStart);
             mStartEditText = (EditText) v.findViewById(R.id.start_edittext);
             mStartEditText.setText(Utils.formatDate(
                     now.get(Calendar.DAY_OF_MONTH),
@@ -457,7 +458,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
             mCalendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
             if (mCalendarEnd.before(Calendar.getInstance())) {
-                Toast.makeText(CreateEventActvity.this, R.string.unable, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT).show();
                 mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 mEndEditText.setText("");
             } else {
@@ -471,7 +472,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     }
 
     public void clickCheckBox(View v) {
-        Toast.makeText(CreateEventActvity.this, "Clicked on checkbox on Dialog", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CreateEventActivity.this, "Clicked on checkbox on Dialog", Toast.LENGTH_SHORT).show();
         switch (v.getId()) {
             case R.id.sun_checkbox:
                 mListDayOfWeekRepeat.add(Constant.SUNDAY);
@@ -517,13 +518,15 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         mCalendarStart = (Calendar) calendar.clone();
+                        mDateFinish = (Date) mDateStart.clone();
+                        mTxtDateFinish.setText(mTxtDateStart.getText().toString());
                     }
                 },
                 nam,
                 thang,
                 ngay
         );
-        mCreateDatePickerDialog.show(CreateEventActvity.this.getFragmentManager(), "CreateEventStartDate");
+        mCreateDatePickerDialog.show(CreateEventActivity.this.getFragmentManager(), "CreateEventStartDate");
     }
 
     public void showDateFinishPickerDialog() {
@@ -546,18 +549,15 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         mCalendarFinish = (Calendar) calendar.clone();
-                        if (mCalendarFinish.compareTo(mCalendarStart) < 0) {
-                            Toast.makeText(CreateEventActvity.this, R.string.unable, Toast.LENGTH_SHORT).show();
-                            mTxtDateFinish.setText(Utils.formatDate(mCalendarStart.get(Calendar.DAY_OF_MONTH),
-                                    mCalendarStart.get(Calendar.MONTH) + 1, mCalendarStart.get(Calendar.YEAR)));
-                        }
+                        mDateStart = (Date) mDateFinish.clone();
+                        mTxtDateStart.setText(mTxtDateFinish.getText().toString());
                     }
                 },
                 nam,
                 thang,
                 ngay
         );
-        mCreateDatePickerDialog.show(CreateEventActvity.this.getFragmentManager(), "CreateEventFinishDate");
+        mCreateDatePickerDialog.show(CreateEventActivity.this.getFragmentManager(), "CreateEventFinishDate");
     }
 
     public void showTimeStartPickerDialog() {
@@ -577,7 +577,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
         TimePickerDialog time = new TimePickerDialog(
-                CreateEventActvity.this,
+                CreateEventActivity.this,
                 callback, gio, phut, true);
         time.setTitle(R.string.select_time_start);
         time.show();
@@ -594,6 +594,16 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 mCal.set(Calendar.MINUTE, minute);
                 mHourFinish = mCal.getTime();
                 mTimeEventFinish = mCal.getTime();
+
+                if (mTimeEventFinish == null) mTimeEventFinish = new Date();
+                if(mTimeEventStart == null) mTimeEventStart = new Date();
+                boolean result = Utils.isBeforeHourInDate(mTimeEventFinish, mTimeEventStart);
+
+                if (result) {
+                    Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT).show();
+                    mTxtTimeFinish.setText(mTxtTimeStart.getText().toString());
+                }
+
             }
         };
         String s = mTxtTimeFinish.getTag() + "";
@@ -601,7 +611,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
         TimePickerDialog time = new TimePickerDialog(
-                CreateEventActvity.this,
+                CreateEventActivity.this,
                 callback, gio, phut, true);
         time.setTitle(R.string.select_time_finish);
         time.show();
@@ -624,13 +634,13 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                     if (error.equals(Constant.NOT_AUTHENTICATION)) {
                         logout();
                     } else {
-                        Toast.makeText(CreateEventActvity.this, R.string.create_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateEventActivity.this, R.string.create_error, Toast.LENGTH_SHORT).show();
                     }
                     DialogUtils.dismissProgressDialog();
                 } else if (response.body().getMessage().equals(Constant.SUCCESS)) {
-                    Toast.makeText(CreateEventActvity.this, R.string.success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateEventActivity.this, R.string.success, Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK, new Intent());
-                    CreateEventActvity.this.finish();
+                    CreateEventActivity.this.finish();
                 }
             }
 
@@ -642,18 +652,18 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     }
 
     private void logout() {
-        Toast.makeText(CreateEventActvity.this, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
+        Toast.makeText(CreateEventActivity.this, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Toast.makeText(CreateEventActvity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateEventActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
             }
         });
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        Intent intent = new Intent(CreateEventActvity.this, LoginActivity.class);
+        Intent intent = new Intent(CreateEventActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -705,7 +715,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                 }
                 event.setRepeatOnAttribute(repeatOnAttribute);
             }
-            event.setStartRepeat(new Date());
+            event.setStartRepeat(mDateStart);
             event.setEndRepeat(mDateEventFinishRepeat);
             event.setRepeatEvery(mRepeatEvery);
             event.setRepeatType(mRepeatType);

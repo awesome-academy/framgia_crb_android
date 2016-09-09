@@ -5,6 +5,11 @@ import android.support.v4.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by lethuy on 19/07/2016.
  */
@@ -48,5 +53,14 @@ public class Utils {
 
     public static int getColor(Context context, int colorId) {
         return ContextCompat.getColor(context, colorId);
+    }
+
+    public static boolean isBeforeHourInDate(Date date, Date compareDate){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.setTime(date);
+        calendar2.setTime(compareDate);
+        return calendar1.getTimeInMillis() < calendar2.getTimeInMillis();
     }
 }
