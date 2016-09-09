@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.CrbApplication;
+import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
 import framgia.vn.framgiacrb.data.EventRepository;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.model.Calendar;
@@ -42,8 +43,12 @@ public class EventRepositoriesLocal implements EventRepository {
         for (int i = 0; i < events.size(); i++) {
             if (!isExists(events.get(i))) {
                 realmEvents.add(events.get(i));
+
             }
         }
+        RegisterNotificationAsyncTask registerNotificationAsynTask
+            = new RegisterNotificationAsyncTask(true);
+        registerNotificationAsynTask.execute(realmEvents);
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
