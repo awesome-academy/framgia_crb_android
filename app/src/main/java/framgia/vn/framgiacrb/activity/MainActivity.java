@@ -47,6 +47,7 @@ import framgia.vn.framgiacrb.ui.WrapContentHeightViewPager;
 import framgia.vn.framgiacrb.ui.listener.OnCloseToolbarListener;
 import framgia.vn.framgiacrb.utils.DrawableUtil;
 import framgia.vn.framgiacrb.utils.NotificationUtil;
+import framgia.vn.framgiacrb.utils.TimeUtils;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -228,6 +229,11 @@ public class MainActivity extends AppCompatActivity {
         mDatePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date date = TimeUtils.convertStringToDate(mDatePickerTextView.getText().toString());
+                if (date == null) date = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                mCalendarViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH));
                 if (isExpanded) {
                     closeToolbar();
                 } else {
@@ -390,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
         mDayClicked = new dayClicked();
         IntentFilter intentFilter = new IntentFilter(ACTION_BROADCAST);
         registerReceiver(mDayClicked, intentFilter);
+        closeToolbar();
     }
 
     @Override

@@ -131,4 +131,15 @@ public class TimeUtils {
         date.setMinutes(time.getMinutes());
         return date;
     }
+
+    public static Date convertStringToDate(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_TOOLBAR, Locale.getDefault());
+        Date date = null;
+        try {
+            date = sdf.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 }
