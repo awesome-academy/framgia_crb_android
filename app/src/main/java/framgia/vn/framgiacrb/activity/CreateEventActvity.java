@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,6 +56,7 @@ import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.object.EventInWeek;
+import framgia.vn.framgiacrb.utils.DialogUtils;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.Realm;
@@ -606,6 +608,7 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
     }
 
     public void getDataFromService(final NewEvent newEvent) {
+        DialogUtils.showProgressDialog(this);
         ServiceBuilder.getService().createEvent(newEvent).enqueue(new Callback<CreateEventResponse>() {
             @Override
             public void onResponse(Call<CreateEventResponse> call, Response<CreateEventResponse> response) {
@@ -623,8 +626,10 @@ public class CreateEventActvity extends AppCompatActivity implements View.OnTouc
                     } else {
                         Toast.makeText(CreateEventActvity.this, R.string.create_error, Toast.LENGTH_SHORT).show();
                     }
+                    DialogUtils.dismissProgressDialog();
                 } else if (response.body().getMessage().equals(Constant.SUCCESS)) {
                     Toast.makeText(CreateEventActvity.this, R.string.success, Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK, new Intent());
                     CreateEventActvity.this.finish();
                 }
             }

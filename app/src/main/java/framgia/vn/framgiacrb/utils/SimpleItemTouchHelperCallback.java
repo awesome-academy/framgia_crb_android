@@ -13,6 +13,9 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListEventAdapter;

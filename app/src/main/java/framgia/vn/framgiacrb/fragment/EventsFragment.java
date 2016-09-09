@@ -1,5 +1,6 @@
 package framgia.vn.framgiacrb.fragment;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,7 @@ import io.realm.Realm;
  */
 public class EventsFragment extends Fragment {
 
+    public static final int REQUEST_CODE = 1;
     private View mViewEvents;
     private RecyclerView mRecyclerViewEvents;
     private FloatingActionButton mFloatingActionButton;
@@ -188,7 +191,8 @@ public class EventsFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), CreateEventActvity.class));
+                startActivityForResult(new Intent(getActivity(), CreateEventActvity.class), REQUEST_CODE);
+
             }
         });
 
@@ -375,5 +379,13 @@ public class EventsFragment extends Fragment {
             }
         }
         return i;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            refreshData();
+        }
     }
 }

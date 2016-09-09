@@ -124,11 +124,14 @@ public class DialogUtils {
     }
 
     public static void showAlertAction(Context context, int message, DialogInterface.OnClickListener possitiveListener, DialogInterface.OnClickListener negativeListener) {
+        dimissAlertAction();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getResources().getString(message));
         builder.setPositiveButton(R.string.ok, possitiveListener);
         builder.setNegativeButton(R.string.cancel, negativeListener);
-        builder.create().show();
+        sAlert = builder.create();
+        sAlert.setCanceledOnTouchOutside(false);
+        sAlert.show();
     }
 
 }
