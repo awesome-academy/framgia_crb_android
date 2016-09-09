@@ -161,4 +161,5 @@
     <string name="attendee_search">Attendee</string>
     <string name="message_logout">Logout Success!</string>
     <string name="time_picker_default">%1$02d:%2$02d</string>
+    <string name="error_create_event">Can\'t create event, please check connection</string>
 </resources>

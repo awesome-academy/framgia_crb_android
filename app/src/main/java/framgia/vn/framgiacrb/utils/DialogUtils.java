@@ -53,6 +53,7 @@ public class DialogUtils {
                     sProgress.dismiss();
                 }
                 sProgress = new ProgressDialog(activity);
+                sProgress.setCanceledOnTouchOutside(false);
                 sProgress.show();
             }
         } catch (Exception e) {
