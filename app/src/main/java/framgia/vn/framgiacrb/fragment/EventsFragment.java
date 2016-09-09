@@ -16,6 +16,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -172,6 +173,13 @@ public class EventsFragment extends Fragment {
     private void initViews() {
         mRefreshLayout = (SwipeRefreshLayout) mViewEvents.findViewById(R.id.swipe_refresh_layout_events);
         mRecyclerViewEvents = (RecyclerView) mViewEvents.findViewById(R.id.rv_events);
+        mRecyclerViewEvents.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mOnCloseToolbarListener.onCloseToolbar(true);
+                return false;
+            }
+        });
         mRecyclerViewEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         mFloatingActionButton = (FloatingActionButton) mViewEvents.findViewById(R.id.fab);
         mAdapter = new ListEventAdapter(getActivity(), mDatas);
@@ -204,7 +212,7 @@ public class EventsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                mOnCloseToolbarListener.onCloseToolbar(true);
+                //mOnCloseToolbarListener.onCloseToolbar(true);
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                 int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                 int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
