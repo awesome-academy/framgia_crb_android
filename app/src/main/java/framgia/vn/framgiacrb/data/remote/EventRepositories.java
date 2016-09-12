@@ -1,13 +1,20 @@
 package framgia.vn.framgiacrb.data.remote;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
+import framgia.vn.framgiacrb.activity.LoginActivity;
+import framgia.vn.framgiacrb.activity.MainActivity;
+import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.EventRepository;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
@@ -15,6 +22,7 @@ import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.ResposeDTO;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
+import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -69,7 +77,20 @@ public class EventRepositories implements EventRepository{
                         mOnLoadEventListener.onSuccess();
                     }
                 } else {
-                    Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT).show();
+                    String error = null;
+                    try {
+                        error = Utils.getStringFromJson(response.errorBody().string());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (error.equals(Constant.NOT_AUTHENTICATION)) {
+                        logout(context);
+                        ((MainActivity)context).finish();
+                    } else {
+                        Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT).show();
+                    }
                     mOnLoadEventListener.onSuccess();
                 }
             }
@@ -82,6 +103,23 @@ public class EventRepositories implements EventRepository{
                 Toast.makeText(context, context.getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void logout(final Context context) {
+        Toast.makeText(context, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
+        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, "Logout Success!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+        ((MainActivity)context).finish();
     }
 
     @Override
