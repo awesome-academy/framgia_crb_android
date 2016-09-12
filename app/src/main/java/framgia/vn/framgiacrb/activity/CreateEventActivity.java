@@ -634,6 +634,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                     }
                     if (error.equals(Constant.NOT_AUTHENTICATION)) {
                         logout();
+                        CreateEventActivity.this.finish();
                     } else {
                         Toast.makeText(CreateEventActivity.this, R.string.create_error, Toast.LENGTH_SHORT).show();
                     }

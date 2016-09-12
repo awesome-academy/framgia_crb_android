@@ -164,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
                 if (position == mPreviousSelected) {
                     MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
                     mv.setSelected(false);
-                } else if (position == mCurrentPosition){
-                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month"+mCurrentPosition);
+                } else if (position == mCurrentPosition) {
+                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mCurrentPosition);
                     mv.setSelect(X, Y);
                     mv.setSelected(true);
                 }
@@ -308,8 +308,8 @@ public class MainActivity extends AppCompatActivity {
         if (position != 0 && position < 4) {
             mDrawerLayout.closeDrawers();
             mCurrentMenuItemPosition = position;
-        } else if (position == 0 || position == 4){
-            Toast.makeText(MainActivity.this, mCurrentMenuItemPosition+"", Toast.LENGTH_SHORT).show();
+        } else if (position == 0 || position == 4) {
+            Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT).show();
             mNavigationListView.setItemChecked(position, false);
             mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         } else if (position > 4) {
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
             editor.apply();
-            Toast.makeText(MainActivity.this, ""+Session.sCalendarId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "" + Session.sCalendarId, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -353,9 +353,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         menu.findItem(R.id.today).setIcon(DrawableUtil.writeOnDrawable(
-            getApplicationContext(),
-            R.drawable.ic_web_asset_white_24dp,
-            DrawableUtil.getTodayDay()
+                getApplicationContext(),
+                R.drawable.ic_web_asset_white_24dp,
+                DrawableUtil.getTodayDay()
         ));
         return true;
     }
@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
                 this.sendBroadcast(intent);
                 mCalendarViewPager.setCurrentItem(
                         (current.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12
-                        + current.get(Calendar.MONTH));
+                                + current.get(Calendar.MONTH));
                 setSubTitle(dateFormat.format(current.getTime()));
                 break;
             case R.id.search:
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
         mDayClicked = new dayClicked();
         IntentFilter intentFilter = new IntentFilter(ACTION_BROADCAST);
         registerReceiver(mDayClicked, intentFilter);
-        closeToolbar();
+        if (isExpanded) closeToolbar();
     }
 
     @Override
