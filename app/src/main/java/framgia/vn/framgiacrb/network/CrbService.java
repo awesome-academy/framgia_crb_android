@@ -7,8 +7,10 @@ import framgia.vn.framgiacrb.data.model.ResposeDTO;
 import framgia.vn.framgiacrb.data.model.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -23,4 +25,7 @@ public interface CrbService {
 
     @POST("events.json/")
     Call<CreateEventResponse> createEvent(@Body NewEvent event);
+
+    @DELETE("events/{id}")
+    Call<Void> deleteEvent(@Path("id") int eventId);
 }
