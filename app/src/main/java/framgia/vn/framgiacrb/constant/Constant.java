@@ -16,15 +16,14 @@ public class Constant {
             R.color.color_event_8, R.color.color_event_9, R.color.color_event_10, R.color.color_event_11,
             R.color.color_event_12};
     public static final String INTENT_DATA = "intent_data";
-    public static final String ID_KEY ="id_event";
+    public static final String ID_KEY = "id_event";
     public static final String LINE_BREAK = "\n";
     public static final String AMOUNT_DEVIDE = "-";
-
     public static final String SUNDAY = "1";
     public static final String MONDAY = "2";
     public static final String TUESDAY = "3";
     public static final String WEDNESDAY = "4";
-    public static final String THURDAY = "5";
+    public static final String THURSDAY = "5";
     public static final String FRIDAY = "6";
     public static final String SATURDAY = "7";
     public static final String WEEKLY = "Weekly";
@@ -36,5 +35,6 @@ public class Constant {
     public static final String FORMAT_TIME = "HH:mm";
     public static final String SUCCESS = "Create Event Success!";
     public static final String NOT_AUTHENTICATION = "Not authenticated";
-    public static final String MESSAGE_NOT_AUTHENTICATION = "This account has been login in other device";
+    public static final String MESSAGE_NOT_AUTHENTICATION =
+        "This account has been login in other device";
 }

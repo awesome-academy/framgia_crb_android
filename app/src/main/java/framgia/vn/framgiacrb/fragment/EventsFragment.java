@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +33,7 @@ import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.adapter.ListEventAdapter;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
+import framgia.vn.framgiacrb.data.dataTest.DataTest;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.Session;
@@ -50,7 +50,6 @@ import io.realm.Realm;
  * Created by nghicv on 04/07/2016.
  */
 public class EventsFragment extends Fragment {
-
     public static final int REQUEST_CODE = 1;
     private View mViewEvents;
     private RecyclerView mRecyclerViewEvents;
@@ -75,7 +74,8 @@ public class EventsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         mViewEvents = inflater.inflate(R.layout.fragment_events, container, false);
         initViews();
         mCalendar = new framgia.vn.framgiacrb.data.model.Calendar();
@@ -87,7 +87,8 @@ public class EventsFragment extends Fragment {
             @Override
             public void onSuccess() {
                 try {
-                    initDatas();
+//                    initDatas();
+                    initData();
                     setRefreshing(false);
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -96,16 +97,15 @@ public class EventsFragment extends Fragment {
 
             @Override
             public void onError() {
-
             }
         });
-
         refreshData();
         mBroadcastReceiverToday = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(MainActivity.ACTION_TODAY)) {
-                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
+                    LinearLayoutManager linearLayoutManager =
+                        (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
                     int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
                     if (firstVisibleItem > mPositionToday) {
                         mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
@@ -121,10 +121,12 @@ public class EventsFragment extends Fragment {
                 if (intent.getAction().equals(MainActivity.ACTION_SCROLL_DAY)) {
                     String timeString = intent.getStringExtra(MonthView.TITLE);
                     Date date = TimeUtils.stringToDate(timeString, "d MMM yyyy");
-                    int month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
+                    int month = Integer
+                        .parseInt(android.text.format.DateFormat.format("MM", date).toString());
                     int year = Integer.parseInt(DateFormat.format("yyyy", date).toString());
                     int position = -1;
-                    if ((month > mLastMonth && year == mLastYear) || (month == 1 && year > mLastYear)) {
+                    if ((month > mLastMonth && year == mLastYear) ||
+                        (month == 1 && year > mLastYear)) {
                         try {
                             position = mDatas.size();
                             loadDatasForNextMonth();
@@ -132,7 +134,8 @@ public class EventsFragment extends Fragment {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                    } else if ((month < mFirstMonth && year == mFirstYear) || (month == 12 && year < mFirstYear)) {
+                    } else if ((month < mFirstMonth && year == mFirstYear) ||
+                        (month == 12 && year < mFirstYear)) {
                         position = 0;
                         try {
                             loadDatasForPrevMonth();
@@ -146,8 +149,10 @@ public class EventsFragment extends Fragment {
                 }
             }
         };
-        getActivity().registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
-        getActivity().registerReceiver(mBroadcastReceiverToDate, new IntentFilter(MainActivity.ACTION_SCROLL_DAY));
+        getActivity()
+            .registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
+        getActivity().registerReceiver(mBroadcastReceiverToDate,
+            new IntentFilter(MainActivity.ACTION_SCROLL_DAY));
         return mViewEvents;
     }
 
@@ -156,22 +161,26 @@ public class EventsFragment extends Fragment {
     }
 
     private void loadDatas() {
-
-        if (Connectivity.isConnected(getActivity()) && Connectivity.isConnectedFast(getActivity())) {
-            mEventRepositories.getEventsByCalendar(Session.sAuthToken, mCalendar, getActivity());
+        if (Connectivity.isConnected(getActivity()) &&
+            Connectivity.isConnectedFast(getActivity())) {
+            mEventRepositories
+                .getEventsByCalendar(Session.sAuthToken, mCalendar, getActivity());
         } else {
             try {
-                initDatas();
+//                initDatas();
+                initData();
                 setRefreshing(false);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect),
+                Toast.LENGTH_SHORT).show();
         }
     }
 
     private void initViews() {
-        mRefreshLayout = (SwipeRefreshLayout) mViewEvents.findViewById(R.id.swipe_refresh_layout_events);
+        mRefreshLayout =
+            (SwipeRefreshLayout) mViewEvents.findViewById(R.id.swipe_refresh_layout_events);
         mRecyclerViewEvents = (RecyclerView) mViewEvents.findViewById(R.id.rv_events);
         mRecyclerViewEvents.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -185,7 +194,7 @@ public class EventsFragment extends Fragment {
         mAdapter = new ListEventAdapter(getActivity(), mDatas);
         mRecyclerViewEvents.setAdapter(mAdapter);
         ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(mAdapter);
+            new SimpleItemTouchHelperCallback(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerViewEvents);
         mAdapter.setOnEventSelectedListener(new ListEventAdapter.OnEventSelectedListener() {
@@ -199,10 +208,10 @@ public class EventsFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getActivity(), CreateEventActivity.class), REQUEST_CODE);
+                startActivityForResult(new Intent(getActivity(), CreateEventActivity.class),
+                    REQUEST_CODE);
             }
         });
-
         mRecyclerViewEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -212,10 +221,11 @@ public class EventsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findLastVisibleItemPosition();
+                int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findFirstVisibleItemPosition();
                 if (dy > 0) {
                     setDateForCalendar(firstVisibleItem);
                     if (totalItemCount - 10 < lastVisibleItem + 1) {
@@ -233,7 +243,6 @@ public class EventsFragment extends Fragment {
                 } else {
                     setDateForCalendar(firstVisibleItem);
                     if (10 > firstVisibleItem) {
-
                         if (!isLoading) {
                             isLoading = true;
                             try {
@@ -249,8 +258,7 @@ public class EventsFragment extends Fragment {
         });
     }
 
-
-    private void initDatas() throws ParseException {
+    private void initData() throws ParseException {
         mDatas.clear();
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
@@ -258,20 +266,20 @@ public class EventsFragment extends Fragment {
         mLastMonth = month;
         mFirstMonth = month;
         String stringMonth = android.text.format.DateFormat.format("MMM", today).toString();
-        mLastYear = Integer.parseInt(android.text.format.DateFormat.format("yyyy", today).toString());
+        mLastYear =
+            Integer.parseInt(android.text.format.DateFormat.format("yyyy", today).toString());
         mFirstYear = mLastYear;
         calendar.set(mLastYear, month - 1, 1);
         Date date = calendar.getTime();
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         boolean isTimelineAdded = false;
         while (month < mLastMonth + 1) {
-
             mDatas.add(date);
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
-                List<Event> events = mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date));
-                for (int i = 0; i < events.size(); i++) {
-                    Event event = events.get(i);
+                List<Event> eventList =
+                    DataTest.getGenCodeEvent(TimeUtils.formatDate(date));
+                for (Event event : eventList) {
                     if (event.getStartTime().getTime() > today.getTime() && !isTimelineAdded) {
                         mDatas.add(null);
                         isTimelineAdded = true;
@@ -282,7 +290,8 @@ public class EventsFragment extends Fragment {
                     mDatas.add(null);
                 }
             } else {
-                mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+                mDatas
+                    .addAll(DataTest.getGenCodeEvent(TimeUtils.formatDate(date)));
             }
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
@@ -294,6 +303,51 @@ public class EventsFragment extends Fragment {
         }
         mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
     }
+//    private void initDatas() throws ParseException {
+//        mDatas.clear();
+//        Calendar calendar = Calendar.getInstance();
+//        Date today = calendar.getTime();
+//        int month = Integer.parseInt(android.text.format.DateFormat.format("MM", today).toString());
+//        mLastMonth = month;
+//        mFirstMonth = month;
+//        String stringMonth = android.text.format.DateFormat.format("MMM", today).toString();
+//        mLastYear =
+//            Integer.parseInt(android.text.format.DateFormat.format("yyyy", today).toString());
+//        mFirstYear = mLastYear;
+//        calendar.set(mLastYear, month - 1, 1);
+//        Date date = calendar.getTime();
+//        mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
+//        boolean isTimelineAdded = false;
+//        while (month < mLastMonth + 1) {
+//            mDatas.add(date);
+//            if (date.equals(today)) {
+//                mPositionToday = mDatas.size();
+//                List<Event> events =
+//                    mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date));
+//                for (int i = 0; i < events.size(); i++) {
+//                    Event event = events.get(i);
+//                    if (event.getStartTime().getTime() > today.getTime() && !isTimelineAdded) {
+//                        mDatas.add(null);
+//                        isTimelineAdded = true;
+//                    }
+//                    mDatas.add(event);
+//                }
+//                if (!isTimelineAdded) {
+//                    mDatas.add(null);
+//                }
+//            } else {
+//                mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+//            }
+//            calendar.add(Calendar.DATE, 1);
+//            date = calendar.getTime();
+//            month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
+//        }
+//        mAdapter.notifyDataSetChanged();
+//        if (mPositionToday > 20) {
+//            loadDatasForNextMonth();
+//        }
+//        mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
+//    }
 
     private synchronized void loadDatasForNextMonth() throws ParseException {
         Calendar calendar = Calendar.getInstance();
@@ -310,7 +364,8 @@ public class EventsFragment extends Fragment {
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         while ((month < mLastMonth + 1) && !(mLastMonth == 12 && month == 1)) {
             mDatas.add(date);
-            mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+//            mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+            mDatas.addAll(DataTest.getGenCodeEvent(TimeUtils.formatDate(date)));
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
@@ -333,7 +388,8 @@ public class EventsFragment extends Fragment {
         String stringMonth = android.text.format.DateFormat.format("MMM", date).toString();
         while ((month >= mFirstMonth) && !(mFirstMonth == 1 && month == 12)) {
             mDatas.add(0, date);
-            mDatas.addAll(1, mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+//            mDatas.addAll(1, mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+            mDatas.addAll(1, DataTest.getGenCodeEvent(TimeUtils.formatDate(date)));
             calendar.add(Calendar.DATE, -1);
             date = calendar.getTime();
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
@@ -355,7 +411,8 @@ public class EventsFragment extends Fragment {
         Object object = mDatas.get(position);
         if (object instanceof Date) {
             Date date = (Date) object;
-            ((MainActivity) getActivity()).setSubTitle(TimeUtils.toStringDate(date, TimeUtils.DATE_FORMAT_TOOLBAR));
+            ((MainActivity) getActivity())
+                .setSubTitle(TimeUtils.toStringDate(date, TimeUtils.DATE_FORMAT_TOOLBAR));
         }
     }
 
@@ -378,7 +435,8 @@ public class EventsFragment extends Fragment {
         for (i = 0; i < mDatas.size(); i++) {
             try {
                 if (mDatas.get(i) instanceof Date) {
-                    if (TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                    if (TimeUtils.formatDate((Date) mDatas.get(i))
+                        .equals(TimeUtils.formatDate(date)))
                         break;
                 }
             } catch (ParseException e) {
