@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.listener.OnCloseToolbarListener;
-import framgia.vn.framgiacrb.utils.Connectivity;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import io.realm.Realm;
