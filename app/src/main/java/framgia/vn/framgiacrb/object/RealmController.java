@@ -51,7 +51,7 @@ public class RealmController implements EventField, CalendarField {
             .contains(EVENT_TITLE_FIELD, textSearch, Case.INSENSITIVE)
             .or()
             .contains(EVENT_DESCRIPTION_FIELD, textSearch, Case.INSENSITIVE)
-            .findAllSorted(EVENT_START_DATE_FIELD, Sort.ASCENDING);
+            .findAll();
     }
     public Event getEventById(String id) {
         return realm.where(Event.class)

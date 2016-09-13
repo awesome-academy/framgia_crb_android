@@ -48,8 +48,8 @@ public class TimeUtils {
     }
 
     public static Date stringToDate(String dateString, String dateInput) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
-        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput);
+        Date date;
         try {
             date = dateFormat.parse(dateString);
         } catch (ParseException e) {
@@ -122,6 +122,16 @@ public class TimeUtils {
             return new SimpleDateFormat(FORMAT_TODAY, Locale.getDefault()).format(date);
         }
         return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY, Locale.getDefault()).format(date);
+    }
+
+    public static boolean compareDate(Date date1, Date date2) {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(date1);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(date2);
+        return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
+            && calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH)
+            && calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
     }
 
     public static String createAmountTime(Date startDate, Date endDate) {

@@ -2,7 +2,6 @@ package framgia.vn.framgiacrb.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
-import io.realm.internal.Util;
 
 /**
  * Created by framgia on 26/07/2016.
@@ -31,6 +29,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
     public static final int TEXT_CONTENT_SIZE = 15;
     public final Activity mActivity;
     public RealmList<Event> data = new RealmList<>();
+
     public SearchEventAdapter(Activity activity, OrderedRealmCollection<Event> data) {
         super(activity, data, true);
         this.mActivity = activity;
@@ -51,7 +50,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
     @Override
     public void onBindViewHolder(SearchEventAdapter.EventViewHolder holder, int position) {
         Event obj = data.get(position);
-        if(obj.getTitle().equals(SearchUtil.DEFINE_YEAR)) {
+        if (obj.getTitle().equals(SearchUtil.DEFINE_YEAR)) {
             holder.type = TYPE_YEAR;
             holder.content.setText(obj.getDescription());
             holder.content.setBackgroundColor(Utils.getColor(mActivity, R.color.bg_default));
@@ -62,11 +61,18 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
             holder.month.setText("");
         } else {
             holder.type = TYPE_EVENT;
-            holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
-            holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
+            if((!data.get(position - 1).getTitle().equals(SearchUtil.DEFINE_YEAR))
+            && (TimeUtils.compareDate(obj.getStartTime(), data.get(position - 1).getStartTime())
+            )) {
+                holder.day.setText("");
+                holder.month.setText("");
+            } else {
+                holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
+                holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
+            }
             String content = obj.getTitle() + Constant.LINE_BREAK +
                 TimeUtils.toStringTime(obj.getStartTime())
-                +Constant.AMOUNT_DEVIDE
+                + Constant.AMOUNT_DEVIDE
                 + TimeUtils.toStringTime(obj.getFinishTime())
                 + (obj.getPlace() == null ? "" : Constant.LINE_BREAK + obj.getPlace().getName());
             holder.content.setText(content);
@@ -78,7 +84,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
         }
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView day;
         public TextView content;
         public TextView month;
@@ -94,7 +100,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
 
         @Override
         public void onClick(View v) {
-            if(type == TYPE_EVENT) {
+            if (type == TYPE_EVENT) {
                 Intent intent = new Intent(mActivity, DetailActivity.class);
                 intent.putExtra(Constant.ID_KEY, data.get(getAdapterPosition()).getId());
                 mActivity.startActivity(intent);

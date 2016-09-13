@@ -2,7 +2,6 @@ package framgia.vn.framgiacrb.utils;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -66,7 +65,6 @@ public class NotificationUtil {
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true);
         NotificationManager notificationManager =
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -78,5 +76,18 @@ public class NotificationUtil {
             CrbApplication.getInstanceContext().
                 getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+    }
+
+    public static Date getNearestDayNotify(Event event) {
+        if (event.getRepeatType().equals(Constant.REPEAT_DAILY)) {
+            Date date = new Date(event.getStartRepeat().getTime());
+            while (date.before(Calendar.getInstance().getTime())) {
+                date.setTime(date.getTime() + SearchUtil.ONE_DAY * event.getRepeatEvery());
+            }
+            return date;
+        }
+        if (event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {
+        }
+        return null;
     }
 }

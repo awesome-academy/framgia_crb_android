@@ -161,7 +161,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void loadDatas() {
-        if (Connectivity.isConnected(getActivity()) &&
+       /* if (Connectivity.isConnected(getActivity()) &&
             Connectivity.isConnectedFast(getActivity())) {
             mEventRepositories
                 .getEventsByCalendar(Session.sAuthToken, mCalendar, getActivity());
@@ -175,6 +175,12 @@ public class EventsFragment extends Fragment {
             }
             Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect),
                 Toast.LENGTH_SHORT).show();
+        }*/
+        try {
+            initData();
+            setRefreshing(false);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
