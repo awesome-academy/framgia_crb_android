@@ -70,15 +70,19 @@ public class TimeUtils {
         SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT);
         return format.parse(format.format(date));
     }
+
     public static String toStringTime(Date date) {
         return new SimpleDateFormat(TIME_FORMAT).format(date);
     }
+
     public static String toDay(Date date) {
         return new SimpleDateFormat(DAY_FORMAT).format(date);
     }
+
     public static String toMonth(Date date) {
         return new SimpleDateFormat(MONTH_FORMAT).format(date);
     }
+
     public static String toYear(Date date) {
         return new SimpleDateFormat(YEAR_FORMAT).format(date);
     }
@@ -88,35 +92,33 @@ public class TimeUtils {
         Date resultDate;
         SimpleDateFormat sdf;
         SimpleDateFormat sdf1;
-
         try {
             sdf = new SimpleDateFormat(givenFormat);
             sdf1 = new SimpleDateFormat(resultFormat);
             result = sdf1.format(sdf.parse(date));
             resultDate = sdf1.parse(result);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new Date();
-        }
-        finally {
-            sdf=null;
-            sdf1=null;
+        } finally {
+            sdf = null;
+            sdf1 = null;
         }
         return resultDate;
     }
 
     public static String getTimeStringBeauty(Date date) {
-        if(date == null) {
+        if (date == null) {
             return "";
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        if(calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)) {
+        if (calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)) {
             return new SimpleDateFormat(FORMAT_OTHER_YEAR, Locale.US).format(date);
         }
-        if(calendar.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)
-            && calendar.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+        if (calendar.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)
+            && calendar.get(Calendar.DAY_OF_MONTH) ==
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
             return new SimpleDateFormat(FORMAT_TODAY, Locale.getDefault()).format(date);
         }
         return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY, Locale.getDefault()).format(date);
@@ -125,6 +127,7 @@ public class TimeUtils {
     public static String createAmountTime(Date startDate, Date endDate) {
         return getTimeStringBeauty(startDate) + DEVIDE_TIME + getTimeStringBeauty(endDate);
     }
+
     @SuppressWarnings("deprecation")
     public static Date formatDateTime(Date date, Date time) {
         date.setHours(time.getHours());

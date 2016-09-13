@@ -35,6 +35,7 @@ import java.util.Locale;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
+import framgia.vn.framgiacrb.data.dataTest.DataTest;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOGOUT = "Logout";
     private static final int ANIMATION_DURATION = 300;
     private static final int NUMBER_COLUMN = 5;
-
     private DrawerLayout mDrawerLayout;
     private ListView mNavigationListView;
     private ArrayList<ItemLeftMenu> mListMenu;
@@ -83,13 +83,10 @@ public class MainActivity extends AppCompatActivity {
     private MonthToolbarPagerAdapter mAdapter;
     private RealmResults<framgia.vn.framgiacrb.data.model.Calendar> mUserCalendar;
     private SharedPreferences mSharedPreferences;
-
     int currentMenuItemId;
     boolean isExpanded = false;
     float currentRotation = 360.0f;
-
     private Toolbar mToolbar;
-
     private int mSelectedColor;
     private int mPreviousSelected;
     private int mPreviousSelectedMonth;
@@ -102,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mCurrentFragment;
     private Fragment mEventFollowWeekFragment;
     private FragmentManager mFragmentManager;
-
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
+    public static final SimpleDateFormat dateFormat =
+        new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         mUserCalendar = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
         mSharedPreferences = getSharedPreferences(SHAREPREFF, Context.MODE_PRIVATE);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
-
+        DataTest.createEvent(this);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         initUi();
@@ -141,15 +138,18 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new MonthToolbarPagerAdapter(this);
         mCalendarViewPager.setAdapter(mAdapter);
         Calendar calendar = Calendar.getInstance();
-        mCalendarViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH));
-        mPreviousSelected = (calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH);
+        mCalendarViewPager.setCurrentItem(
+            (calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 +
+                calendar.get(Calendar.MONTH));
+        mPreviousSelected = (calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 +
+            calendar.get(Calendar.MONTH);
         mCurrentPosition = mPreviousSelected;
         mPreviousSelectedMonth = calendar.get(Calendar.MONTH);
         mPreviousSelectedYear = calendar.get(Calendar.YEAR);
         mCalendarViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
             }
 
             @Override
@@ -162,10 +162,12 @@ public class MainActivity extends AppCompatActivity {
                 Date date = calendar.getTime();
                 setSubTitle(MainActivity.dateFormat.format(date));
                 if (position == mPreviousSelected) {
-                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
+                    MonthView mv =
+                        (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
                     mv.setSelected(false);
                 } else if (position == mCurrentPosition) {
-                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mCurrentPosition);
+                    MonthView mv =
+                        (MonthView) mCalendarViewPager.findViewWithTag("month" + mCurrentPosition);
                     mv.setSelect(X, Y);
                     mv.setSelected(true);
                 }
@@ -173,10 +175,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
-
         mDatePickerButton = (RelativeLayout) findViewById(R.id.date_picker_button);
         setSubTitle(dateFormat.format(calendar.getTime()));
         mFrameLayout = (FrameLayout) findViewById(R.id.frame);
@@ -232,7 +232,9 @@ public class MainActivity extends AppCompatActivity {
                 if (date == null) date = new Date();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
-                mCalendarViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH));
+                mCalendarViewPager.setCurrentItem(
+                    (calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 +
+                        calendar.get(Calendar.MONTH));
                 if (isExpanded) {
                     closeToolbar();
                 } else {
@@ -246,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
                 updateDisplayView(position);
             }
         });
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open,
+            R.string.close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -273,12 +276,13 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getTitle()) {
             case HOME:
                 mCurrentFragment = new EventsFragment();
-                ((EventsFragment) mCurrentFragment).setOnCloseToolbarListener(new OnCloseToolbarListener() {
-                    @Override
-                    public void onCloseToolbar(boolean isClose) {
-                        if (isClose) closeToolbar();
-                    }
-                });
+                ((EventsFragment) mCurrentFragment)
+                    .setOnCloseToolbarListener(new OnCloseToolbarListener() {
+                        @Override
+                        public void onCloseToolbar(boolean isClose) {
+                            if (isClose) closeToolbar();
+                        }
+                    });
                 break;
             case WEEK:
                 mCurrentFragment = new EventFollowWeekFragment();
@@ -289,12 +293,14 @@ public class MainActivity extends AppCompatActivity {
             case LOGOUT:
                 NotificationUtil.clearNotification();
                 logout();
-                new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(MainActivity.this, getString(R.string.message_logout), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                new EventRepositoriesLocal(Realm.getDefaultInstance())
+                    .clearDatabase(new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(MainActivity.this, getString(R.string.message_logout),
+                                Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 return;
@@ -309,13 +315,15 @@ public class MainActivity extends AppCompatActivity {
             mDrawerLayout.closeDrawers();
             mCurrentMenuItemPosition = position;
         } else if (position == 0 || position == 4) {
-            Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT)
+                .show();
             mNavigationListView.setItemChecked(position, false);
             mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
         } else if (position > 4) {
             mDrawerLayout.closeDrawers();
             Session.sCalendarId = item.getCalendarId();
-            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences =
+                getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
             editor.apply();
@@ -324,13 +332,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(MainActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        new EventRepositoriesLocal(Realm.getDefaultInstance())
+            .clearDatabase(new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(MainActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        SharedPreferences sharedPreferences =
+            getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
@@ -353,9 +363,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         menu.findItem(R.id.today).setIcon(DrawableUtil.writeOnDrawable(
-                getApplicationContext(),
-                R.drawable.ic_web_asset_white_24dp,
-                DrawableUtil.getTodayDay()
+            getApplicationContext(),
+            R.drawable.ic_web_asset_white_24dp,
+            DrawableUtil.getTodayDay()
         ));
         return true;
     }
@@ -372,8 +382,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(MonthView.MONTH, current.get(Calendar.MONTH));
                 this.sendBroadcast(intent);
                 mCalendarViewPager.setCurrentItem(
-                        (current.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12
-                                + current.get(Calendar.MONTH));
+                    (current.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12
+                        + current.get(Calendar.MONTH));
                 setSubTitle(dateFormat.format(current.getTime()));
                 break;
             case R.id.search:
@@ -385,7 +395,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -427,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setCalendarCheck(int year, int month) {
         if ((year == mPreviousSelectedYear && month != mPreviousSelectedMonth) ||
-                (year != mPreviousSelectedYear)) {
+            (year != mPreviousSelectedYear)) {
             mPreviousSelected = mCurrentPosition;
             mCurrentPosition = (year - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + month;
             mPreviousSelectedYear = year;

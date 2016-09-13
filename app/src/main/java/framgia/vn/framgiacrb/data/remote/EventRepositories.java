@@ -32,8 +32,7 @@ import retrofit2.Response;
 /**
  * Created by nghicv on 26/07/2016.
  */
-public class EventRepositories implements EventRepository{
-
+public class EventRepositories implements EventRepository {
     private List<Event> mEvents;
     private OnLoadEventListener mOnLoadEventListener;
 
@@ -43,17 +42,14 @@ public class EventRepositories implements EventRepository{
 
     @Override
     public void insertEvent(Event event) {
-
     }
 
     @Override
     public void deleteEvent(Event event) {
-
     }
 
     @Override
     public void updateEvent(Event event) {
-
     }
 
     @Override
@@ -86,10 +82,11 @@ public class EventRepositories implements EventRepository{
                         e.printStackTrace();
                     }
                     if (error.equals(Constant.NOT_AUTHENTICATION)) {
-                        logout(context);
-                        ((MainActivity)context).finish();
+//                        logout(context);
+//                        ((MainActivity) context).finish();
                     } else {
-                        Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.message_error),
+                            Toast.LENGTH_SHORT).show();
                     }
                     mOnLoadEventListener.onSuccess();
                 }
@@ -100,26 +97,29 @@ public class EventRepositories implements EventRepository{
                 if (mOnLoadEventListener != null) {
                     mOnLoadEventListener.onSuccess();
                 }
-                Toast.makeText(context, context.getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.message_not_connect),
+                    Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void logout(final Context context) {
         Toast.makeText(context, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
-        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(context, "Logout Success!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        new EventRepositoriesLocal(Realm.getDefaultInstance())
+            .clearDatabase(new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(context, "Logout Success!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        SharedPreferences sharedPreferences =
+            context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
-        ((MainActivity)context).finish();
+        ((MainActivity) context).finish();
     }
 
     @Override

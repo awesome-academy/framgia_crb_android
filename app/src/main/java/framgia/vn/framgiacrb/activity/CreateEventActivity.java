@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -77,31 +75,28 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     private Spinner mRepeatSpinner, mRepeatEverySpinner;
     private DatePickerDialog mDatePickerDialog, mCreateDatePickerDialog;
     private LinearLayout mDayOfWeekLinearLayout;
-    private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat, mTxtNewEvent;
+    private TextView mTxtDateStart, mTxtTimeStart, mTxtDateFinish, mTxtTimeFinish, mTxtRepeat,
+        mTxtNewEvent;
     private TextView mTxtAttendee, mTxtPlace;
     private Spinner mSpinerCalendar;
     private EditText mStartRepeat, mEndRepeat;
-
     private Calendar mCal, mCalendarStart, mCalendarFinish, mCalendarEnd;
-    private Date mDateStart, mDateFinish, mHourFinish, mDateEventStartRepeat, mDateEventFinishRepeat;
+    private Date mDateStart, mDateFinish, mHourFinish, mDateEventStartRepeat,
+        mDateEventFinishRepeat;
     private Date mTimeEventStart, mTimeEventFinish;
-
     private ArrayList<String> mListData;
-
     private Toolbar mToolbar;
-
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
     ArrayAdapter<EventInWeek> adapter = null;
-
     private int mCurrentIndexOfSpinnerChoice = 0;
     private int mRepeatEvery = 1;
     private String mRepeatType = "";
     private ArrayList<String> mListDayOfWeekRepeat = new ArrayList<>();
-
     boolean isRepeat;
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager =
+            (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
@@ -109,37 +104,28 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar_event);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mCalendarStart = Calendar.getInstance();
         mCalendarFinish = Calendar.getInstance();
         mCalendarEnd = Calendar.getInstance();
-
         mTxtDateStart = (TextView) findViewById(R.id.txt_DateStart);
         mTxtDateFinish = (TextView) findViewById(R.id.txt_DateFinish);
         mTxtTimeStart = (TextView) findViewById(R.id.txt_timeStart);
         mTxtTimeFinish = (TextView) findViewById(R.id.txt_TimeFinish);
         mTxtNewEvent = (TextView) findViewById(R.id.txt_NewEvent);
-
         mSwitchAlarm = (Switch) findViewById(R.id.sw_SwitchAlarm);
-
         mTxtRepeat = (TextView) findViewById(R.id.txt_Repeat);
         mTxtAttendee = (TextView) findViewById(R.id.txt_Attendee);
         mTxtPlace = (TextView) findViewById(R.id.txt_Place);
-
         mEdtTitle = (EditText) findViewById(R.id.edit_Title_New_Event);
         mEdtDesciption = (EditText) findViewById(R.id.edt_Detail);
-
         CardView cardView = (CardView) findViewById(R.id.card_view2);
         cardView.setOnTouchListener(this);
-
         mTxtNewEvent.setText(R.string.new_event);
-
         mSwitchAlarm.setChecked(false);
         mSwitchAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +137,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 mTxtTimeFinish.setEnabled(isAnable);
             }
         });
-
         mTxtPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +144,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 startActivityForResult(intent, 3);
             }
         });
-
         mTxtAttendee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,25 +151,21 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 startActivityForResult(intent, 2);
             }
         });
-
         adapter = new ArrayAdapter<EventInWeek>
-                (this, android.R.layout.simple_list_item_1, arrJob);
-
+            (this, android.R.layout.simple_list_item_1, arrJob);
         mListData = new ArrayList<>();
         RealmResults<framgia.vn.framgiacrb.data.model.Calendar> result =
-                new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
-
+            new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
         for (int i = 0; i < result.size(); i++) {
             mListData.add(result.get(i).getName());
         }
-
         mSpinerCalendar = (Spinner) findViewById(R.id.spin_Calendar);
-        mSpinerCalendar.getBackground().setColorFilter(Color.parseColor("#757575"), PorterDuff.Mode.SRC_ATOP);
+        mSpinerCalendar.getBackground()
+            .setColorFilter(Color.parseColor("#757575"), PorterDuff.Mode.SRC_ATOP);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,
-                mListData);
+            mListData);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSpinerCalendar.setAdapter(adapter);
-
         getDefaultInfor();
         addEventFormWidgets();
         selectRepeat();
@@ -204,9 +184,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             case R.id.action_Save:
                 String title = mEdtTitle.getText().toString();
                 if (!title.equals("")) {
-                    getDataFromService(createEvent());
+//                    getDataFromService(createEvent());
                 } else {
-                    Toast.makeText(CreateEventActivity.this, R.string.not_be_empty, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateEventActivity.this, R.string.not_be_empty,
+                        Toast.LENGTH_LONG).show();
                 }
                 break;
             case android.R.id.home:
@@ -220,7 +201,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     public void onBackPressed() {
         super.onBackPressed();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,7 +277,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    private class MyDialogRepeat extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    private class MyDialogRepeat extends DialogFragment
+        implements DatePickerDialog.OnDateSetListener {
         private int mCurrentItemSelectedOnSpinnerChoice;
         private AlertDialog mDialog;
 
@@ -316,15 +297,16 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             mRepeatSpinner.setSelection(this.mCurrentItemSelectedOnSpinnerChoice);
             mStartRepeat = (EditText) v.findViewById(R.id.start_edittext);
             mEndEditText = (EditText) v.findViewById(R.id.end_edittext);
-
             // Setup listener
             mRepeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemSelected(AdapterView<?> parent, View view, int position,
+                                           long id) {
                     mCurrentItemSelectedOnSpinnerChoice = position;
                     if (parent.getSelectedItem().toString().equalsIgnoreCase(Constant.NO_REPEAT) ||
-                            (!parent.getSelectedItem().toString().equalsIgnoreCase(Constant.NO_REPEAT) &&
-                                    !mEndEditText.getText().toString().isEmpty())) {
+                        (!parent.getSelectedItem().toString()
+                            .equalsIgnoreCase(Constant.NO_REPEAT) &&
+                            !mEndEditText.getText().toString().isEmpty())) {
                         mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     } else {
                         mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -336,22 +318,22 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                         mRepeatEverySpinner.setEnabled(true);
                         mEndEditText.setEnabled(true);
                     }
-                    boolean isShowDayOfWeek = mRepeatSpinner.getSelectedItem().equals(Constant.WEEKLY);
+                    boolean isShowDayOfWeek =
+                        mRepeatSpinner.getSelectedItem().equals(Constant.WEEKLY);
                     showDayOfWeek(isShowDayOfWeek);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
                 }
             });
             Calendar now = Calendar.getInstance();
             if (mDateStart != null) now.setTime(mDateStart);
             mStartEditText = (EditText) v.findViewById(R.id.start_edittext);
             mStartEditText.setText(Utils.formatDate(
-                    now.get(Calendar.DAY_OF_MONTH),
-                    now.get(Calendar.MONTH) + 1,
-                    now.get(Calendar.YEAR)
+                now.get(Calendar.DAY_OF_MONTH),
+                now.get(Calendar.MONTH) + 1,
+                now.get(Calendar.YEAR)
             ));
             mEndEditText = (EditText) v.findViewById(R.id.end_edittext);
             mEndEditText.setOnClickListener(new View.OnClickListener() {
@@ -359,10 +341,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 public void onClick(View v) {
                     Calendar now = Calendar.getInstance();
                     mDatePickerDialog = DatePickerDialog.newInstance(
-                            MyDialogRepeat.this,
-                            now.get(Calendar.YEAR),
-                            now.get(Calendar.MONTH),
-                            now.get(Calendar.DAY_OF_MONTH)
+                        MyDialogRepeat.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
                     );
                     mDatePickerDialog.show(getActivity().getFragmentManager(), "Datepickerdialog");
                 }
@@ -370,26 +352,28 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             mDayOfWeekLinearLayout = (LinearLayout) v.findViewById(R.id.day_of_week_container);
             if (!mRepeatSpinner.getSelectedItem().equals(Constant.WEEKLY))
                 mDayOfWeekLinearLayout.setVisibility(View.INVISIBLE);
-
             builder.setView(v)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            mCurrentIndexOfSpinnerChoice = mCurrentItemSelectedOnSpinnerChoice;
-                            mTxtRepeat.setText(mRepeatSpinner.getSelectedItem().toString().toLowerCase());
-                            mRepeatEvery = Integer.parseInt(mRepeatEverySpinner.getSelectedItem().toString());
-                            mRepeatType = mTxtRepeat.getText().toString();
-                            if (!mRepeatSpinner.getSelectedItem().toString().equalsIgnoreCase(Constant.NO_REPEAT)) {
-                                isRepeat = true;
-                            } else {
-                                isRepeat = false;
-                            }
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        mCurrentIndexOfSpinnerChoice = mCurrentItemSelectedOnSpinnerChoice;
+                        mTxtRepeat
+                            .setText(mRepeatSpinner.getSelectedItem().toString().toLowerCase());
+                        mRepeatEvery =
+                            Integer.parseInt(mRepeatEverySpinner.getSelectedItem().toString());
+                        mRepeatType = mTxtRepeat.getText().toString();
+                        if (!mRepeatSpinner.getSelectedItem().toString()
+                            .equalsIgnoreCase(Constant.NO_REPEAT)) {
+                            isRepeat = true;
+                        } else {
+                            isRepeat = false;
                         }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
             mDialog = builder.create();
             return mDialog;
         }
@@ -402,7 +386,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
         private void showDayOfWeek(boolean isShow) {
             if (isShow) {
-                mDayOfWeekLinearLayout.animate().alpha(1.0f).setDuration(Constant.SHOW_DURATION).setListener(
+                mDayOfWeekLinearLayout.animate().alpha(1.0f).setDuration(Constant.SHOW_DURATION)
+                    .setListener(
                         new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -411,26 +396,23 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-
                             }
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
-
                             }
 
                             @Override
                             public void onAnimationRepeat(Animator animation) {
-
                             }
                         }
-                );
+                    );
             } else {
-                mDayOfWeekLinearLayout.animate().alpha(0.0f).setDuration(Constant.HIDE_DURATION).setListener(
+                mDayOfWeekLinearLayout.animate().alpha(0.0f).setDuration(Constant.HIDE_DURATION)
+                    .setListener(
                         new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
-
                             }
 
                             @Override
@@ -440,15 +422,13 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
-
                             }
 
                             @Override
                             public void onAnimationRepeat(Animator animation) {
-
                             }
                         }
-                );
+                    );
             }
         }
 
@@ -457,14 +437,14 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             mCalendarEnd.set(Calendar.YEAR, year);
             mCalendarEnd.set(Calendar.MONTH, monthOfYear);
             mCalendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
             if (mCalendarEnd.before(Calendar.getInstance())) {
-                Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT)
+                    .show();
                 mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 mEndEditText.setText("");
             } else {
                 mEndEditText.setText(Utils.formatDate(
-                        dayOfMonth, monthOfYear + 1, year
+                    dayOfMonth, monthOfYear + 1, year
                 ));
                 mDateEventFinishRepeat = mCalendarEnd.getTime();
                 mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -473,7 +453,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     }
 
     public void clickCheckBox(View v) {
-        Toast.makeText(CreateEventActivity.this, "Clicked on checkbox on Dialog", Toast.LENGTH_SHORT).show();
+        Toast
+            .makeText(CreateEventActivity.this, "Clicked on checkbox on Dialog", Toast.LENGTH_SHORT)
+            .show();
         switch (v.getId()) {
             case R.id.sun_checkbox:
                 mListDayOfWeekRepeat.add(Constant.SUNDAY);
@@ -488,7 +470,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 mListDayOfWeekRepeat.add(Constant.WEDNESDAY);
                 break;
             case R.id.thu_checkbox:
-                mListDayOfWeekRepeat.add(Constant.THURDAY);
+                mListDayOfWeekRepeat.add(Constant.THURSDAY);
                 break;
             case R.id.fri_checkbox:
                 mListDayOfWeekRepeat.add(Constant.FRIDAY);
@@ -506,28 +488,29 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
         mCreateDatePickerDialog = DatePickerDialog.newInstance(
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        mTxtDateStart.setText(
-                                Utils.formatDate(dayOfMonth, (monthOfYear + 1), year));
-
-                        mCal.set(year, monthOfYear, dayOfMonth);
-                        mDateStart = mCal.getTime();
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, monthOfYear);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        mCalendarStart = (Calendar) calendar.clone();
-                        mDateFinish = (Date) mDateStart.clone();
-                        mTxtDateFinish.setText(mTxtDateStart.getText().toString());
-                    }
-                },
-                nam,
-                thang,
-                ngay
+            new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePickerDialog view, int year, int monthOfYear,
+                                      int dayOfMonth) {
+                    mTxtDateStart.setText(
+                        Utils.formatDate(dayOfMonth, (monthOfYear + 1), year));
+                    mCal.set(year, monthOfYear, dayOfMonth);
+                    mDateStart = mCal.getTime();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, monthOfYear);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    mCalendarStart = (Calendar) calendar.clone();
+                    mDateFinish = (Date) mDateStart.clone();
+                    mTxtDateFinish.setText(mTxtDateStart.getText().toString());
+                }
+            },
+            nam,
+            thang,
+            ngay
         );
-        mCreateDatePickerDialog.show(CreateEventActivity.this.getFragmentManager(), "CreateEventStartDate");
+        mCreateDatePickerDialog
+            .show(CreateEventActivity.this.getFragmentManager(), "CreateEventStartDate");
     }
 
     public void showDateFinishPickerDialog() {
@@ -538,27 +521,29 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         int nam = Integer.parseInt(strArrtmp[2]);
         Calendar now = Calendar.getInstance();
         mCreateDatePickerDialog = DatePickerDialog.newInstance(
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        mTxtDateFinish.setText(
-                                (Utils.formatDate(dayOfMonth, (monthOfYear + 1), year)));
-                        mCal.set(year, monthOfYear, dayOfMonth);
-                        mDateFinish = mCal.getTime();
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, monthOfYear);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        mCalendarFinish = (Calendar) calendar.clone();
-                        mDateStart = (Date) mDateFinish.clone();
-                        mTxtDateStart.setText(mTxtDateFinish.getText().toString());
-                    }
-                },
-                nam,
-                thang,
-                ngay
+            new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePickerDialog view, int year, int monthOfYear,
+                                      int dayOfMonth) {
+                    mTxtDateFinish.setText(
+                        (Utils.formatDate(dayOfMonth, (monthOfYear + 1), year)));
+                    mCal.set(year, monthOfYear, dayOfMonth);
+                    mDateFinish = mCal.getTime();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, monthOfYear);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    mCalendarFinish = (Calendar) calendar.clone();
+                    mDateStart = (Date) mDateFinish.clone();
+                    mTxtDateStart.setText(mTxtDateFinish.getText().toString());
+                }
+            },
+            nam,
+            thang,
+            ngay
         );
-        mCreateDatePickerDialog.show(CreateEventActivity.this.getFragmentManager(), "CreateEventFinishDate");
+        mCreateDatePickerDialog
+            .show(CreateEventActivity.this.getFragmentManager(), "CreateEventFinishDate");
     }
 
     public void showTimeStartPickerDialog() {
@@ -566,7 +551,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             public void onTimeSet(TimePicker view,
                                   int hourOfDay, int minute) {
                 mTxtTimeStart.setText
-                        (Utils.formatTime(hourOfDay, minute));
+                    (Utils.formatTime(hourOfDay, minute));
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);
                 mHourFinish = mCal.getTime();
@@ -578,8 +563,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
         TimePickerDialog time = new TimePickerDialog(
-                CreateEventActivity.this,
-                callback, gio, phut, true);
+            CreateEventActivity.this,
+            callback, gio, phut, true);
         time.setTitle(R.string.select_time_start);
         time.show();
     }
@@ -589,22 +574,19 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             public void onTimeSet(TimePicker view,
                                   int hourOfDay, int minute) {
                 mTxtTimeFinish.setText
-                        (Utils.formatTime(hourOfDay, minute));
-
+                    (Utils.formatTime(hourOfDay, minute));
                 mCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCal.set(Calendar.MINUTE, minute);
                 mHourFinish = mCal.getTime();
                 mTimeEventFinish = mCal.getTime();
-
                 if (mTimeEventFinish == null) mTimeEventFinish = new Date();
-                if(mTimeEventStart == null) mTimeEventStart = new Date();
+                if (mTimeEventStart == null) mTimeEventStart = new Date();
                 boolean result = Utils.isBeforeHourInDate(mTimeEventFinish, mTimeEventStart);
-
                 if (result) {
-                    Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT)
+                        .show();
                     mTxtTimeFinish.setText(mTxtTimeStart.getText().toString());
                 }
-
             }
         };
         String s = mTxtTimeFinish.getTag() + "";
@@ -612,57 +594,66 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
         TimePickerDialog time = new TimePickerDialog(
-                CreateEventActivity.this,
-                callback, gio, phut, true);
+            CreateEventActivity.this,
+            callback, gio, phut, true);
         time.setTitle(R.string.select_time_finish);
         time.show();
     }
 
     public void getDataFromService(final NewEvent newEvent) {
         DialogUtils.showProgressDialog(this);
-        ServiceBuilder.getService().createEvent(newEvent).enqueue(new Callback<CreateEventResponse>() {
-            @Override
-            public void onResponse(Call<CreateEventResponse> call, Response<CreateEventResponse> response) {
-                if (response.body() == null) {
-                    String error = null;
-                    try {
-                        error = Utils.getStringFromJson(response.errorBody().string());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (error.equals(Constant.NOT_AUTHENTICATION)) {
-                        logout();
+        ServiceBuilder.getService().createEvent(newEvent)
+            .enqueue(new Callback<CreateEventResponse>() {
+                @Override
+                public void onResponse(Call<CreateEventResponse> call,
+                                       Response<CreateEventResponse> response) {
+                    if (response.body() == null) {
+                        String error = null;
+                        try {
+                            error = Utils.getStringFromJson(response.errorBody().string());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (error.equals(Constant.NOT_AUTHENTICATION)) {
+                            logout();
+                            CreateEventActivity.this.finish();
+                        } else {
+                            Toast.makeText(CreateEventActivity.this, R.string.create_error,
+                                Toast.LENGTH_SHORT).show();
+                        }
+                        DialogUtils.dismissProgressDialog();
+                    } else if (response.body().getMessage().equals(Constant.SUCCESS)) {
+                        Toast.makeText(CreateEventActivity.this, R.string.success,
+                            Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK, new Intent());
                         CreateEventActivity.this.finish();
-                    } else {
-                        Toast.makeText(CreateEventActivity.this, R.string.create_error, Toast.LENGTH_SHORT).show();
                     }
-                    DialogUtils.dismissProgressDialog();
-                } else if (response.body().getMessage().equals(Constant.SUCCESS)) {
-                    Toast.makeText(CreateEventActivity.this, R.string.success, Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK, new Intent());
-                    CreateEventActivity.this.finish();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<CreateEventResponse> call, Throwable t) {
-                DialogUtils.dismissProgressDialog();
-                DialogUtils.showErrorAlert(CreateEventActivity.this, getString(R.string.error_create_event));
-            }
-        });
+                @Override
+                public void onFailure(Call<CreateEventResponse> call, Throwable t) {
+                    DialogUtils.dismissProgressDialog();
+                    DialogUtils.showErrorAlert(CreateEventActivity.this,
+                        getString(R.string.error_create_event));
+                }
+            });
     }
 
     private void logout() {
-        Toast.makeText(CreateEventActivity.this, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
-        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(CreateEventActivity.this, "Logout Success!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        Toast.makeText(CreateEventActivity.this, Constant.MESSAGE_NOT_AUTHENTICATION,
+            Toast.LENGTH_SHORT).show();
+        new EventRepositoriesLocal(Realm.getDefaultInstance())
+            .clearDatabase(new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(CreateEventActivity.this, "Logout Success!", Toast.LENGTH_SHORT)
+                        .show();
+                }
+            });
+        SharedPreferences sharedPreferences =
+            getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
