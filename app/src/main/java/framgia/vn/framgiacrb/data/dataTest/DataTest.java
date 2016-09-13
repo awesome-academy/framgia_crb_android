@@ -12,27 +12,28 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.activity.MainActivity;
+import framgia.vn.framgiacrb.data.enums.ExceptionType;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.DayOfWeekId;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import framgia.vn.framgiacrb.data.model.Session;
+import framgia.vn.framgiacrb.utils.TimeUtils;
 import io.realm.Realm;
 
 /**
  * Created by framgia on 08/09/2016.
  */
 public class DataTest {
-    private static Realm sRealm = Realm.getDefaultInstance();
     public static final String DAILY = "daily";
     public static final String MONTHLY = "monthly";
     public static final String YEARLY = "yearly";
     public static final String WEEKLY = "weekly";
     public static final String NO_REPEAT = "no repeat";
     public static final String UPDATED = "updated";
-    public static final String EDIT_ONLY = "edit_only";
-    public static final String EDIT_ALL_FOLLOW = "edit_all_follow";
-    public static final String EDIT_ALL = "edit_all";
+    private static Realm sRealm = Realm.getDefaultInstance();
+    private static EventRepositoriesLocal sEventRepositoriesLocal =
+        new EventRepositoriesLocal(sRealm);
 
     public static void createEvent(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
@@ -43,26 +44,58 @@ public class DataTest {
                 calendarRepeat.set(Calendar.HOUR_OF_DAY, 18 - i % 18);
                 calendarRepeat.set(Calendar.MINUTE, 0);
                 calendarRepeat.set(Calendar.SECOND, 0);
-                //
                 Date startRepeat = calendarRepeat.getTime();
                 Date startTime = calendarRepeat.getTime();
-                //
                 calendarRepeat.set(Calendar.HOUR_OF_DAY, 20);
                 calendarRepeat.set(Calendar.MINUTE, 0);
                 Date finishTime = calendarRepeat.getTime();
-                //
-                calendarRepeat.add(Calendar.DAY_OF_MONTH, 100 + i);
+                calendarRepeat.add(Calendar.DAY_OF_MONTH, 1000);
                 calendarRepeat.set(Calendar.HOUR_OF_DAY, 12);
                 calendarRepeat.set(Calendar.MINUTE, 0);
                 Date endRepeat = calendarRepeat.getTime();
-                //
-                createEvent("test " + i, "" + i, startTime, finishTime, startRepeat, endRepeat);
+                Event event = createEvent("test " + i, "" + i, startTime, finishTime, startRepeat,
+                    endRepeat);
+                createEventByExceptionType(event, 1);
+                createEventByExceptionType(event, 8);
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(UPDATED, true);
             editor.apply();
             createCalender(context);
         }
+    }
+
+    private static void createEventByExceptionType(Event event, int dayOfMonth) {
+        sRealm.beginTransaction();
+        Event eventException = sRealm.createObject(Event.class);
+        eventException.setId("exception" + event.getId() + dayOfMonth);
+        eventException.setTitle("exception " + dayOfMonth);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date startTime = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 0);
+        Date finishTime = calendar.getTime();
+        eventException.setStartTime(startTime);
+        eventException.setFinishTime(finishTime);
+        eventException.setRepeatEvery(event.getRepeatEvery());
+        eventException.setRepeatType(event.getRepeatType());
+        eventException.setColorId(event.getColorId());
+        eventException.setParentId(event.getId());
+        eventException.setExceptionTime(startTime);
+        //
+        switch (dayOfMonth) {
+            case 1:
+                eventException.setExceptionType(ExceptionType.EDIT_ONLY.getValues());
+                break;
+            case 8:
+                eventException.setExceptionType(ExceptionType.DELETE_ONLY.getValues());
+                break;
+        }
+        sRealm.commitTransaction();
     }
 
     private static void createCalender(Context context) {
@@ -81,13 +114,12 @@ public class DataTest {
         sRealm.commitTransaction();
     }
 
-    public static void createEvent(String title, String id, Date startTime, Date finishTime, Date
+    public static Event createEvent(String title, String id, Date startTime, Date finishTime, Date
         startRepeat, Date endRepeat) {
         sRealm.beginTransaction();
         Event event = sRealm.createObject(Event.class);
         event.setTitle(title);
         event.setId(id);
-        // test: 09/09/2016
         switch (id) {
             case "4":
                 event.setRepeatType(NO_REPEAT);
@@ -103,7 +135,7 @@ public class DataTest {
             case "12":
                 event.setRepeatType(WEEKLY);
                 List<String> listDayOfWeekRepeat = new ArrayList<>();
-                listDayOfWeekRepeat.add("2");
+                listDayOfWeekRepeat.add("3");
                 listDayOfWeekRepeat.add("5");
                 listDayOfWeekRepeat.add("6");
                 listDayOfWeekRepeat.add("7");
@@ -148,18 +180,17 @@ public class DataTest {
             event.setEndRepeat(endRepeat);
             event.setRepeatEvery(1);
         }
-        //
         event.setStartTime(startTime);
         event.setFinishTime(finishTime);
         event.setColorId(10);
         sRealm.commitTransaction();
+        return event;
     }
 
     public static List<Event> getGenCodeEvent(Date date) {
         List<Event> genEventList = new ArrayList<>();
-        EventRepositoriesLocal eventRepositoriesLocal = new EventRepositoriesLocal(sRealm);
-        genEventList.addAll(eventRepositoriesLocal.getEventByDate(date));
-        List<Event> eventRepeatList = eventRepositoriesLocal.getAllEventRepeatByDate(date);
+        genEventList.addAll(sEventRepositoriesLocal.getEventByDate(date));
+        List<Event> eventRepeatList = sEventRepositoriesLocal.getAllEventRepeatByDate(date);
         Event eventGen = null;
         for (Event event : eventRepeatList) {
             String repeatType = event.getRepeatType();
@@ -201,35 +232,34 @@ public class DataTest {
             calendar.setTime(startTime);
             weekOfYearStartTime = calendar.get(Calendar.WEEK_OF_YEAR);
         }
-        if (compareWeek(date, startTime) && isRepeatOnAttribute(event, date)) {
-            Event eventGen = new Event();
-            int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
-            calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calendar.set(Calendar.MINUTE, minute);
-            eventGen.setStartTime(calendar.getTime());
-            //
-            calendar.setTime(finishTime);
-            hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-            minute = calendar.get(Calendar.MINUTE);
-            calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calendar.set(Calendar.MINUTE, minute);
-            eventGen.setFinishTime(calendar.getTime());
-            //
+        Event eventGen = null;
+        if (TimeUtils.compareWeek(date, startTime) && isRepeatOnAttribute(event, date)) {
+            eventGen = new Event();
+            startTime = getTimeRepeat(date, startTime);
+            finishTime = getTimeRepeat(date, finishTime);
+            eventGen.setStartTime(startTime);
+            eventGen.setFinishTime(finishTime);
             eventGen.setId(event.getId());
             eventGen.setTitle(event.getTitle());
             eventGen.setStartRepeat(event.getStartRepeat());
             eventGen.setEndRepeat(event.getEndRepeat());
             eventGen.setRepeatEvery(repeatEvery);
             eventGen.setRepeatType(repeatType);
-            //
             eventGen.setColorId(event.getColorId());
-            //
-            return eventGen;
+            eventGen = checkException(date, event, eventGen);
         }
-        return null;
+        return eventGen;
+    }
+
+    private static Date getTimeRepeat(Date date, Date dateSet) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateSet);
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        return calendar.getTime();
     }
 
     private static boolean isRepeatOnAttribute(Event event, Date date) {
@@ -263,23 +293,48 @@ public class DataTest {
         while (!startTime.after(date)) {
             startTime = getTime(startTime, repeatType, repeatEvery);
         }
-        if (compareDate(date, startTime)) {
-            Event eventGen = new Event();
+        Event eventGen = null;
+        if (TimeUtils.compareDate(date, startTime)) {
+            eventGen = new Event();
+            startTime = getTimeRepeat(date, startTime);
+            finishTime = getTimeRepeat(date, finishTime);
             eventGen.setStartTime(startTime);
-            //
-            eventGen.setFinishTime(getTime(finishTime, repeatType, repeatEvery));
-            //
+            eventGen.setFinishTime(finishTime);
             eventGen.setId(event.getId());
             eventGen.setTitle(event.getTitle());
             eventGen.setStartRepeat(event.getStartRepeat());
             eventGen.setEndRepeat(event.getEndRepeat());
             eventGen.setRepeatEvery(repeatEvery);
             eventGen.setRepeatType(repeatType);
-            //
             eventGen.setColorId(event.getColorId());
-            return eventGen;
+            eventGen = checkException(date, event, eventGen);
         }
-        return null;
+        return eventGen;
+    }
+
+    private static Event checkException(Date date, Event event, Event eventGen) {
+        List<Event> eventChangeList = sEventRepositoriesLocal.getEventByParentId(event.getId());
+        for (Event eventChange : eventChangeList) {
+            switch (ExceptionType.getExceptionType(eventChange.getExceptionType())) {
+                case DELETE_ONLY:
+                    if (TimeUtils.compareDate(date, eventChange.getStartTime())) {
+                        eventGen = null;
+                    }
+                    break;
+                case EDIT_ONLY:
+                    if (TimeUtils.compareDate(date, eventChange.getStartTime())) {
+                        if (eventGen != null) {
+                            eventGen.setId(eventChange.getId());
+                            eventGen.setTitle(eventChange.getTitle());
+                            eventGen.setStartTime(eventChange.getStartTime());
+                            eventGen.setFinishTime(eventChange.getFinishTime());
+                            eventGen.setColorId(eventChange.getColorId());
+                        }
+                    }
+                    break;
+            }
+        }
+        return eventGen;
     }
 
     private static Date getTime(Date time, String repeatType, int repeatEvery) {
@@ -300,31 +355,5 @@ public class DataTest {
                 break;
         }
         return calendar.getTime();
-    }
-
-    public static boolean compareDate(Date date1, Date date2) {
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTime(date1);
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.setTime(date2);
-        return (calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) &&
-            calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
-            calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH));
-    }
-
-    private static boolean compareWeek(Date date1, Date date2) {
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTime(date1);
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.setTime(date2);
-        return (calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) &&
-            calendar1.get(Calendar.WEEK_OF_YEAR) == calendar2.get(Calendar.WEEK_OF_YEAR));
-    }
-
-    public static List<Event> getAllEvent() {
-        return sRealm.where(Event.class).findAll();
-    }
-
-    public void editEvent(Event event) {
     }
 }

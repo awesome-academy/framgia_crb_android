@@ -44,20 +44,23 @@ public class Event extends RealmObject {
     private int mCalendarId;
     @SerializedName("all_day")
     private boolean mAllDay;
-
     @SerializedName("start_repeat")
     private Date mStartRepeat;
-
     @SerializedName("end_repeat")
     private Date mEndRepeat;
-
     @SerializedName("user_id")
     private int mUserId;
-
     @SerializedName("repeat_ons_attributes")
     private RepeatOnAttribute mRepeatOnAttribute;
+    @SerializedName("parent_id")
+    private String mParentId;
+    @SerializedName("exception_type")
+    private String mExceptionType;
+    @SerializedName("exception_time")
+    private Date mExceptionTime;
 
-    public Event() {}
+    public Event() {
+    }
 
     public Event(Event event) {
         this.mId = event.getId();
@@ -232,5 +235,29 @@ public class Event extends RealmObject {
 
     public void setRepeatOnAttribute(RepeatOnAttribute mRepeatOnAttribute) {
         this.mRepeatOnAttribute = mRepeatOnAttribute;
+    }
+
+    public String getParentId() {
+        return mParentId;
+    }
+
+    public void setParentId(String parentId) {
+        mParentId = parentId;
+    }
+
+    public String getExceptionType() {
+        return mExceptionType;
+    }
+
+    public void setExceptionType(String exceptionType) {
+        mExceptionType = exceptionType;
+    }
+
+    public Date getExceptionTime() {
+        return mExceptionTime;
+    }
+
+    public void setExceptionTime(Date exceptionTime) {
+        mExceptionTime = exceptionTime;
     }
 }
