@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +46,6 @@ public class DataTest {
                 //
                 Date startRepeat = calendarRepeat.getTime();
                 Date startTime = calendarRepeat.getTime();
-                startTime.setTime(calendarRepeat.getTimeInMillis());
                 //
                 calendarRepeat.set(Calendar.HOUR_OF_DAY, 20);
                 calendarRepeat.set(Calendar.MINUTE, 0);
@@ -176,6 +177,13 @@ public class DataTest {
                 genEventList.add(eventGen);
             }
         }
+        Collections.sort(genEventList, new Comparator<Event>() {
+                @Override
+                public int compare(Event event1, Event event2) {
+                    return event1.getStartTime().compareTo(event2.getStartTime());
+                }
+            }
+        );
         return genEventList;
     }
 
@@ -195,9 +203,20 @@ public class DataTest {
         }
         if (compareWeek(date, startTime) && isRepeatOnAttribute(event, date)) {
             Event eventGen = new Event();
-            eventGen.setStartTime(startTime);
+            int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            eventGen.setStartTime(calendar.getTime());
             //
-            eventGen.setFinishTime(getTime(finishTime, repeatType, repeatEvery));
+            calendar.setTime(finishTime);
+            hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+            minute = calendar.get(Calendar.MINUTE);
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            eventGen.setFinishTime(calendar.getTime());
             //
             eventGen.setId(event.getId());
             eventGen.setTitle(event.getTitle());
@@ -304,5 +323,8 @@ public class DataTest {
 
     public static List<Event> getAllEvent() {
         return sRealm.where(Event.class).findAll();
+    }
+
+    public void editEvent(Event event) {
     }
 }
