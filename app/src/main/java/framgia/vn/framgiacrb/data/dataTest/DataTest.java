@@ -36,28 +36,27 @@ public class DataTest {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
             MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         if (!sharedPreferences.getBoolean(UPDATED, false)) {
-//            for (int i = 1; i < 300; i++) {
-            int i = 1;
-            Calendar calendarRepeat = Calendar.getInstance();
-//            calendarRepeat.add(Calendar.DAY_OF_MONTH, 0);
-            calendarRepeat.set(Calendar.HOUR_OF_DAY, 18);
-            calendarRepeat.set(Calendar.MINUTE, 0);
-            calendarRepeat.set(Calendar.SECOND, 0);
-            //
-            Date startRepeat = calendarRepeat.getTime();
-            Date startTime = calendarRepeat.getTime();
-            //
-            calendarRepeat.set(Calendar.HOUR_OF_DAY, 20);
-            calendarRepeat.set(Calendar.MINUTE, 0);
-            Date finishTime = calendarRepeat.getTime();
-            //
-            calendarRepeat.add(Calendar.DAY_OF_MONTH, 100 + i);
-            calendarRepeat.set(Calendar.HOUR_OF_DAY, 12);
-            calendarRepeat.set(Calendar.MINUTE, 0);
-            Date endRepeat = calendarRepeat.getTime();
-            //
-            createEvent("test " + i, "" + i, startTime, finishTime, startRepeat, endRepeat);
-//            }
+            for (int i = 1; i < 300; i++) {
+                Calendar calendarRepeat = Calendar.getInstance();
+                calendarRepeat.set(Calendar.HOUR_OF_DAY, 18 - i % 18);
+                calendarRepeat.set(Calendar.MINUTE, 0);
+                calendarRepeat.set(Calendar.SECOND, 0);
+                //
+                Date startRepeat = calendarRepeat.getTime();
+                Date startTime = calendarRepeat.getTime();
+                startTime.setTime(calendarRepeat.getTimeInMillis());
+                //
+                calendarRepeat.set(Calendar.HOUR_OF_DAY, 20);
+                calendarRepeat.set(Calendar.MINUTE, 0);
+                Date finishTime = calendarRepeat.getTime();
+                //
+                calendarRepeat.add(Calendar.DAY_OF_MONTH, 100 + i);
+                calendarRepeat.set(Calendar.HOUR_OF_DAY, 12);
+                calendarRepeat.set(Calendar.MINUTE, 0);
+                Date endRepeat = calendarRepeat.getTime();
+                //
+                createEvent("test " + i, "" + i, startTime, finishTime, startRepeat, endRepeat);
+            }
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(UPDATED, true);
             editor.apply();
@@ -87,7 +86,6 @@ public class DataTest {
         Event event = sRealm.createObject(Event.class);
         event.setTitle(title);
         event.setId(id);
-        event.setRepeatType(DAILY);
         // test: 09/09/2016
         switch (id) {
             case "4":
@@ -139,6 +137,9 @@ public class DataTest {
                     }
                 }
                 event.setRepeatOnAttribute(repeatOnAttribute);
+                break;
+            default:
+                event.setRepeatType(DAILY);
                 break;
         }
         if (!event.getRepeatType().equals(NO_REPEAT)) {

@@ -8,60 +8,40 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by nghicv on 20/07/2016.
- */
 public class Event extends RealmObject {
-
     @PrimaryKey
     @SerializedName("id")
     private String mId;
-
     @SerializedName("title")
     private String mTitle;
-
     @SerializedName("description")
     private String mDescription;
-
     @SerializedName("start_date")
     private Date mStartTime;
-
     @SerializedName("finish_date")
     private Date mFinishTime;
-
     @SerializedName("status")
     private String mStatus;
-
     @SerializedName("repeat_type")
     private String mRepeatType;
-
     @SerializedName("repeat_every")
     private int mRepeatEvery;
-
     @SerializedName("end_date")
     private Date mEndDate;
-
     @SerializedName("exception_date")
     private Date mExceptionDate;
-
     @SerializedName("type")
     private int mType;
-
     @SerializedName("event_id")
     private int mEventId;
-
     @SerializedName("color_id")
     private int mColorId;
-
     @SerializedName("attendees")
     private RealmList<Attendee> mAttendees;
-
     @SerializedName("place")
     private Place mPlace;
-
     @SerializedName("calendar_id")
     private int mCalendarId;
-
     @SerializedName("all_day")
     private boolean mAllDay;
 
@@ -76,6 +56,31 @@ public class Event extends RealmObject {
 
     @SerializedName("repeat_ons_attributes")
     private RepeatOnAttribute mRepeatOnAttribute;
+
+    public Event() {}
+
+    public Event(Event event) {
+        this.mId = event.getId();
+        this.mTitle = event.getTitle();
+        this.mDescription = event.getDescription();
+        this.mStartTime = event.getStartTime();
+        this.mFinishTime = event.getFinishTime();
+        this.mStatus = event.getStatus();
+        this.mRepeatType = event.getRepeatType();
+        this.mRepeatEvery = event.getRepeatEvery();
+        this.mExceptionDate = event.getExceptionDate();
+        this.mType = event.getType();
+        this.mEventId = event.getEventId();
+        this.mColorId = event.getColorId();
+        this.mPlace = event.getPlace();
+        this.mAttendees = event.getAttendees();
+        this.mCalendarId = event.getCalendarId();
+        this.mAllDay = event.isAllDay();
+        this.mUserId = event.getUserId();
+        this.mStartRepeat = event.getStartRepeat();
+        this.mEndRepeat = event.getEndRepeat();
+        this.mRepeatOnAttribute = event.getRepeatOnAttribute();
+    }
 
     public int getColorId() {
         return mColorId;
@@ -177,16 +182,15 @@ public class Event extends RealmObject {
         mEventId = eventId;
     }
 
-
-    public boolean isAllday() {
+    public boolean isAllDay() {
         return mAllDay;
     }
 
-    public void setAllday(boolean mAllday) {
+    public void setAllDay(boolean mAllday) {
         this.mAllDay = mAllday;
     }
 
-    public int getUserid() {
+    public int getUserId() {
         return mUserId;
     }
 
