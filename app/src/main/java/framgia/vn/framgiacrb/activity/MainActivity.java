@@ -83,11 +83,10 @@ public class MainActivity extends AppCompatActivity {
     private MonthToolbarPagerAdapter mAdapter;
     private RealmResults<framgia.vn.framgiacrb.data.model.Calendar> mUserCalendar;
     private SharedPreferences mSharedPreferences;
-
+    public static Date sCurrentDate = null;
+    private boolean mToolbarIsTouched;
     int currentMenuItemId;
     boolean isExpanded = false;
-    float currentRotation = 360.0f;
-
     private Toolbar mToolbar;
 
     private int mSelectedColor;
@@ -102,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mCurrentFragment;
     private Fragment mEventFollowWeekFragment;
     private FragmentManager mFragmentManager;
+    private int mPositionSelected;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
 
@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mFragmentManager = getSupportFragmentManager();
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
         mUserCalendar = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
         mSharedPreferences = getSharedPreferences(SHAREPREFF, Context.MODE_PRIVATE);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
@@ -119,10 +118,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         initUi();
         assignHandler();
-        mCurrentMenuItemPosition = 1;
-        mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
-        updateDisplayView(mCurrentMenuItemPosition);
-        currentMenuItemId = R.id.home;
+        initContentFrame();
     } // end of method onCreate
 
     private void initUi() {
@@ -154,20 +150,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.YEAR, position / 12 + MonthToolbarPagerAdapter.MIN_YEAR);
-                calendar.set(Calendar.MONTH, position % 12);
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                sendBroadcastGotoToday(MainActivity.dateFormat.format(calendar.getTime()));
-                Date date = calendar.getTime();
-                setSubTitle(MainActivity.dateFormat.format(date));
-                if (position == mPreviousSelected) {
-                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
-                    mv.setSelected(false);
-                } else if (position == mCurrentPosition) {
-                    MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mCurrentPosition);
-                    mv.setSelect(X, Y);
-                    mv.setSelected(true);
+                if (!mToolbarIsTouched) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, position / 12 + MonthToolbarPagerAdapter.MIN_YEAR);
+                    calendar.set(Calendar.MONTH, position % 12);
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    sendBroadcastGotoToday(MainActivity.dateFormat.format(calendar.getTime()));
+                    Date date = calendar.getTime();
+                    setSubTitle(MainActivity.dateFormat.format(date));
+                    if (position == mPreviousSelected) {
+                        MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mPreviousSelected);
+                        mv.setSelected(false);
+                    } else if (position == mCurrentPosition) {
+                        MonthView mv = (MonthView) mCalendarViewPager.findViewWithTag("month" + mCurrentPosition);
+                        mv.setSelect(X, Y);
+                        mv.setSelected(true);
+                    }
                 }
             }
 
@@ -220,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
         mListMenu.add(logout);
         mListMenuAdapter = new ListMenuAdapter(this, mListMenu);
         mNavigationListView.setAdapter(mListMenuAdapter);
-        //mNavigationListView
     }
 
     @SuppressWarnings("deprecation")
@@ -232,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 if (date == null) date = new Date();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
+                mToolbarIsTouched = true;
                 mCalendarViewPager.setCurrentItem((calendar.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12 + calendar.get(Calendar.MONTH));
                 if (isExpanded) {
                     closeToolbar();
@@ -255,6 +253,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                ItemLeftMenu item = mListMenu.get(mPositionSelected);
+                if (mCurrentFragment != null) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.frame, mCurrentFragment).commit();
+                }
+                if (mPositionSelected != 0 && mPositionSelected < 4) {
+                    mDrawerLayout.closeDrawers();
+                    mCurrentMenuItemPosition = mPositionSelected;
+                } else if (mPositionSelected == 0 || mPositionSelected == 4) {
+                    Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT).show();
+                    mNavigationListView.setItemChecked(mPositionSelected, false);
+                    mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
+                } else if (mPositionSelected > 4) {
+                    mDrawerLayout.closeDrawers();
+                    Session.sCalendarId = item.getCalendarId();
+                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
+                    editor.apply();
+                    Toast.makeText(MainActivity.this, "" + Session.sCalendarId, Toast.LENGTH_SHORT).show();
+                }
             }
         };
 //        mNavigationListView.setSelection(3);
@@ -301,26 +320,7 @@ public class MainActivity extends AppCompatActivity {
             case LABEL:
                 break;
         }
-        if (mCurrentFragment != null) {
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.frame, mCurrentFragment).commit();
-        }
-        if (position != 0 && position < 4) {
-            mDrawerLayout.closeDrawers();
-            mCurrentMenuItemPosition = position;
-        } else if (position == 0 || position == 4) {
-            Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT).show();
-            mNavigationListView.setItemChecked(position, false);
-            mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
-        } else if (position > 4) {
-            mDrawerLayout.closeDrawers();
-            Session.sCalendarId = item.getCalendarId();
-            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
-            editor.apply();
-            Toast.makeText(MainActivity.this, "" + Session.sCalendarId, Toast.LENGTH_SHORT).show();
-        }
+        mDrawerLayout.closeDrawers();
     }
 
     private void logout() {
@@ -342,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
     private void openToolbar() {
         mAppBarLayout.setExpanded(true, true);
         isExpanded = true;
+        mToolbarIsTouched = false;
     }
 
     private void closeToolbar() {
@@ -371,10 +372,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(MonthView.YEAR, current.get(Calendar.YEAR));
                 intent.putExtra(MonthView.MONTH, current.get(Calendar.MONTH));
                 this.sendBroadcast(intent);
-                mCalendarViewPager.setCurrentItem(
-                        (current.get(Calendar.YEAR) - MonthToolbarPagerAdapter.MIN_YEAR) * 12
-                                + current.get(Calendar.MONTH));
                 setSubTitle(dateFormat.format(current.getTime()));
+                closeToolbar();
                 break;
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));
@@ -387,6 +386,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initContentFrame() {
+        mPositionSelected = 0;
+        mCurrentMenuItemPosition = 1;
+        mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
+        currentMenuItemId = R.id.home;
+        mCurrentFragment = new EventsFragment();
+        ((EventsFragment) mCurrentFragment).setOnCloseToolbarListener(new OnCloseToolbarListener() {
+            @Override
+            public void onCloseToolbar(boolean isClose) {
+                if (isClose) closeToolbar();
+            }
+        });
+        if (mCurrentFragment != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.frame, mCurrentFragment).commit();
+        }
     }
 
     @Override

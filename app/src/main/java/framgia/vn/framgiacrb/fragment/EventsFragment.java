@@ -14,7 +14,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
-import android.util.Log;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,6 +53,7 @@ import io.realm.Realm;
 public class EventsFragment extends Fragment {
 
     public static final int REQUEST_CODE = 1;
+    public static final int OFFSET_ITEM_TODAY = 60;
     private View mViewEvents;
     private RecyclerView mRecyclerViewEvents;
     private FloatingActionButton mFloatingActionButton;
@@ -72,6 +74,8 @@ public class EventsFragment extends Fragment {
     private BroadcastReceiver mBroadcastReceiverToDate;
     private framgia.vn.framgiacrb.data.model.Calendar mCalendar;
     private OnCloseToolbarListener mOnCloseToolbarListener;
+    private Date mCurrentDate;
+    private int mCurrentPosition;
 
     @Nullable
     @Override
@@ -96,22 +100,19 @@ public class EventsFragment extends Fragment {
 
             @Override
             public void onError() {
-
+                Toast.makeText(getActivity(), getString(R.string.message_error), Toast.LENGTH_SHORT).show();
             }
         });
-
-        refreshData();
+        if (MainActivity.sCurrentDate == null) {
+            refreshData();
+        } else {
+            loadDatasRestore();
+        }
         mBroadcastReceiverToday = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(MainActivity.ACTION_TODAY)) {
-                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
-                    int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                    if (firstVisibleItem > mPositionToday) {
-                        mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
-                    } else {
-                        mRecyclerViewEvents.scrollToPosition(mPositionToday + 5);
-                    }
+                    scrollToposition(mPositionToday, OFFSET_ITEM_TODAY);
                 }
             }
         };
@@ -126,9 +127,9 @@ public class EventsFragment extends Fragment {
                     int position = -1;
                     if ((month > mLastMonth && year == mLastYear) || (month == 1 && year > mLastYear)) {
                         try {
-                            position = mDatas.size();
                             loadDatasForNextMonth();
                             mAdapter.notifyDataSetChanged();
+                            position = findPositionByDate(date);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -142,7 +143,7 @@ public class EventsFragment extends Fragment {
                     } else {
                         position = findPositionByDate(date);
                     }
-                    mRecyclerViewEvents.smoothScrollToPosition(position);
+                    scrollToposition(position, 0);
                 }
             }
         };
@@ -167,6 +168,21 @@ public class EventsFragment extends Fragment {
                 e.printStackTrace();
             }
             Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadDatasRestore() {
+        if (MainActivity.sCurrentDate != null) {
+            try {
+                initDatas();
+                int left = 0;
+                int right = mDatas.size();
+                restoreData(left, right);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            setRefreshing(false);
+            return;
         }
     }
 
@@ -292,7 +308,7 @@ public class EventsFragment extends Fragment {
         if (mPositionToday > 20) {
             loadDatasForNextMonth();
         }
-        mRecyclerViewEvents.scrollToPosition(mPositionToday - 2);
+        scrollToposition(mPositionToday, OFFSET_ITEM_TODAY);
     }
 
     private synchronized void loadDatasForNextMonth() throws ParseException {
@@ -354,8 +370,10 @@ public class EventsFragment extends Fragment {
     private void setDateForCalendar(int position) {
         Object object = mDatas.get(position);
         if (object instanceof Date) {
-            Date date = (Date) object;
-            ((MainActivity) getActivity()).setSubTitle(TimeUtils.toStringDate(date, TimeUtils.DATE_FORMAT_TOOLBAR));
+            mCurrentDate = (Date) object;
+            MainActivity.sCurrentDate = mCurrentDate;
+            mCurrentPosition = position;
+            ((MainActivity) getActivity()).setSubTitle(TimeUtils.toStringDate(mCurrentDate, TimeUtils.DATE_FORMAT_TOOLBAR));
         }
     }
 
@@ -374,18 +392,28 @@ public class EventsFragment extends Fragment {
     }
 
     private int findPositionByDate(Date date) {
-        int i;
-        for (i = 0; i < mDatas.size(); i++) {
-            try {
-                if (mDatas.get(i) instanceof Date) {
-                    if (TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
-                        break;
+        int left = 0;
+        int right = mDatas.size();
+        try {
+            if (mCurrentDate.before(TimeUtils.formatDate(date))) {
+                left = mCurrentPosition;
+                for (int i = left; i <= right; i++) {
+                    if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                        return i;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } else {
+                right = mCurrentPosition;
+                for (int i = right; i >= left; i--) {
+                    if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                        return i;
+                }
             }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
         }
-        return i;
+        return -1;
     }
 
     @Override
@@ -394,5 +422,50 @@ public class EventsFragment extends Fragment {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             refreshData();
         }
+    }
+
+    private void scrollToposition(int position, int offSet) {
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int offSetPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, offSet, metrics);
+        linearLayoutManager.scrollToPositionWithOffset(position, (int) offSetPx);
+    }
+
+    private void restoreData(int left, int right) {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(MainActivity.sCurrentDate);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            if (month <= mLastMonth && month >= mFirstMonth) {
+                int position = findDate(left, right, MainActivity.sCurrentDate);
+                scrollToposition(position, 0);
+                return;
+            }
+            if (month > mLastMonth) {
+                left = mDatas.size();
+                loadDatasForNextMonth();
+                restoreData(left, mDatas.size());
+            } else {
+                loadDatasForPrevMonth();
+                restoreData(left, mDatas.size() - right);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private int findDate(int left, int right, Date date) {
+        for (int i = left; i < right; i++) {
+            try {
+                if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                    return i;
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
+        return -1;
     }
 }
