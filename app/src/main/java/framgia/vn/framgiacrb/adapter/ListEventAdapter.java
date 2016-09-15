@@ -179,7 +179,12 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private String mId;
         public EventViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
+            tvTime = (TextView) itemView.findViewById(R.id.tv_time);
+            cardView = (CardView) itemView.findViewById(R.id.card_view_item_event);
+            linearLayoutLocation = (LinearLayout) itemView.findViewById(R.id.ll_location);
+            tvLocation = (TextView) itemView.findViewById(R.id.tv_location);
+            cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnEventSelectedListener != null) {
@@ -187,11 +192,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                 }
             });
-            tvTitleEvent = (TextView) itemView.findViewById(R.id.tv_title_event);
-            tvTime = (TextView) itemView.findViewById(R.id.tv_time);
-            cardView = (CardView) itemView.findViewById(R.id.card_view_item_event);
-            linearLayoutLocation = (LinearLayout) itemView.findViewById(R.id.ll_location);
-            tvLocation = (TextView) itemView.findViewById(R.id.tv_location);
         }
 
         public void setId(String id) {

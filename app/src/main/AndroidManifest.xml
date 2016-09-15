@@ -61,6 +61,9 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity android:name=".activity.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <receiver
             android:name=".services.AlarmReceiver"
             android:exported="false"/>

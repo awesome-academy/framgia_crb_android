@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String MONTH = "Month";
     private static final String LABEL = "Calendar";
     private static final String LOGOUT = "Logout";
-    private static final int ANIMATION_DURATION = 300;
-    private static final int NUMBER_COLUMN = 5;
 
     private DrawerLayout mDrawerLayout;
     private ListView mNavigationListView;
@@ -102,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mEventFollowWeekFragment;
     private FragmentManager mFragmentManager;
     private int mPositionSelected;
+    private boolean mMenuIsSelected;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
 
@@ -248,31 +247,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                mMenuIsSelected = false;
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                ItemLeftMenu item = mListMenu.get(mPositionSelected);
-                if (mCurrentFragment != null) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.frame, mCurrentFragment).commit();
-                }
-                if (mPositionSelected != 0 && mPositionSelected < 4) {
-                    mDrawerLayout.closeDrawers();
-                    mCurrentMenuItemPosition = mPositionSelected;
-                } else if (mPositionSelected == 0 || mPositionSelected == 4) {
-                    Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT).show();
-                    mNavigationListView.setItemChecked(mPositionSelected, false);
-                    mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
-                } else if (mPositionSelected > 4) {
-                    mDrawerLayout.closeDrawers();
-                    Session.sCalendarId = item.getCalendarId();
-                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
-                    editor.apply();
-                    Toast.makeText(MainActivity.this, "" + Session.sCalendarId, Toast.LENGTH_SHORT).show();
+                if (mMenuIsSelected) {
+                    ItemLeftMenu item = mListMenu.get(mPositionSelected);
+                    if (mCurrentFragment != null) {
+                        FragmentManager fm = getSupportFragmentManager();
+                        fm.beginTransaction().replace(R.id.frame, mCurrentFragment).commit();
+                    }
+                    if (mPositionSelected != 0 && mPositionSelected < 4) {
+                        mDrawerLayout.closeDrawers();
+                        mCurrentMenuItemPosition = mPositionSelected;
+                    } else if (mPositionSelected == 0 || mPositionSelected == 4) {
+                        Toast.makeText(MainActivity.this, mCurrentMenuItemPosition + "", Toast.LENGTH_SHORT).show();
+                        mNavigationListView.setItemChecked(mPositionSelected, false);
+                        mNavigationListView.setItemChecked(mCurrentMenuItemPosition, true);
+                    } else if (mPositionSelected > 4) {
+                        mDrawerLayout.closeDrawers();
+                        Session.sCalendarId = item.getCalendarId();
+                        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(Session.CALENDAR_ID, Session.sCalendarId);
+                        editor.apply();
+                        Toast.makeText(MainActivity.this, "" + Session.sCalendarId, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         };
@@ -289,6 +291,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateDisplayView(int position) {
         ItemLeftMenu item = mListMenu.get(position);
+        mPositionSelected = position;
+        mMenuIsSelected = true;
         switch (item.getTitle()) {
             case HOME:
                 mCurrentFragment = new EventsFragment();
@@ -324,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
+        sCurrentDate = null;
         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
