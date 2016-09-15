@@ -28,6 +28,8 @@ public class EventRepositoriesLocal implements EventRepository {
     public static final String END_REPEAT = "mEndRepeat";
     public static final String START_TIME = "mStartTime";
     public static final String REPEAT_TYPE = "mRepeatType";
+    public static final String PARENT_ID = "mParentId";
+    public static final String EXCEPTION_DATE = "mExceptionDate";
     private Realm mRealm;
 
     public EventRepositoriesLocal(Realm realm) {
@@ -119,11 +121,23 @@ public class EventRepositoriesLocal implements EventRepository {
     }
 
     @Override
-    public void deleteEvent(Event event) {
+    public void deleteEvent(final Event event) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                event.deleteFromRealm();
+            }
+        });
     }
 
     @Override
-    public void updateEvent(Event event) {
+    public void updateEvent(final Event event) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mRealm.copyToRealmOrUpdate(event);
+            }
+        });
     }
 
     @Override
@@ -140,7 +154,11 @@ public class EventRepositoriesLocal implements EventRepository {
         return mRealm.where(Event.class).findFirst();
     }
 
-    // no repeat
+    public List<Event> getEventByParentId(String parentId) {
+        return mRealm.where(Event.class)
+            .equalTo(PARENT_ID, parentId).findAll();
+    }
+
     @Override
     public RealmResults<Event> getEventByDate(Date date) {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
