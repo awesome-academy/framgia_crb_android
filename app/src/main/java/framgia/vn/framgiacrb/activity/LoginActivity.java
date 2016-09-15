@@ -53,7 +53,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         if (sharedPreferences.contains(Session.AUTHTOKEN)) {
             Session.sAuthToken = sharedPreferences.getString(Session.AUTHTOKEN, null);
             Session.sCalendarId = sharedPreferences.getInt(Session.CALENDAR_ID, -1);
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
             startActivity(intent);
             finish();
         }
@@ -162,7 +162,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
 
     @Override
     public void onSuccess() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
         startActivity(intent);
         finish();
     }

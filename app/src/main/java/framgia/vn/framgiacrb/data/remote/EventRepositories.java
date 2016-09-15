@@ -3,6 +3,7 @@ package framgia.vn.framgiacrb.data.remote;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -110,7 +111,7 @@ public class EventRepositories implements EventRepository{
         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Toast.makeText(context, "Logout Success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.message_logout_success, Toast.LENGTH_SHORT).show();
             }
         });
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
@@ -119,7 +120,7 @@ public class EventRepositories implements EventRepository{
         editor.apply();
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
-        ((MainActivity)context).finish();
+        ((AppCompatActivity)context).finish();
     }
 
     @Override

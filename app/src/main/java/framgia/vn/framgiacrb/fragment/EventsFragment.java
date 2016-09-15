@@ -50,7 +50,7 @@ import io.realm.Realm;
 /**
  * Created by nghicv on 04/07/2016.
  */
-public class EventsFragment extends Fragment {
+public class EventsFragment extends Fragment implements OnLoadEventListener {
 
     public static final int REQUEST_CODE = 1;
     public static final int OFFSET_ITEM_TODAY = 60;
@@ -87,24 +87,13 @@ public class EventsFragment extends Fragment {
         mRealm = Realm.getDefaultInstance();
         mEventRepositoriesLocal = new EventRepositoriesLocal(mRealm);
         mEventRepositories = new EventRepositories();
-        mEventRepositories.setOnLoadEventListener(new OnLoadEventListener() {
-            @Override
-            public void onSuccess() {
-                try {
-                    initDatas();
-                    setRefreshing(false);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError() {
-                Toast.makeText(getActivity(), getString(R.string.message_error), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mEventRepositories.setOnLoadEventListener(this);
         if (MainActivity.sCurrentDate == null) {
-            refreshData();
+            try {
+                initDatas();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         } else {
             loadDatasRestore();
         }
@@ -172,18 +161,15 @@ public class EventsFragment extends Fragment {
     }
 
     private void loadDatasRestore() {
-        if (MainActivity.sCurrentDate != null) {
-            try {
-                initDatas();
-                int left = 0;
-                int right = mDatas.size();
-                restoreData(left, right);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            setRefreshing(false);
-            return;
+        try {
+            initDatas();
+            int left = 0;
+            int right = mDatas.size();
+            restoreData(left, right);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        setRefreshing(false);
     }
 
     private void initViews() {
@@ -436,12 +422,13 @@ public class EventsFragment extends Fragment {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(MainActivity.sCurrentDate);
             int month = calendar.get(Calendar.MONTH) + 1;
-            if (month <= mLastMonth && month >= mFirstMonth) {
+            int year = calendar.get(Calendar.YEAR);
+            if ((month == mLastMonth && year == mLastYear) || (month == mFirstMonth && year == mFirstYear)) {
                 int position = findDate(left, right, MainActivity.sCurrentDate);
                 scrollToposition(position, 0);
                 return;
             }
-            if (month > mLastMonth) {
+            if ((month > mLastMonth && mLastYear == year) ||(month <= mLastMonth && year > mLastYear)) {
                 left = mDatas.size();
                 loadDatasForNextMonth();
                 restoreData(left, mDatas.size());
@@ -467,5 +454,20 @@ public class EventsFragment extends Fragment {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void onSuccess() {
+        try {
+            initDatas();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        setRefreshing(false);
+    }
+
+    @Override
+    public void onError() {
+        Toast.makeText(getActivity(), getString(R.string.message_error), Toast.LENGTH_SHORT).show();
     }
 }
