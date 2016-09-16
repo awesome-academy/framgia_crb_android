@@ -7,7 +7,8 @@ import android.text.TextUtils;
  */
 public enum ExceptionType {
     DELETE_ONLY("delete_only"),
-    EDIT_ONLY("edit_only");
+    EDIT_ONLY("edit_only"),
+    EDIT_ALL_FOLLOW("edit_all_follow");
     private String mValues;
 
     ExceptionType(String values) {

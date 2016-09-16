@@ -29,7 +29,7 @@ public class EventRepositoriesLocal implements EventRepository {
     public static final String START_TIME = "mStartTime";
     public static final String REPEAT_TYPE = "mRepeatType";
     public static final String PARENT_ID = "mParentId";
-    public static final String EXCEPTION_DATE = "mExceptionDate";
+    public static final String EXCEPTION_TYPE = "mExceptionType";
     private Realm mRealm;
 
     public EventRepositoriesLocal(Realm realm) {
