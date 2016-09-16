@@ -75,8 +75,9 @@ public class Event extends RealmObject {
         this.mType = event.getType();
         this.mEventId = event.getEventId();
         this.mColorId = event.getColorId();
-        this.mPlace = event.getPlace();
-        this.mAttendees = event.getAttendees();
+        this.mPlace = (event.getPlace() == null) ? null : new Place(event.getPlace());
+        this.mAttendees = (event.getAttendees() == null) ? null : Attendee.cloneListAttendee(event
+            .getAttendees());
         this.mCalendarId = event.getCalendarId();
         this.mAllDay = event.isAllDay();
         this.mUserId = event.getUserId();

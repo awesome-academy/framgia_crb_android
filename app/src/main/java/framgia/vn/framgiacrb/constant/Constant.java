@@ -39,4 +39,5 @@ public class Constant {
     public static final String NOT_AUTHENTICATION = "Not authenticated";
     public static final String MESSAGE_NOT_AUTHENTICATION =
         "This account has been login in other device";
+    public static final int INVALID_INDEX = -1;
 }
