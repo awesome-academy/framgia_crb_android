@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+import framgia.vn.framgiacrb.activity.SearchActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
 import io.realm.OrderedRealmCollection;
@@ -19,6 +20,11 @@ public class SearchUtil {
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
         RealmList<Event> list = new RealmList();
         list.addAll(generateEvent(data));
+        Event firstEvent = list.get(0);
+        if (SearchActivity.sNotNeedYear && TimeUtils.getYear(firstEvent.getStartTime()) ==
+            SearchActivity.sYear) {
+            return list;
+        }
         Event yearInSearch = new Event();
         if (list.size() == 0) {
             return list;
@@ -45,8 +51,15 @@ public class SearchUtil {
         int lenth = data.size();
         for (int i = 0; i < lenth; i++) {
             Event event = data.get(i);
-            list.add(event);
-            if (event.getRepeatType() == Constant.NO_REPEAT) {
+            if (TimeUtils.getMonth(event.getStartTime()) > SearchActivity.sMonth
+                && TimeUtils.getYear(event.getStartTime()) >= SearchActivity.sYear) {
+                return list;
+            }
+            if (TimeUtils.getMonth(event.getStartTime()) == SearchActivity.sMonth
+                && TimeUtils.getYear(event.getStartTime()) == SearchActivity.sYear) {
+                list.add(new Event(event));
+            }
+            if (event.getRepeatType().equals(Constant.NO_REPEAT)) {
                 continue;
             }
             if (event.getRepeatType().equals(Constant.REPEAT_DAILY)) {
@@ -57,10 +70,18 @@ public class SearchUtil {
                         + ONE_DAY * event.getRepeatEvery());
                     Event childEvent = new Event(event);
                     childEvent.setStartTime(new Date(childEventDate.getTime()));
-                    list.add(childEvent);
+                    if (TimeUtils.getMonth(childEventDate) > SearchActivity.sMonth
+                        && TimeUtils.getYear(childEventDate) >= SearchActivity.sYear) {
+                        break;
+                    }
+                    if (TimeUtils.getMonth(childEventDate) == SearchActivity.sMonth
+                        && TimeUtils.getYear(childEventDate) == SearchActivity.sYear) {
+                        list.add(childEvent);
+                    }
                 }
             }
-            if(event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {}
+            if (event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {
+            }
         }
         Collections.sort(list, new Comparator<Event>() {
             @Override

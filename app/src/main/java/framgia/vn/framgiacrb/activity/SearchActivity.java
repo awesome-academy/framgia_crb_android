@@ -11,20 +11,28 @@ import android.view.MenuItem;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.SearchEventAdapter;
-import framgia.vn.framgiacrb.object.RealmController;
-import io.realm.Realm;
+import framgia.vn.framgiacrb.asyntask.SearchEventAsynTask;
+import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.ui.listener.AsyncTaskFinishListener;
+import io.realm.RealmList;
 
 /**
  * Created by lethuy on 04/07/2016.
  */
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements AsyncTaskFinishListener {
     private Toolbar mToolbar;
     private RecyclerView mRecycler;
     private SearchView mSearchView;
     private SearchView.OnQueryTextListener mSearchViewListener;
-    private RecyclerView.LayoutManager layoutManager;
-    private Realm mRealm;
+    private LinearLayoutManager layoutManager;
     private SearchEventAdapter mAdapter;
+    private String mTextSearch;
+    private RealmList mRealmList = new RealmList();
+    public static int sMonth = Constant.INVALID_INDEX;
+    public static int sYear = Constant.INVALID_INDEX;
+    public static boolean sIsHasMoreEvent = true;
+    public static boolean sAsyncTaskFinish = false;
+    public static boolean sNotNeedYear = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +41,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void init() {
-        mRealm = RealmController.with(this).getRealm();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -41,6 +48,32 @@ public class SearchActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(layoutManager);
         mRecycler.setHasFixedSize(true);
+        mAdapter = new SearchEventAdapter(SearchActivity.this, mRealmList);
+        mRecycler.setAdapter(mAdapter);
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition() + 1;
+                if (sAsyncTaskFinish && sIsHasMoreEvent && dy > 0 &&
+                    totalItemCount == lastVisibleItem) {
+                    sNotNeedYear = true;
+                    sMonth++;
+                    if (sMonth == 13) {
+                        sNotNeedYear = false;
+                        sMonth = 1;
+                        sYear++;
+                    }
+                    if (!mTextSearch.equals("")) {
+                        SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
+                            (SearchActivity.this, mRealmList);
+                        searchEventAsynTask.setListener(SearchActivity.this);
+                        searchEventAsynTask.execute(mTextSearch);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -52,12 +85,14 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(!query.equals("")) {
-                    mAdapter = new SearchEventAdapter(SearchActivity.this, RealmController.with
-                        (SearchActivity.this).searchEvent(query));
-                    mRecycler.setAdapter(mAdapter);
-                } else {
-                    mRecycler.setAdapter(null);
+                mTextSearch = query;
+                mRealmList.clear();
+                sNotNeedYear = false;
+                if (!query.equals("")) {
+                    SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
+                        (SearchActivity.this, mRealmList);
+                    searchEventAsynTask.setListener(SearchActivity.this);
+                    searchEventAsynTask.execute(query);
                 }
                 return false;
             }
@@ -78,5 +113,12 @@ public class SearchActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFinish(RealmList list) {
+        mRealmList = list;
+        mAdapter.data = list;
+        mAdapter.notifyDataSetChanged();
     }
 }

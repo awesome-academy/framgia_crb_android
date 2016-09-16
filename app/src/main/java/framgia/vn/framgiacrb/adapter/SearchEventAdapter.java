@@ -3,9 +3,13 @@ package framgia.vn.framgiacrb.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.activity.DetailActivity;
@@ -21,19 +25,18 @@ import io.realm.RealmRecyclerViewAdapter;
 /**
  * Created by framgia on 26/07/2016.
  */
-public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEventAdapter
+public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter
     .EventViewHolder> {
     public static final int TYPE_YEAR = 0;
     public static final int TYPE_EVENT = 1;
     public static final int TEXT_YEAR_SIZE = 30;
     public static final int TEXT_CONTENT_SIZE = 15;
     public final Activity mActivity;
-    public RealmList<Event> data = new RealmList<>();
+    public List<Event> data = new ArrayList<>();
 
-    public SearchEventAdapter(Activity activity, OrderedRealmCollection<Event> data) {
-        super(activity, data, true);
+    public SearchEventAdapter(Activity activity, List<Event> data) {
         this.mActivity = activity;
-        this.data = SearchUtil.editListDataSearch(data);
+        this.data = data;
     }
 
     @Override
@@ -43,7 +46,8 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
 
     @Override
     public SearchEventAdapter.EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.item_search_result, parent, false);
+        View itemView = LayoutInflater.from(mActivity).inflate(R.layout.item_search_result, parent,
+            false);
         return new EventViewHolder(itemView);
     }
 
