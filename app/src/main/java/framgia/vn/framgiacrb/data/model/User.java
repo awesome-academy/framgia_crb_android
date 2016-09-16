@@ -2,31 +2,44 @@ package framgia.vn.framgiacrb.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by lethuy on 26/07/2016.
  */
-public class User implements Serializable{
+public class User extends RealmObject{
+
     @SerializedName("id")
+    @PrimaryKey
     private int mId;
+
     @SerializedName("name")
     private String mName;
+
     @SerializedName("email")
     private String mEmail;
+
     @SerializedName("password")
     private String mPassword;
+
     @SerializedName("avatar")
     private String mAvatar;
+
     @SerializedName("auth_token")
     private String mAutToken;
 
+    @SerializedName("google_calendar_id")
+    private String mGoogleCalendarId;
+
     @SerializedName("user_calendars")
-    private List<Calendar> mUserCalendars;
+    private RealmList<Calendar> mUserCalendars;
 
     @SerializedName("shared_calendars")
-    private List<Calendar> mShareUserCalendars;
+    private RealmList<Calendar> mShareUserCalendars;
 
     public User() {}
 
@@ -90,15 +103,15 @@ public class User implements Serializable{
         return mUserCalendars;
     }
 
-    public void setUserCalendars(List<Calendar> mUserCalendars) {
-        this.mUserCalendars = mUserCalendars;
+    public void setUserCalendars(RealmList<Calendar> userCalendars) {
+        mUserCalendars = userCalendars;
     }
 
-    public List<Calendar> getShareUserCalendars() {
+    public RealmList<Calendar> getShareUserCalendars() {
         return mShareUserCalendars;
     }
 
-    public void setShareUserCalendars(List<Calendar> mShareUserCalendars) {
-        this.mShareUserCalendars = mShareUserCalendars;
+    public void setShareUserCalendars(RealmList<Calendar> shareUserCalendars) {
+        mShareUserCalendars = shareUserCalendars;
     }
 }

@@ -1,18 +1,18 @@
 package framgia.vn.framgiacrb.data.local;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import framgia.vn.framgiacrb.CrbApplication;
 import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
 import framgia.vn.framgiacrb.data.EventRepository;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
-import framgia.vn.framgiacrb.utils.NotificationUtil;
+import framgia.vn.framgiacrb.data.model.Place;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -26,6 +26,8 @@ public class EventRepositoriesLocal implements EventRepository {
     public static final String ID_FIELD = "mId";
     public static final String EVENT_ID_FIELD = "mEventId";
     public static final String CALENDAR_ID_FIELD = "mId";
+    public static final String PLACE_ID = "mId";
+    public static final String PLACE_NAME = "mName";
 
     private Realm mRealm;
 
@@ -47,7 +49,7 @@ public class EventRepositoriesLocal implements EventRepository {
             }
         }
         RegisterNotificationAsyncTask registerNotificationAsynTask
-            = new RegisterNotificationAsyncTask(true);
+                = new RegisterNotificationAsyncTask(true);
         registerNotificationAsynTask.execute(realmEvents);
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -66,9 +68,11 @@ public class EventRepositoriesLocal implements EventRepository {
 
     public void addCalendars(final List<Calendar> calendars, final Realm.Transaction.OnSuccess onSuccess) {
         final List<Calendar> realmCalendars = new ArrayList<>();
-        for (int i = 0; i < calendars.size(); i++) {
-            if (!hasCalendar(calendars.get(i))) {
-                realmCalendars.add(calendars.get(i));
+        for (Calendar calendar : calendars) {
+            if (!hasCalendar(calendar)) {
+                realmCalendars.add(calendar);
+            } else {
+                Log.d("EventRepositorieLocal", "has Calendar");
             }
         }
 
@@ -87,8 +91,40 @@ public class EventRepositoriesLocal implements EventRepository {
         });
     }
 
+    public void addPlaces(final List<Place> places, final Realm.Transaction.OnSuccess onSuccess) {
+        final List<Place> realmPlaces = new ArrayList<>();
+        for (Place place : places) {
+            if (!hasPlace(place)) {
+                realmPlaces.add(place);
+            } else {
+                Log.d("EventRepositorieLocal", "has Place");
+            }
+        }
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(realmPlaces);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                if (onSuccess != null) {
+                    onSuccess.onSuccess();
+                }
+            }
+        });
+    }
+
     public RealmResults<Calendar> getAllCalendars() {
         return mRealm.where(Calendar.class).findAll();
+    }
+
+    public RealmResults<Place> getAllPlaces() {
+        return mRealm.where(Place.class).findAll();
+    }
+
+    public Place getPlaceByName(String name) {
+        return mRealm.where(Place.class).equalTo(PLACE_NAME, name).findFirst();
     }
 
     public void clearCalendarFromDatabase(final Realm.Transaction.OnSuccess onSuccess) {
@@ -96,6 +132,20 @@ public class EventRepositoriesLocal implements EventRepository {
             @Override
             public void execute(Realm realm) {
                 realm.delete(Calendar.class);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                onSuccess.onSuccess();
+            }
+        });
+    }
+
+    public void clearPlaceFromDatabase(final Realm.Transaction.OnSuccess onSuccess) {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(Place.class);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -161,5 +211,9 @@ public class EventRepositoriesLocal implements EventRepository {
 
     public boolean hasCalendar(Calendar calendar) {
         return mRealm.where(Calendar.class).equalTo(CALENDAR_ID_FIELD, calendar.getId()).count() != 0;
+    }
+
+    public boolean hasPlace(Place place) {
+        return mRealm.where(Place.class).equalTo(PLACE_ID, place.getId()).count() != 0;
     }
 }

@@ -31,8 +31,6 @@ public class AttendeeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee);
-
-        mEditAttendee = (EditText) findViewById(R.id.edtAttendee);
         init();
     }
 

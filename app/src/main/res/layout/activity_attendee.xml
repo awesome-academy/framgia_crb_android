@@ -9,17 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary">
-
-        <EditText
-            android:id="@+id/edtAttendee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/white"
-            android:background="@null"
-            android:hint="@string/attendee_search"
-            android:textSize="@dimen/text_size_or" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
