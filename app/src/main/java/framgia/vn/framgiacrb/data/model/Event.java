@@ -71,8 +71,11 @@ public class Event extends RealmObject {
     @SerializedName("end_repeat")
     private Date mEndRepeat;
 
+    @SerializedName("place_id")
+    private String mPlaceId;
+
     @SerializedName("user_id")
-    private int mUserId;
+    private String mUserId;
 
     @SerializedName("repeat_ons_attributes")
     private RepeatOnAttribute mRepeatOnAttribute;
@@ -186,8 +189,12 @@ public class Event extends RealmObject {
         this.mAllDay = mAllday;
     }
 
-    public int getUserid() {
+    public String getUserid() {
         return mUserId;
+    }
+
+    public void setUserId(String mUserId) {
+        this.mUserId = mUserId;
     }
 
     public int getCalendarId() {
@@ -228,5 +235,17 @@ public class Event extends RealmObject {
 
     public void setRepeatOnAttribute(RepeatOnAttribute mRepeatOnAttribute) {
         this.mRepeatOnAttribute = mRepeatOnAttribute;
+    }
+
+    public void setPlace(Place mPlace) {
+        this.mPlace = mPlace;
+    }
+
+    public String getPlaceId() {
+        return mPlaceId;
+    }
+
+    public void setPlaceId(String mPlaceId) {
+        this.mPlaceId = mPlaceId;
     }
 }

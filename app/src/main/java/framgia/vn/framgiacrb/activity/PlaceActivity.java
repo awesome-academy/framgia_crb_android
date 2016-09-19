@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,14 +28,12 @@ public class PlaceActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private final String MESSAGE = "MESSAGE";
     private Realm mRealm;
-
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
-
-        mEditPlace = (EditText) findViewById(R.id.edtPlace);
         init();
 
     }
@@ -58,6 +57,9 @@ public class PlaceActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_attendee, menu);
+        mSearchView = (SearchView) menu.findItem(R.id.action_save).getActionView();
+        mSearchView.onActionViewExpanded();
+
         return true;
     }
 

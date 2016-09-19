@@ -20,6 +20,7 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.LoginResponse;
+import framgia.vn.framgiacrb.data.model.Place;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
@@ -163,7 +164,42 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     @Override
     public void onSuccess() {
         Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+        getPlaceFromServer(Session.sAuthToken);
         startActivity(intent);
         finish();
+    }
+
+    public void  getPlaceFromServer(String authToken){
+        Log.d("getDataFromServer", "-------------");
+        ServiceBuilder.getService().listPlace(authToken).enqueue(new Callback<List<Place>>() {
+            @Override
+            public void onResponse(Call<List<Place>> call, final Response<List<Place>> response) {
+                Log.d("onResponse", "------------");
+                if (response.isSuccessful()){
+                    if(response.body() != null){
+                        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("SearchActivity", "Clear Place from database success");
+                                Realm realm = Realm.getDefaultInstance();
+                                new EventRepositoriesLocal(realm).addPlaces(response.body(), new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(LoginActivity.this, "Save place success", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }else {
+                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Place>> call, Throwable t) {
+                Log.d("--------", "Failed");
+            }
+        });
     }
 }

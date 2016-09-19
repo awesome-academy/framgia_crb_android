@@ -3,6 +3,7 @@ package framgia.vn.framgiacrb.data.model;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by nghicv on 20/07/2016.
@@ -10,6 +11,7 @@ import io.realm.RealmObject;
 public class Calendar extends RealmObject{
 
     @SerializedName("id")
+    @PrimaryKey
     private int mId;
 
     @SerializedName("name")

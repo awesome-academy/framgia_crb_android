@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -53,6 +51,7 @@ import framgia.vn.framgiacrb.data.model.CreateEventResponse;
 import framgia.vn.framgiacrb.data.model.DayOfWeekId;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.NewEvent;
+import framgia.vn.framgiacrb.data.model.Place;
 import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
@@ -70,7 +69,6 @@ import retrofit2.Response;
  * Created by lethuy on 05/07/2016.
  */
 public class CreateEventActivity extends AppCompatActivity implements View.OnTouchListener {
-    private ImageButton mImageButtonBack;
     private EditText mEdtOption, mEdtTitle, mEdtDesciption, mStartEditText, mEndEditText;
     private ImageButton mButtonSave;
     private Switch mSwitchAlarm;
@@ -89,6 +87,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     private ArrayList<String> mListData;
 
     private Toolbar mToolbar;
+    private ArrayList<String> mListPlace;
 
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
     ArrayAdapter<EventInWeek> adapter = null;
@@ -96,6 +95,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     private int mCurrentIndexOfSpinnerChoice = 0;
     private int mRepeatEvery = 1;
     private String mRepeatType = "";
+    private String mPlace = "Manila";
+    private String mPlaceId = "1";
+    private  RealmResults<Place> mPlaces;
     private ArrayList<String> mListDayOfWeekRepeat = new ArrayList<>();
 
     boolean isRepeat;
@@ -155,8 +157,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         mTxtPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateEventActivity.this, PlaceActivity.class);
-                startActivityForResult(intent, 3);
+                getPlaceFromServerIfNotExist();
+                listPlace();
             }
         });
 
@@ -250,6 +252,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         dft = new SimpleDateFormat(Constant.FORMAT_TIME, Locale.getDefault());
         mTxtTimeStart.setTag(dft.format(mCal.getTime()));
         mTxtTimeFinish.setTag(dft.format(mCal.getTime()));
+        mTxtPlace.setText(mPlace);
     }
 
     public void addEventFormWidgets() {
@@ -510,7 +513,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                         mTxtDateStart.setText(
-                                Utils.formatDate(dayOfMonth, (monthOfYear + 1), year));
+                                Utils.formatDate((monthOfYear + 1), dayOfMonth, year));
 
                         mCal.set(year, monthOfYear, dayOfMonth);
                         mDateStart = mCal.getTime();
@@ -542,7 +545,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                         mTxtDateFinish.setText(
-                                (Utils.formatDate(dayOfMonth, (monthOfYear + 1), year)));
+                                (Utils.formatDate((monthOfYear + 1), dayOfMonth, year)));
                         mCal.set(year, monthOfYear, dayOfMonth);
                         mDateFinish = mCal.getTime();
                         Calendar calendar = Calendar.getInstance();
@@ -597,7 +600,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 mTimeEventFinish = mCal.getTime();
 
                 if (mTimeEventFinish == null) mTimeEventFinish = new Date();
-                if(mTimeEventStart == null) mTimeEventStart = new Date();
+                if (mTimeEventStart == null) mTimeEventStart = new Date();
                 boolean result = Utils.isBeforeHourInDate(mTimeEventFinish, mTimeEventStart);
 
                 if (result) {
@@ -727,5 +730,31 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         event.setFinishTime(TimeUtils.formatDateTime(mDateFinish, mTimeEventFinish));
         event.setCalendarId(Session.sCalendarId);
         return new NewEvent(Session.sAuthToken, event);
+    }
+
+    public void listPlace() {
+        new AlertDialog.Builder(CreateEventActivity.this)
+                .setTitle("Place")
+                .setItems(mListPlace.toArray(new String[mListPlace.size()]), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPlace = mListPlace.get(which);
+                        mTxtPlace.setText(mPlace);
+                        mPlaceId = String.valueOf(mPlaces.get(which).getId());
+                    }
+                })
+                .show();
+    }
+
+    private void getPlaceFromServerIfNotExist() {
+        mPlaces = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllPlaces();
+        addPlaceData(mPlaces);
+     }
+
+    private void addPlaceData(RealmResults<Place> places) {
+        mListPlace = new ArrayList<>();
+        for (Place place : places) {
+            mListPlace.add(place.getName());
+        }
     }
 }

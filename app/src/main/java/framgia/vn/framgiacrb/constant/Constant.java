@@ -32,7 +32,7 @@ public class Constant {
     public static final int SHOW_DURATION = 1000;
     public static final int HIDE_DURATION = 500;
     public static final String MESSAGE = "MESSAGE";
-    public static final String FORMAT_DATE = "dd-MM-yyyy";
+    public static final String FORMAT_DATE = "MM-dd-yyyy";
     public static final String FORMAT_TIME = "HH:mm";
     public static final String SUCCESS = "Create Event Success!";
     public static final String NOT_AUTHENTICATION = "Not authenticated";
