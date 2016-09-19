@@ -112,7 +112,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (object instanceof Event){
             Event event = (Event) object;
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
-            eventViewHolder.setId(event.getId());
+            eventViewHolder.setEvent(event);
             eventViewHolder.tvTitleEvent.setText(event.getTitle());
             SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             Date startDate = event.getStartTime();
@@ -176,14 +176,14 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         CardView cardView;
         LinearLayout linearLayoutLocation;
         TextView tvLocation;
-        private String mId;
+        private Event mEvent;
         public EventViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnEventSelectedListener != null) {
-                        mOnEventSelectedListener.onSelected(mId);
+                        mOnEventSelectedListener.onSelected(mEvent);
                     }
                 }
             });
@@ -194,8 +194,8 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvLocation = (TextView) itemView.findViewById(R.id.tv_location);
         }
 
-        public void setId(String id) {
-            mId = id;
+        public void setEvent(Event event) {
+            mEvent = event;
         }
     }
 
@@ -207,6 +207,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public interface OnEventSelectedListener {
-        void onSelected (String idSelected);
+        void onSelected (Event event);
     }
 }
