@@ -190,6 +190,7 @@ public class EventRepositoriesLocal implements EventRepository {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
+                if (onSuccess != null)
                 onSuccess.onSuccess();
             }
         });

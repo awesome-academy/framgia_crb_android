@@ -32,14 +32,14 @@
     <dimen name="left_edt_background">1dp</dimen>
     <dimen name="right_edt_background">1dp</dimen>
     <dimen name="top_edt_background">1dp</dimen>
-    <dimen name="radius_edt_background">1dp</dimen>
+    <dimen name="radius_edt_background">5dp</dimen>
     <dimen name="width_edt_background">1dp</dimen>
     <dimen name="layout_width_imgbt">45dp</dimen>
     <dimen name="layout_height_linear">110dp</dimen>
     <dimen name="height_linear">200dp</dimen>
     <dimen name="height_linear_cardview2">250dp</dimen>
     <dimen name="layout_width_textview">130dp</dimen>
-    <dimen name="margin_cardview">5dp</dimen>
+    <dimen name="margin_cardview">8dp</dimen>
     <dimen name="cardCornerRadius_cardview">2dp</dimen>
     <dimen name="layout_margin_2dp">2dp</dimen>
     <dimen name="layout_margin_5dp">5dp</dimen>
@@ -87,4 +87,5 @@
     <dimen name="item_create_event_start_date_margin_left">56dp</dimen>
     <dimen name="item_sprinner_calendar_margin">40dp</dimen>
     <dimen name="app_bar_show_event_height">150dp</dimen>
+    <dimen name="radius_button_loggin">8dp</dimen>
 </resources>

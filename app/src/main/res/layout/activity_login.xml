@@ -26,8 +26,8 @@
                 android:layout_marginBottom="@dimen/margin_bottom"
                 android:layout_marginTop="@dimen/margin_top"
                 android:text="@string/title_login"
-                android:textColor="@color/color_grey800"
-                android:textSize="@dimen/textview_textsize" />
+                android:textSize="@dimen/textview_textsize"
+                android:textStyle="bold"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/padding_left"
-                    android:textColor="@color/color_grey800"
                     android:text="@string/email" />
 
                 <EditText
@@ -56,10 +55,8 @@
                     android:layout_marginBottom="@dimen/margin_bottom"
                     android:layout_marginTop="@dimen/margin_top_edit_text"
                     android:background="@drawable/edt_bacground"
-                    android:hint="@string/hint_email_input"
                     android:inputType="textEmailAddress"
-                    android:padding="@dimen/padding"
-                    android:text="mai.dai.dien@framgia.com"/>
+                    android:padding="@dimen/padding"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -70,14 +67,13 @@
                 <ImageView
                     android:layout_width="@dimen/layout_width"
                     android:layout_height="@dimen/layout_height"
-                    android:src="@drawable/ic_password" />
+                    android:src="@drawable/ic_lock" />
 
                 <TextView
                     android:id="@+id/text_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/padding_left"
-                    android:textColor="@color/color_grey800"
                     android:text="@string/pass" />
 
                 <EditText
@@ -119,7 +115,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_bottom"
                 android:text="@string/or"
-                android:textColor="@color/color_grey800"
                 android:textSize="@dimen/text_size_or"
                 android:textStyle="bold"
                 />

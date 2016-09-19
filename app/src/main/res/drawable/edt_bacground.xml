@@ -5,7 +5,7 @@
     </solid>
     <stroke
         android:width="@dimen/width_edt_background"
-        android:color="@color/edt_background" >
+        android:color="@color/color_grey600" >
     </stroke>
     <padding
         android:bottom="@dimen/bottom_edt_background"

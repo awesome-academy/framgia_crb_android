@@ -24,7 +24,7 @@
     <string name="save">Save</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="hint_create_event_input">Title</string>
+    <string name="hint_create_event_input">Title...</string>
     <string name="sun">SUN</string>
     <string name="mon">MON</string>
     <string name="tue">TUE</string>

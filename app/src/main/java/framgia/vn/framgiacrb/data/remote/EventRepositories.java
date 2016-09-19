@@ -88,11 +88,10 @@ public class EventRepositories implements EventRepository{
                     }
                     if (error.equals(Constant.NOT_AUTHENTICATION)) {
                         logout(context);
-                        ((MainActivity)context).finish();
                     } else {
                         Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT).show();
+                        mOnLoadEventListener.onSuccess();
                     }
-                    mOnLoadEventListener.onSuccess();
                 }
             }
 
@@ -108,12 +107,7 @@ public class EventRepositories implements EventRepository{
 
     private void logout(final Context context) {
         Toast.makeText(context, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
-        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(context, R.string.message_logout_success, Toast.LENGTH_SHORT).show();
-            }
-        });
+        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(null);
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();

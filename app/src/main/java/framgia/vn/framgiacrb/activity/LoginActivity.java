@@ -111,7 +111,6 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                     new EventRepositoriesLocal(Realm.getDefaultInstance()).clearCalendarFromDatabase(new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            Log.d("LoginActivity", "Clear Calendar from database success");
                             saveCalendarToDatabase();
                         }
                     });
@@ -178,7 +177,6 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
                             @Override
                             public void onSuccess() {
-                                Log.d("SearchActivity", "Clear Place from database success");
                                 Realm realm = Realm.getDefaultInstance();
                                 new EventRepositoriesLocal(realm).addPlaces(response.body(), new Realm.Transaction.OnSuccess() {
                                     @Override
