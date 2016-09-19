@@ -203,9 +203,13 @@ public class EventsFragment extends Fragment {
         touchHelper.attachToRecyclerView(mRecyclerViewEvents);
         mAdapter.setOnEventSelectedListener(new ListEventAdapter.OnEventSelectedListener() {
             @Override
-            public void onSelected(String idSelected) {
+            public void onSelected(Event event) {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(Constant.ID_KEY, idSelected);
+                intent.putExtra(Constant.ID_KEY, event.getId());
+                intent.putExtra(Constant.INTENT_START_DATE,
+                    event.getStartTime());
+                intent.putExtra(Constant.INTENT_FINISH_DATE,
+                    event.getFinishTime());
                 getActivity().startActivity(intent);
             }
         });

@@ -18,9 +18,6 @@ import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.utils.SearchUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmList;
-import io.realm.RealmRecyclerViewAdapter;
 
 /**
  * Created by framgia on 26/07/2016.
@@ -65,8 +62,8 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter
             holder.month.setText("");
         } else {
             holder.type = TYPE_EVENT;
-            if((!data.get(position - 1).getTitle().equals(SearchUtil.DEFINE_YEAR))
-            && (TimeUtils.compareDate(obj.getStartTime(), data.get(position - 1).getStartTime())
+            if ((!data.get(position - 1).getTitle().equals(SearchUtil.DEFINE_YEAR))
+                && (TimeUtils.compareDate(obj.getStartTime(), data.get(position - 1).getStartTime())
             )) {
                 holder.day.setText("");
                 holder.month.setText("");
@@ -107,6 +104,10 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter
             if (type == TYPE_EVENT) {
                 Intent intent = new Intent(mActivity, DetailActivity.class);
                 intent.putExtra(Constant.ID_KEY, data.get(getAdapterPosition()).getId());
+                intent.putExtra(Constant.INTENT_START_DATE,
+                    data.get(getAdapterPosition()).getStartTime());
+                intent.putExtra(Constant.INTENT_FINISH_DATE,
+                    data.get(getAdapterPosition()).getFinishTime());
                 mActivity.startActivity(intent);
             }
         }

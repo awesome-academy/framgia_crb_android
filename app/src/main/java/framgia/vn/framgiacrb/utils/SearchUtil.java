@@ -62,14 +62,19 @@ public class SearchUtil {
             if (event.getRepeatType().equals(Constant.NO_REPEAT)) {
                 continue;
             }
-            if (event.getRepeatType().equals(Constant.REPEAT_DAILY)) {
+            if (event.getRepeatType().equals(Constant.REPEAT_DAILY) && event.getEndRepeat() !=
+                null) {
                 Date childEventDate = event.getStartTime();
+                Date childEventFinishTime = event.getFinishTime();
                 while ((event.getEndRepeat().getTime() - childEventDate.getTime())
                     >= (ONE_DAY * event.getRepeatEvery())) {
                     childEventDate.setTime(childEventDate.getTime()
                         + ONE_DAY * event.getRepeatEvery());
+                    childEventFinishTime.setTime(childEventFinishTime.getTime()
+                        + ONE_DAY * event.getRepeatEvery());
                     Event childEvent = new Event(event);
                     childEvent.setStartTime(new Date(childEventDate.getTime()));
+                    childEvent.setFinishTime(new Date(childEventFinishTime.getTime()));
                     if (TimeUtils.getMonth(childEventDate) > SearchActivity.sMonth
                         && TimeUtils.getYear(childEventDate) >= SearchActivity.sYear) {
                         break;
