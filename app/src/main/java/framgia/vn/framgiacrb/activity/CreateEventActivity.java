@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +55,7 @@ import framgia.vn.framgiacrb.data.model.NewEvent;
 import framgia.vn.framgiacrb.data.model.Place;
 import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import framgia.vn.framgiacrb.data.model.Session;
+import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
 import framgia.vn.framgiacrb.object.EventInWeek;
 import framgia.vn.framgiacrb.utils.DialogUtils;
@@ -88,6 +90,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
     private Toolbar mToolbar;
     private ArrayList<String> mListPlace;
+    private ArrayList<String> mUserAttendee;
+    private ArrayList<String> mListUser;
+    private boolean[] mSaveUserAttendee;
 
     ArrayList<EventInWeek> arrJob = new ArrayList<EventInWeek>();
     ArrayAdapter<EventInWeek> adapter = null;
@@ -96,8 +101,11 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     private int mRepeatEvery = 1;
     private String mRepeatType = "";
     private String mPlace = "Manila";
+    private String mUser;
     private String mPlaceId = "1";
-    private  RealmResults<Place> mPlaces;
+    private String mUserId = "1";
+    private RealmResults<Place> mPlaces;
+    private RealmResults<User> mAttendees;
     private ArrayList<String> mListDayOfWeekRepeat = new ArrayList<>();
 
     boolean isRepeat;
@@ -132,10 +140,13 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
         mTxtRepeat = (TextView) findViewById(R.id.txt_Repeat);
         mTxtAttendee = (TextView) findViewById(R.id.txt_Attendee);
+        mTxtAttendee.setMovementMethod(new ScrollingMovementMethod());
         mTxtPlace = (TextView) findViewById(R.id.txt_Place);
 
         mEdtTitle = (EditText) findViewById(R.id.edit_Title_New_Event);
         mEdtDesciption = (EditText) findViewById(R.id.edt_Detail);
+
+        mUserAttendee = new ArrayList<>();
 
         CardView cardView = (CardView) findViewById(R.id.card_view2);
         cardView.setOnTouchListener(this);
@@ -165,8 +176,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         mTxtAttendee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateEventActivity.this, AttendeeActivity.class);
-                startActivityForResult(intent, 2);
+                getUserFromServerIfNotExist();
+                listAttendee();
             }
         });
 
@@ -746,15 +757,77 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 .show();
     }
 
+    public void listAttendee() {
+        if (mSaveUserAttendee == null) mSaveUserAttendee = new boolean[mListUser.size()];
+        mTxtAttendee.setText("");
+        mUserAttendee.clear();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
+        builder.setTitle(R.string.select_attendee);
+        builder.setMultiChoiceItems(mListUser.toArray(new String[mListUser.size()]), mSaveUserAttendee,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int indexSelected,
+                                        boolean isChecked) {
+                        mSaveUserAttendee[indexSelected] = isChecked;
+                        if (isChecked) {
+                            mUserAttendee.add(mListUser.get(indexSelected));
+                        } else {
+                            int index = getIndexOfUserInList(mListUser.get(indexSelected));
+                            if (index != -1)
+                                mUserAttendee.remove(index);
+                        }
+                    }
+                })
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (mTxtAttendee.getText().toString().isEmpty())
+                            for (String s : mUserAttendee) {
+                                mTxtAttendee.setText(
+                                        mTxtAttendee.getText().toString() +
+                                                (mTxtAttendee.getText().toString().isEmpty() ? "" : ", ")
+                                                + s);
+                            }
+
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        mTxtAttendee.setText(R.string.no_attendee);
+                    }
+                }).show();
+    }
+
+    private int getIndexOfUserInList(String name) {
+        for (int i = 0; i < mUserAttendee.size(); i++) {
+            if (name.equalsIgnoreCase(mUserAttendee.get(i))) return i;
+        }
+        return -1;
+    }
+
     private void getPlaceFromServerIfNotExist() {
         mPlaces = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllPlaces();
         addPlaceData(mPlaces);
-     }
+    }
+
+    private void getUserFromServerIfNotExist() {
+        mAttendees = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllUsers();
+        addUserData(mAttendees);
+    }
+
 
     private void addPlaceData(RealmResults<Place> places) {
         mListPlace = new ArrayList<>();
         for (Place place : places) {
             mListPlace.add(place.getName());
+        }
+    }
+
+    private void addUserData(RealmResults<User> users) {
+        mListUser = new ArrayList<>();
+        for (User user : users) {
+            mListUser.add(user.getName());
         }
     }
 }
