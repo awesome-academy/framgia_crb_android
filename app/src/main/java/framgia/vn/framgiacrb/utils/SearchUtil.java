@@ -1,5 +1,7 @@
 package framgia.vn.framgiacrb.utils;
 
+import android.app.AlarmManager;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,7 +16,6 @@ import io.realm.RealmList;
  * Created by framgia on 09/08/2016.
  */
 public class SearchUtil {
-    public static long ONE_DAY = 1000 * 60 * 60 * 24;
     public static final String DEFINE_YEAR = "item_year";
 
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
@@ -67,11 +68,11 @@ public class SearchUtil {
                 Date childEventDate = event.getStartTime();
                 Date childEventFinishTime = event.getFinishTime();
                 while ((event.getEndRepeat().getTime() - childEventDate.getTime())
-                    >= (ONE_DAY * event.getRepeatEvery())) {
+                    >= (AlarmManager.INTERVAL_DAY * event.getRepeatEvery())) {
                     childEventDate.setTime(childEventDate.getTime()
-                        + ONE_DAY * event.getRepeatEvery());
+                        + AlarmManager.INTERVAL_DAY * event.getRepeatEvery());
                     childEventFinishTime.setTime(childEventFinishTime.getTime()
-                        + ONE_DAY * event.getRepeatEvery());
+                        + AlarmManager.INTERVAL_DAY * event.getRepeatEvery());
                     Event childEvent = new Event(event);
                     childEvent.setStartTime(new Date(childEventDate.getTime()));
                     childEvent.setFinishTime(new Date(childEventFinishTime.getTime()));

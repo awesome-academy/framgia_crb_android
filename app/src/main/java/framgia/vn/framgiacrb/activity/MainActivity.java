@@ -35,6 +35,7 @@ import java.util.Locale;
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
+import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
 import framgia.vn.framgiacrb.data.dataTest.DataTest;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Session;
@@ -112,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
         mSharedPreferences = getSharedPreferences(SHAREPREFF, Context.MODE_PRIVATE);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
         DataTest.createEvent(this);
+        RegisterNotificationAsyncTask registerNotificationAsyncTask = new
+            RegisterNotificationAsyncTask(false);
+        registerNotificationAsyncTask.execute(new ArrayList());
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         initUi();
