@@ -175,4 +175,15 @@ public class TimeUtils {
         calendar.setTime(date);
         return calendar.get(Calendar.YEAR);
     }
+
+    public static Date genFinishTime(Date trueStartTime, Date oldFinishTime) {
+        Calendar result = Calendar.getInstance();
+        result.setTime(trueStartTime);
+        Calendar oldFinishCalendar = Calendar.getInstance();
+        oldFinishCalendar.setTime(oldFinishTime);
+        result.set(Calendar.HOUR_OF_DAY, oldFinishCalendar.get(Calendar.HOUR_OF_DAY));
+        result.set(Calendar.MINUTE, oldFinishCalendar.get(Calendar.MINUTE));
+        result.set(Calendar.SECOND, oldFinishCalendar.get(Calendar.SECOND));
+        return result.getTime();
+    }
 }

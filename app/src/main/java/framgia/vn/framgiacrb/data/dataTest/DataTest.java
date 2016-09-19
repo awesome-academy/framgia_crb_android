@@ -138,8 +138,8 @@ public class DataTest {
             case "3":
             case "15":
             case "20":
-                event.setRepeatType(MONTHLY);
-                event.setTitle(MONTHLY);
+                event.setRepeatType(DAILY);
+                event.setTitle(DAILY);
                 break;
             case "5":
                 event.setRepeatType(YEARLY);

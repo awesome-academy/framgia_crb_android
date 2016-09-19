@@ -19,6 +19,8 @@ public class Constant {
     public static final String ID_KEY = "id_event";
     public static final String INTENT_START_DATE = "start date intent";
     public static final String INTENT_FINISH_DATE = "finish date intent";
+    public static final String INTENT_END_REPEAT = "end repeat intent";
+    public static final String INTENT_REPEAT_TYPE = "repeat type intent";
     public static final String LINE_BREAK = "\n";
     public static final String AMOUNT_DEVIDE = "-";
     public static final String SUNDAY = "1";

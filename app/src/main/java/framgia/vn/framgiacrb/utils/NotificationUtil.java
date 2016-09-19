@@ -28,25 +28,59 @@ public class NotificationUtil {
 
     public static void registerNotificationEventTime(Context context, Event event) {
         Date timeReal = event.getStartTime();
-        if (timeReal.before(Calendar.getInstance().getTime())) {
-            return;
-        }
-        Date time = (Date) timeReal.clone();
-        time.setTime(time.getTime() - TIME_EARLY);
         SharedPreferences prefs = context.getSharedPreferences(Activity.class.getSimpleName(),
             Context.MODE_PRIVATE);
         int notificationNumber = prefs.getInt(NOTIFICATION_ID, 0);
+        Date time;
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         alarmIntent.putExtra(AlarmReceiver.INTENT_TITLE, event.getTitle());
         alarmIntent.putExtra(AlarmReceiver.INTENT_NOTIFICATION_ID, notificationNumber);
         alarmIntent.putExtra(Constant.ID_KEY, event.getId());
-        String content = TimeUtils.createAmountTime(timeReal, event.getFinishTime())
-            + (event.getPlace() == null ? "" : Constant.LINE_BREAK + event.getPlace().getName());
-        alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context
-            , notificationNumber, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        manager.set(AlarmManager.RTC_WAKEUP, time.getTime(), pendingIntent);
+        PendingIntent pendingIntent;
+        String content;
+        switch (event.getRepeatType()) {
+            case Constant.NO_REPEAT:
+                if (timeReal.before(Calendar.getInstance().getTime())) {
+                    return;
+                }
+                time = (Date) timeReal.clone();
+                time.setTime(time.getTime() - TIME_EARLY);
+                alarmIntent.putExtra(Constant.INTENT_START_DATE, event.getStartTime());
+                alarmIntent.putExtra(Constant.INTENT_FINISH_DATE, event.getFinishTime());
+                alarmIntent.putExtra(Constant.INTENT_END_REPEAT, event.getEndRepeat());
+                alarmIntent.putExtra(Constant.INTENT_REPEAT_TYPE, event.getRepeatType());
+                content = TimeUtils.createAmountTime(timeReal, event.getFinishTime()) +
+                    (event.getPlace() == null ? "" :
+                        Constant.LINE_BREAK + event.getPlace().getName());
+                alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content);
+                pendingIntent = PendingIntent.getBroadcast(context
+                    , notificationNumber, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                manager.set(AlarmManager.RTC_WAKEUP, time.getTime(), pendingIntent);
+                break;
+            case Constant.REPEAT_DAILY:
+                while (timeReal.before(Calendar.getInstance().getTime())) {
+                    timeReal.setTime(timeReal.getTime()
+                        + AlarmManager.INTERVAL_DAY * event.getRepeatEvery());
+                }
+                time = (Date) timeReal.clone();
+                time.setTime(time.getTime() - TIME_EARLY);
+                alarmIntent.putExtra(Constant.INTENT_START_DATE, timeReal);
+                alarmIntent.putExtra(Constant.INTENT_FINISH_DATE,
+                    TimeUtils.genFinishTime(timeReal, event.getFinishTime()));
+                alarmIntent.putExtra(Constant.INTENT_END_REPEAT, event.getEndRepeat());
+                alarmIntent.putExtra(Constant.INTENT_REPEAT_TYPE, event.getRepeatType());
+                content = TimeUtils.createAmountTime(timeReal, TimeUtils.genFinishTime
+                    (timeReal, event.getFinishTime())) + (event.getPlace() == null ? "" :
+                    Constant.LINE_BREAK + event.getPlace().getName());
+                alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content);
+                pendingIntent = PendingIntent.getBroadcast(context
+                    , notificationNumber, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                manager.setRepeating(AlarmManager.RTC_WAKEUP, time.getTime(),
+                    AlarmManager.INTERVAL_DAY *
+                        event.getRepeatEvery(), pendingIntent);
+                break;
+        }
         SharedPreferences.Editor editor = prefs.edit();
         notificationNumber++;
         editor.putInt(NOTIFICATION_ID, notificationNumber);
@@ -54,9 +88,11 @@ public class NotificationUtil {
     }
 
     public static void pushNotification(Context context, String title, String content, String
-        eventId, int notificationNumber) {
+        eventId, int notificationNumber, Date startTime, Date finishTime) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(Constant.ID_KEY, eventId);
+        intent.putExtra(Constant.INTENT_START_DATE, startTime);
+        intent.putExtra(Constant.INTENT_FINISH_DATE, finishTime);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
             notificationNumber, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder =
@@ -76,18 +112,5 @@ public class NotificationUtil {
             CrbApplication.getInstanceContext().
                 getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
-    }
-
-    public static Date getNearestDayNotify(Event event) {
-        if (event.getRepeatType().equals(Constant.REPEAT_DAILY)) {
-            Date date = new Date(event.getStartRepeat().getTime());
-            while (date.before(Calendar.getInstance().getTime())) {
-                date.setTime(date.getTime() + SearchUtil.ONE_DAY * event.getRepeatEvery());
-            }
-            return date;
-        }
-        if (event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {
-        }
-        return null;
     }
 }
