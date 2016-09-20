@@ -1,7 +1,6 @@
 package framgia.vn.framgiacrb.data.local;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +12,7 @@ import framgia.vn.framgiacrb.data.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.Place;
+import framgia.vn.framgiacrb.data.model.User;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -28,6 +28,7 @@ public class EventRepositoriesLocal implements EventRepository {
     public static final String CALENDAR_ID_FIELD = "mId";
     public static final String PLACE_ID = "mId";
     public static final String PLACE_NAME = "mName";
+    public static final String USER_ID = "mId";
 
     private Realm mRealm;
 
@@ -72,7 +73,6 @@ public class EventRepositoriesLocal implements EventRepository {
             if (!hasCalendar(calendar)) {
                 realmCalendars.add(calendar);
             } else {
-                Log.d("EventRepositorieLocal", "has Calendar");
             }
         }
 
@@ -97,7 +97,6 @@ public class EventRepositoriesLocal implements EventRepository {
             if (!hasPlace(place)) {
                 realmPlaces.add(place);
             } else {
-                Log.d("EventRepositorieLocal", "has Place");
             }
         }
         mRealm.executeTransactionAsync(new Realm.Transaction() {
@@ -115,12 +114,39 @@ public class EventRepositoriesLocal implements EventRepository {
         });
     }
 
+    public void addUser(final List<User> users, final Realm.Transaction.OnSuccess onSuccess) {
+        final List<User> realmUsers = new ArrayList<>();
+        for (User user : users) {
+            if (!hasUser(user)) {
+                realmUsers.add(user);
+            } else {
+            }
+        }
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(realmUsers);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                if (onSuccess != null) {
+                    onSuccess.onSuccess();
+                }
+            }
+        });
+    }
+
     public RealmResults<Calendar> getAllCalendars() {
         return mRealm.where(Calendar.class).findAll();
     }
 
     public RealmResults<Place> getAllPlaces() {
         return mRealm.where(Place.class).findAll();
+    }
+
+    public RealmResults<User> getAllUsers() {
+        return mRealm.where(User.class).findAll();
     }
 
     public Place getPlaceByName(String name) {
@@ -215,5 +241,9 @@ public class EventRepositoriesLocal implements EventRepository {
 
     public boolean hasPlace(Place place) {
         return mRealm.where(Place.class).equalTo(PLACE_ID, place.getId()).count() != 0;
+    }
+
+    public boolean hasUser(User user) {
+        return mRealm.where(User.class).equalTo(USER_ID, user.getId()).count() != 0;
     }
 }

@@ -159,6 +159,8 @@
     <string name="not_be_empty">Not be empty</string>
     <string name="Attendee">Attendee</string>
     <string name="attendee_search">Attendee</string>
+    <string name="no_attendee">No Attendee</string>
+    <string name="select_attendee">Attendee</string>
     <string name="message_logout">Logout Success!</string>
     <string name="time_picker_default">%1$02d:%2$02d</string>
     <string name="error_create_event">Can\'t create event, please check connection</string>

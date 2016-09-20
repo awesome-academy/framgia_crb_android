@@ -34,7 +34,7 @@ import retrofit2.Response;
 /**
  * Created by lethuy on 01/07/2016.
  */
-public class LoginActivity extends Activity implements Realm.Transaction.OnSuccess{
+public class LoginActivity extends Activity implements Realm.Transaction.OnSuccess {
     private EditText mEditTextEmail, mEditTextPassword;
     private Button mButtonLogin, mButtonLoginFb, mButtonLoginGg;
     private SharedPreferences mSharedPreferences;
@@ -71,13 +71,13 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
             @Override
             public void onClick(View v) {
 
-                boolean isValidEmail =  ValidationLogin.isValidEmail(LoginActivity.this, mEditTextEmail);
+                boolean isValidEmail = ValidationLogin.isValidEmail(LoginActivity.this, mEditTextEmail);
                 boolean isValidPass = ValidationLogin.isValidatePassword(LoginActivity.this, mEditTextPassword);
 
                 if (!NetworkUtil.isInternetConnected(LoginActivity.this)) {
                     Toast.makeText(LoginActivity.this, getString(R.string.msg_no_internet), Toast.LENGTH_SHORT).show();
                 } else {
-                    if (isValidEmail && isValidPass){
+                    if (isValidEmail && isValidPass) {
                         mProgressDialog.setMessage(Constant.LOADING);
                         mProgressDialog.show();
                         getDataFromInternet(user());
@@ -90,7 +90,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         });
     }
 
-    public void getDataFromInternet(User user){
+    public void getDataFromInternet(User user) {
 
         ServiceBuilder.getService().authenticate(user).enqueue(new Callback<LoginResponse>() {
             @Override
@@ -115,8 +115,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                             saveCalendarToDatabase();
                         }
                     });
-                }
-                else {
+                } else {
                     Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -154,7 +153,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         editor.apply();
     }
 
-    public User user(){
+    public User user() {
         User user = new User();
         user.setEmail(mEditTextEmail.getText().toString());
         user.setPassword(mEditTextPassword.getText().toString());
@@ -165,18 +164,17 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     public void onSuccess() {
         Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
         getPlaceFromServer(Session.sAuthToken);
+        getUserFromServer(Session.sAuthToken);
         startActivity(intent);
         finish();
     }
 
-    public void  getPlaceFromServer(String authToken){
-        Log.d("getDataFromServer", "-------------");
+    public void getPlaceFromServer(String authToken) {
         ServiceBuilder.getService().listPlace(authToken).enqueue(new Callback<List<Place>>() {
             @Override
             public void onResponse(Call<List<Place>> call, final Response<List<Place>> response) {
-                Log.d("onResponse", "------------");
-                if (response.isSuccessful()){
-                    if(response.body() != null){
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
                         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
                             @Override
                             public void onSuccess() {
@@ -185,20 +183,47 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                                 new EventRepositoriesLocal(realm).addPlaces(response.body(), new Realm.Transaction.OnSuccess() {
                                     @Override
                                     public void onSuccess() {
-                                        Toast.makeText(LoginActivity.this, "Save place success", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
                         });
                     }
-                }else {
+                } else {
                     Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Place>> call, Throwable t) {
-                Log.d("--------", "Failed");
+            }
+        });
+    }
+
+    public void getUserFromServer(String authToken) {
+        ServiceBuilder.getService().listAttendee(authToken).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, final Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Realm realm = Realm.getDefaultInstance();
+                                new EventRepositoriesLocal(realm).addUser(response.body(), new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+                                });
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
             }
         });
     }
