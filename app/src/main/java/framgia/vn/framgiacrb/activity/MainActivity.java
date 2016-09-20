@@ -36,7 +36,6 @@ import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.adapter.MonthToolbarPagerAdapter;
 import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
-import framgia.vn.framgiacrb.data.dataTest.DataTest;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.fragment.EventFollowWeekFragment;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         mUserCalendar = new EventRepositoriesLocal(Realm.getDefaultInstance()).getAllCalendars();
         mSharedPreferences = getSharedPreferences(SHAREPREFF, Context.MODE_PRIVATE);
         mSelectedColor = ContextCompat.getColor(this, R.color.flamingo);
-        DataTest.createEvent(this);
+//        DataTest.createEvent(this);
         RegisterNotificationAsyncTask registerNotificationAsyncTask = new
             RegisterNotificationAsyncTask(false);
         registerNotificationAsyncTask.execute(new ArrayList());

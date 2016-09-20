@@ -39,7 +39,9 @@ public class NotificationUtil {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent;
         String content;
-        switch (event.getRepeatType()) {
+        String repeatType = event.getRepeatType();
+        if (repeatType == null) repeatType = Constant.NO_REPEAT;
+        switch (repeatType) {
             case Constant.NO_REPEAT:
                 if (timeReal.before(Calendar.getInstance().getTime())) {
                     return;

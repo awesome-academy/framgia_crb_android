@@ -390,4 +390,12 @@ public class DataTest {
         }
         return calendar.getTime();
     }
+
+    public static void saveEvent(Event newEvent) {
+        sRealm.beginTransaction();
+        newEvent.setId("" + sEventRepositoriesLocal.getSize() + 1);
+        newEvent.setColorId(10);
+        sRealm.commitTransaction();
+        sEventRepositoriesLocal.updateEvent(newEvent);
+    }
 }

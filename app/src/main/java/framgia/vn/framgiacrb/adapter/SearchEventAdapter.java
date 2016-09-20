@@ -55,8 +55,8 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter
             holder.type = TYPE_YEAR;
             holder.content.setText(obj.getDescription());
             holder.content.setBackgroundColor(Utils.getColor(mActivity, R.color.bg_default));
-            holder.content.setTextColor(mActivity.getResources().getColor(R.color
-                .text_default_event_color));
+            holder.content
+                .setTextColor(Utils.getColor(mActivity, R.color.text_default_event_color));
             holder.content.setTextSize(TEXT_YEAR_SIZE);
             holder.day.setText("");
             holder.month.setText("");
@@ -73,14 +73,13 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter
             }
             String content = obj.getTitle() + Constant.LINE_BREAK +
                 TimeUtils.toStringTime(obj.getStartTime())
-                + Constant.AMOUNT_DEVIDE
+                + Constant.AMOUNT_DIVIDE
                 + TimeUtils.toStringTime(obj.getFinishTime())
                 + (obj.getPlace() == null ? "" : Constant.LINE_BREAK + obj.getPlace().getName());
             holder.content.setText(content);
-            holder.content.setTextColor(mActivity.getResources().getColor(
-                R.color.white));
+            holder.content.setTextColor(Utils.getColor(mActivity, R.color.white));
             holder.content.setBackgroundColor(
-                mActivity.getResources().getColor(Constant.color[obj.getColorId() - 1]));
+                Utils.getColor(mActivity, Constant.color[obj.getColorId() - 1]));
             holder.content.setTextSize(TEXT_CONTENT_SIZE);
         }
     }

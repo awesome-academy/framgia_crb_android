@@ -190,8 +190,8 @@ public class Event extends RealmObject {
         return mAllDay;
     }
 
-    public void setAllDay(boolean mAllday) {
-        this.mAllDay = mAllday;
+    public void setAllDay(boolean allDay) {
+        this.mAllDay = allDay;
     }
 
     public int getUserId() {

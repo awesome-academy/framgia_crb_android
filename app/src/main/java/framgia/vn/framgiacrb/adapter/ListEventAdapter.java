@@ -20,17 +20,16 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.utils.TimeUtils;
+import framgia.vn.framgiacrb.utils.Utils;
 
 /**
  * Created by nghicv on 04/07/2016.
  */
 public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private static final int VIEW_TYPE_MONTH = 0;
     private static final int VIEW_TYPE_DATE = 1;
     private static final int VIEW_TYPE_EVENT = 2;
     private static final int VIEW_TYPE_TIMELINE = 3;
-
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<Object> mDatas;
@@ -49,7 +48,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         Object object = mDatas.get(position);
-        if(object instanceof ItemMonth)
+        if (object instanceof ItemMonth)
             return VIEW_TYPE_MONTH;
         if (object instanceof Date)
             return VIEW_TYPE_DATE;
@@ -60,28 +59,25 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType) {
             case VIEW_TYPE_MONTH:
                 View itemViewMonth = mLayoutInflater.inflate(R.layout.item_month, parent, false);
                 viewHolder = new MonthViewHolder(itemViewMonth);
                 break;
-
             case VIEW_TYPE_DATE:
                 View itemViewDate = mLayoutInflater.inflate(R.layout.item_date, parent, false);
                 viewHolder = new DateViewHolder(itemViewDate);
                 break;
-
             case VIEW_TYPE_EVENT:
                 View itemmViewEvent = mLayoutInflater.inflate(R.layout.item_event, parent, false);
                 viewHolder = new EventViewHolder(itemmViewEvent);
                 break;
             case VIEW_TYPE_TIMELINE:
-                View itemViewTimeline = mLayoutInflater.inflate(R.layout.item_timeline, parent, false);
+                View itemViewTimeline =
+                    mLayoutInflater.inflate(R.layout.item_timeline, parent, false);
                 viewHolder = new TimeLineViewHolder(itemViewTimeline);
                 break;
-
         }
         return viewHolder;
     }
@@ -103,13 +99,15 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             dateViewHolder.tvDate.setText(dayOfMonth);
             dateViewHolder.tvDay.setText(dayOfWeek);
             if (TimeUtils.toStringDate(date).compareTo(TimeUtils.toStringDate(today)) == 0) {
-                dateViewHolder.tvDate.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-                dateViewHolder.tvDay.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                dateViewHolder.tvDate.setTextColor(Utils.getColor(mContext, R.color.colorAccent));
+                dateViewHolder.tvDay.setTextColor(Utils.getColor(mContext, R.color.colorAccent));
             } else {
-                dateViewHolder.tvDate.setTextColor(mContext.getResources().getColor(R.color.text_default_event_color));
-                dateViewHolder.tvDay.setTextColor(mContext.getResources().getColor(R.color.text_default_event_color));
+                dateViewHolder.tvDate
+                    .setTextColor(Utils.getColor(mContext, R.color.text_default_event_color));
+                dateViewHolder.tvDay
+                    .setTextColor(Utils.getColor(mContext, R.color.text_default_event_color));
             }
-        } else if (object instanceof Event){
+        } else if (object instanceof Event) {
             Event event = (Event) object;
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
             eventViewHolder.setEvent(event);
@@ -121,7 +119,8 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             String finishTime = format.format(finishDate);
             String time = startTime + "-" + finishTime;
             eventViewHolder.tvTime.setText(time);
-            eventViewHolder.cardView.setCardBackgroundColor(mContext.getResources().getColor(Constant.color[event.getColorId() - 1]));
+            eventViewHolder.cardView.setCardBackgroundColor(
+                Utils.getColor(mContext, Constant.color[event.getColorId() - 1]));
             if (event.getPlace() != null) {
                 eventViewHolder.tvLocation.setText(event.getPlace().getName());
                 eventViewHolder.linearLayoutLocation.setVisibility(View.VISIBLE);
@@ -151,6 +150,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     class MonthViewHolder extends RecyclerView.ViewHolder {
         TextView tvMonth;
+
         public MonthViewHolder(View itemView) {
             super(itemView);
             tvMonth = (TextView) itemView.findViewById(R.id.tv_month);
@@ -158,7 +158,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class DateViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvDate;
         TextView tvDay;
 
@@ -170,13 +169,13 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvTitleEvent;
         TextView tvTime;
         CardView cardView;
         LinearLayout linearLayoutLocation;
         TextView tvLocation;
         private Event mEvent;
+
         public EventViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -200,13 +199,12 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class TimeLineViewHolder extends RecyclerView.ViewHolder {
-
         public TimeLineViewHolder(View itemView) {
             super(itemView);
         }
     }
 
     public interface OnEventSelectedListener {
-        void onSelected (Event event);
+        void onSelected(Event event);
     }
 }
