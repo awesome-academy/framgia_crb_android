@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_normal"
         android:layout_marginLeft="@dimen/item_event_margin_left"
-        android:layout_marginRight="@dimen/padding_normal"
+        android:layout_marginRight="@dimen/padding_lager"
         android:minHeight="@dimen/item_event_min_height"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/padding_normal"
