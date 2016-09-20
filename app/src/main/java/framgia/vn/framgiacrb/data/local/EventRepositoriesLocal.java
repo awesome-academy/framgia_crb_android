@@ -9,7 +9,6 @@ import java.util.List;
 import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
 import framgia.vn.framgiacrb.data.EventRepository;
 import framgia.vn.framgiacrb.data.OnLoadEventListener;
-import framgia.vn.framgiacrb.data.dataTest.DataTest;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import io.realm.Realm;
@@ -21,15 +20,12 @@ import io.realm.Sort;
  */
 public class EventRepositoriesLocal implements EventRepository {
     public static final String START_DATE_FIELD = "mStartTime";
-    public static final String ID_FIELD = "mId";
     public static final String EVENT_ID_FIELD = "mEventId";
     public static final String CALENDAR_ID_FIELD = "mId";
     public static final String START_REPEAT = "mStartRepeat";
     public static final String END_REPEAT = "mEndRepeat";
-    public static final String START_TIME = "mStartTime";
     public static final String REPEAT_TYPE = "mRepeatType";
     public static final String PARENT_ID = "mParentId";
-    public static final String EXCEPTION_TYPE = "mExceptionType";
     private Realm mRealm;
 
     public EventRepositoriesLocal(Realm realm) {
@@ -166,7 +162,7 @@ public class EventRepositoriesLocal implements EventRepository {
         calendar.add(java.util.Calendar.HOUR, 23);
         Date toDate = calendar.getTime();
         return mRealm.where(Event.class).between(START_DATE_FIELD, date, toDate)
-            .equalTo(REPEAT_TYPE, DataTest.NO_REPEAT)
+            .isNull(REPEAT_TYPE)
             .findAllSorted(START_DATE_FIELD, Sort.ASCENDING);
     }
 
@@ -189,5 +185,13 @@ public class EventRepositoriesLocal implements EventRepository {
             .lessThan(START_REPEAT, toDate)
             .greaterThan(END_REPEAT, date)
             .findAll();
+    }
+
+    public List<Event> getAllEvent() {
+        return mRealm.where(Event.class).findAll();
+    }
+
+    public int getSize() {
+        return mRealm.where(Event.class).findAll().size();
     }
 }

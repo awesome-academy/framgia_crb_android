@@ -46,6 +46,7 @@ import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.dataTest.DataTest;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.CreateEventResponse;
 import framgia.vn.framgiacrb.data.model.DayOfWeekId;
@@ -166,7 +167,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             mListData);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSpinerCalendar.setAdapter(adapter);
-        getDefaultInfor();
+        getDefaultInFor();
         addEventFormWidgets();
         selectRepeat();
     }
@@ -184,7 +185,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             case R.id.action_Save:
                 String title = mEdtTitle.getText().toString();
                 if (!title.equals("")) {
-//                    getDataFromService(createEvent());
+                    getDataFromService(createEvent());
+                    DataTest.saveEvent(createEvent().getEvent());
+                    finish();
                 } else {
                     Toast.makeText(CreateEventActivity.this, R.string.not_be_empty,
                         Toast.LENGTH_LONG).show();
@@ -204,7 +207,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 2) {
                 String message = data.getStringExtra(Constant.MESSAGE);
@@ -216,9 +218,9 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    public void getDefaultInfor() {
+    public void getDefaultInFor() {
         mCal = Calendar.getInstance();
-        SimpleDateFormat dft = null;
+        SimpleDateFormat dft;
         dft = new SimpleDateFormat(Constant.FORMAT_DATE, Locale.getDefault());
         String strDate = dft.format(mCal.getTime());
         mTxtDateStart.setText(strDate);
@@ -295,8 +297,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             mRepeatSpinner.setSelection(0);
             mRepeatEverySpinner = (Spinner) v.findViewById(R.id.repeat_every_spinner);
             mRepeatSpinner.setSelection(this.mCurrentItemSelectedOnSpinnerChoice);
-            mStartRepeat = (EditText) v.findViewById(R.id.start_edittext);
-            mEndEditText = (EditText) v.findViewById(R.id.end_edittext);
+            mStartRepeat = (EditText) v.findViewById(R.id.start_edit_text);
+            mEndEditText = (EditText) v.findViewById(R.id.end_edit_text);
             // Setup listener
             mRepeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -329,13 +331,13 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             });
             Calendar now = Calendar.getInstance();
             if (mDateStart != null) now.setTime(mDateStart);
-            mStartEditText = (EditText) v.findViewById(R.id.start_edittext);
+            mStartEditText = (EditText) v.findViewById(R.id.start_edit_text);
             mStartEditText.setText(Utils.formatDate(
                 now.get(Calendar.DAY_OF_MONTH),
                 now.get(Calendar.MONTH) + 1,
                 now.get(Calendar.YEAR)
             ));
-            mEndEditText = (EditText) v.findViewById(R.id.end_edittext);
+            mEndEditText = (EditText) v.findViewById(R.id.end_edit_text);
             mEndEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -483,7 +485,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
     public void showDateStartPickerDialog() {
         String s = mTxtDateStart.getText() + "";
-        String strArrtmp[] = s.split("-");
+        String strArrtmp[] = s.split(Constant.AMOUNT_DIVIDE);
         int ngay = Integer.parseInt(strArrtmp[0]);
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
@@ -515,7 +517,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
     public void showDateFinishPickerDialog() {
         String s = mTxtDateFinish.getText() + "";
-        String strArrtmp[] = s.split("-");
+        String strArrtmp[] = s.split(Constant.AMOUNT_DIVIDE);
         int ngay = Integer.parseInt(strArrtmp[0]);
         int thang = Integer.parseInt(strArrtmp[1]) - 1;
         int nam = Integer.parseInt(strArrtmp[2]);
@@ -601,7 +603,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     }
 
     public void getDataFromService(final NewEvent newEvent) {
-        DialogUtils.showProgressDialog(this);
+//        DialogUtils.showProgressDialog(this);
         ServiceBuilder.getService().createEvent(newEvent)
             .enqueue(new Callback<CreateEventResponse>() {
                 @Override
@@ -665,7 +667,6 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     public NewEvent createEvent() {
         Event event = new Event();
         event.setTitle(mEdtTitle.getText().toString());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         if (null == mTimeEventStart) mTimeEventStart = new Date();
         if (null == mTimeEventFinish) mTimeEventFinish = new Date();
         if (null == mDateStart) mDateStart = new Date();
