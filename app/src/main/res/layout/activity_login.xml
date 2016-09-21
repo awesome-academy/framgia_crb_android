@@ -108,20 +108,44 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-           >
+            android:paddingLeft="@dimen/padding_lager"
+            android:paddingRight="@dimen/padding_lager">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_bottom"
-                android:text="@string/or"
-                android:textSize="@dimen/text_size_or"
-                android:textStyle="bold"
-                />
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_grey600"
+                    android:layout_toLeftOf="@+id/tv_or"
+                    android:layout_centerVertical="true"/>
+                <TextView
+                    android:id="@+id/tv_or"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_bottom"
+                    android:text="@string/or"
+                    android:textSize="@dimen/text_size_or"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/padding_lager"
+                    android:layout_marginLeft="@dimen/padding_lager"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_grey600"
+                    android:layout_toRightOf="@+id/tv_or"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
 
             <Button
+                android:layout_marginTop="@dimen/padding_lager"
                 android:id="@+id/btn_facebook"
-                android:layout_width="@dimen/layout_with_fb"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height_fb"
                 android:background="@drawable/button_login_facebook_selector"
                 android:text="@string/login_with_fb"
@@ -133,7 +157,7 @@
                 android:layout_below="@+id/btn_facebook"
                 android:layout_marginTop="@dimen/padding_top"
                 android:id="@+id/btn_google"
-                android:layout_width="@dimen/layout_with_fb"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height_fb"
                 android:background="@drawable/button_login_google_selector"
                 android:text="@string/login_with_gg"
