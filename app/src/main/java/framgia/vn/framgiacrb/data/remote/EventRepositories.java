@@ -33,8 +33,7 @@ import retrofit2.Response;
 /**
  * Created by nghicv on 26/07/2016.
  */
-public class EventRepositories implements EventRepository{
-
+public class EventRepositories implements EventRepository {
     private List<Event> mEvents;
     private OnLoadEventListener mOnLoadEventListener;
 
@@ -44,17 +43,14 @@ public class EventRepositories implements EventRepository{
 
     @Override
     public void insertEvent(Event event) {
-
     }
 
     @Override
     public void deleteEvent(Event event) {
-
     }
 
     @Override
     public void updateEvent(Event event) {
-
     }
 
     @Override
@@ -89,7 +85,8 @@ public class EventRepositories implements EventRepository{
                     if (error.equals(Constant.NOT_AUTHENTICATION)) {
                         logout(context);
                     } else {
-                        Toast.makeText(context, context.getString(R.string.message_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.message_error),
+                            Toast.LENGTH_SHORT).show();
                         mOnLoadEventListener.onSuccess();
                     }
                 }
@@ -100,21 +97,24 @@ public class EventRepositories implements EventRepository{
                 if (mOnLoadEventListener != null) {
                     mOnLoadEventListener.onSuccess();
                 }
-                Toast.makeText(context, context.getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.message_not_connect),
+                    Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void logout(final Context context) {
+        Utils.cancelAllAlarm(context);
         Toast.makeText(context, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(null);
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+            context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
-        ((AppCompatActivity)context).finish();
+        ((AppCompatActivity) context).finish();
     }
 
     @Override
