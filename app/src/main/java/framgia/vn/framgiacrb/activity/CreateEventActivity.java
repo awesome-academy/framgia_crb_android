@@ -516,8 +516,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     public void showDateStartPickerDialog() {
         String s = mTxtDateStart.getText() + "";
         String strArrtmp[] = s.split("-");
-        int ngay = Integer.parseInt(strArrtmp[0]);
-        int thang = Integer.parseInt(strArrtmp[1]) - 1;
+        int thang = Integer.parseInt(strArrtmp[0]) - 1;
+        int ngay = Integer.parseInt(strArrtmp[1]);
         int nam = Integer.parseInt(strArrtmp[2]);
         mCreateDatePickerDialog = DatePickerDialog.newInstance(
                 new DatePickerDialog.OnDateSetListener() {
@@ -547,8 +547,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     public void showDateFinishPickerDialog() {
         String s = mTxtDateFinish.getText() + "";
         String strArrtmp[] = s.split("-");
-        int ngay = Integer.parseInt(strArrtmp[0]);
-        int thang = Integer.parseInt(strArrtmp[1]) - 1;
+        int thang = Integer.parseInt(strArrtmp[0]) - 1;
+        int ngay = Integer.parseInt(strArrtmp[1]);
         int nam = Integer.parseInt(strArrtmp[2]);
         Calendar now = Calendar.getInstance();
         mCreateDatePickerDialog = DatePickerDialog.newInstance(
