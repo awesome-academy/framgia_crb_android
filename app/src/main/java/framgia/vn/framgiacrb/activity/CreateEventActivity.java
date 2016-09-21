@@ -585,9 +585,18 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 mCal.set(Calendar.MINUTE, minute);
                 mHourFinish = mCal.getTime();
                 mTimeEventStart = mCal.getTime();
+                if (mTimeEventFinish == null) mTimeEventFinish = new Date();
+                if (mTimeEventStart == null) mTimeEventStart = new Date();
+                boolean result = Utils.isBeforeHourInDate(mTimeEventFinish, mTimeEventStart);
+
+                if (result) {
+                    mTxtTimeFinish.setText
+                            (Utils.formatTime(hourOfDay + 1, minute));
+                }
+
             }
         };
-        String s = mTxtTimeStart.getTag() + "";
+        String s = mTxtTimeStart.getText().toString().trim();
         String strArr[] = s.split(":");
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
@@ -615,13 +624,13 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 boolean result = Utils.isBeforeHourInDate(mTimeEventFinish, mTimeEventStart);
 
                 if (result) {
-                    Toast.makeText(CreateEventActivity.this, R.string.unable, Toast.LENGTH_SHORT).show();
-                    mTxtTimeFinish.setText(mTxtTimeStart.getText().toString());
+                    mTxtTimeStart.setText
+                            (Utils.formatTime(hourOfDay - 1, minute));
                 }
 
             }
         };
-        String s = mTxtTimeFinish.getTag() + "";
+        String s = mTxtTimeFinish.getText().toString().trim();
         String strArr[] = s.split(":");
         int gio = Integer.parseInt(strArr[0]);
         int phut = Integer.parseInt(strArr[1]);
