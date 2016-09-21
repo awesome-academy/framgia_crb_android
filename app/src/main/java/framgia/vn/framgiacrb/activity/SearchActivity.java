@@ -56,7 +56,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition() + 1;
-                if (sAsyncTaskFinish && sIsHasMoreEvent && dy > 0 &&
+                if (sAsyncTaskFinish && sIsHasMoreEvent && dy >= 0 &&
                     totalItemCount == lastVisibleItem) {
                     sNotNeedYear = true;
                     sMonth++;
@@ -88,6 +88,8 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
                 mTextSearch = query;
                 mRealmList.clear();
                 sNotNeedYear = false;
+                sIsHasMoreEvent = true;
+                sMonth = Constant.INVALID_INDEX;
                 if (!query.equals("")) {
                     SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
                         (SearchActivity.this, mRealmList);

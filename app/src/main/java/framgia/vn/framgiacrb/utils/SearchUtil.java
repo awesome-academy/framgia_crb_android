@@ -2,13 +2,16 @@ package framgia.vn.framgiacrb.utils;
 
 import android.app.AlarmManager;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
 import framgia.vn.framgiacrb.activity.SearchActivity;
 import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.model.DayOfWeekId;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmList;
 
@@ -21,15 +24,22 @@ public class SearchUtil {
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
         RealmList<Event> list = new RealmList();
         list.addAll(generateEvent(data));
+        Collections.sort(list, new Comparator<Event>() {
+            @Override
+            public int compare(Event lhs, Event rhs) {
+                return lhs.getStartTime().compareTo(rhs.getStartTime());
+            }
+        });
+        if (list.size() == 0) {
+            SearchActivity.sIsHasMoreEvent = false;
+            return list;
+        }
         Event firstEvent = list.get(0);
         if (SearchActivity.sNotNeedYear && TimeUtils.getYear(firstEvent.getStartTime()) ==
             SearchActivity.sYear) {
             return list;
         }
         Event yearInSearch = new Event();
-        if (list.size() == 0) {
-            return list;
-        }
         String startYear = TimeUtils.toYear(list.get(0).getStartTime());
         yearInSearch.setTitle(DEFINE_YEAR);
         yearInSearch.setDescription(TimeUtils.toYear(list.get(0).getStartTime()));
@@ -87,14 +97,76 @@ public class SearchUtil {
                 }
             }
             if (event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {
+                list.addAll(genEventWeekly(event));
             }
         }
-        Collections.sort(list, new Comparator<Event>() {
-            @Override
-            public int compare(Event lhs, Event rhs) {
-                return lhs.getStartTime().compareTo(rhs.getStartTime());
-            }
-        });
         return list;
+    }
+
+    public static RealmList<Event> genEventWeekly(Event event) {
+        RealmList listEvent = new RealmList();
+        RepeatOnAttribute repeatOnAttribute = event.getRepeatOnAttribute();
+        if(repeatOnAttribute == null) {
+            return listEvent;
+        }
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute1()));
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute2()));
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute3()));
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute4()));
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute5()));
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute6()));
+        listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
+            .getRepeatOnAttribute7()));
+        return listEvent;
+    }
+
+    public static RealmList<Event> getListEventByDayOfWeekId(Event event, DayOfWeekId dayOfWeekId) {
+        RealmList listEvent = new RealmList();
+        if (dayOfWeekId == null) {
+            return listEvent;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(event.getStartRepeat());
+        switch (dayOfWeekId.getDayOfWeekId()) {
+            case Constant.SUNDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                break;
+            case Constant.MONDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                break;
+            case Constant.TUESDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                break;
+            case Constant.WEDNESDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                break;
+            case Constant.THURSDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                break;
+            case Constant.FRIDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                break;
+            case Constant.SATURDAY:
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                break;
+        }
+        while (TimeUtils.getMonth(calendar.getTime()) == SearchActivity.sMonth) {
+            if (calendar.getTime().after(event.getStartRepeat())
+                && calendar.getTime().before(event.getEndRepeat())) {
+                Event suitableEvent = new Event(event);
+                suitableEvent.setStartTime(calendar.getTime());
+                suitableEvent.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(),
+                    event.getFinishTime()));
+                listEvent.add(suitableEvent);
+            }
+            calendar.add(Calendar.WEEK_OF_MONTH, event.getRepeatEvery());
+        }
+        return listEvent;
     }
 }
