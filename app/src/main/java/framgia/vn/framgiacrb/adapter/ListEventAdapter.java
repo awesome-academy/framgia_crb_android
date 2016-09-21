@@ -1,6 +1,7 @@
 package framgia.vn.framgiacrb.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -121,12 +122,13 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             String finishTime = format.format(finishDate);
             String time = startTime + "-" + finishTime;
             eventViewHolder.tvTime.setText(time);
-            eventViewHolder.cardView.setCardBackgroundColor(mContext.getResources().getColor(Constant.color[event.getColorId() - 1]));
             if (event.getPlace() != null) {
                 eventViewHolder.tvLocation.setText(event.getPlace().getName());
                 eventViewHolder.linearLayoutLocation.setVisibility(View.VISIBLE);
+                eventViewHolder.cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, Constant.color[event.getPlace().getId() - 1]));
             } else {
                 eventViewHolder.linearLayoutLocation.setVisibility(View.GONE);
+                eventViewHolder.cardView.setCardBackgroundColor(ContextCompat.getColor(mContext, Constant.color[event.getColorId() - 1]));
             }
         }
     }

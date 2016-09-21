@@ -47,4 +47,15 @@
     <color name="color_event_12">#FAD165</color>
     <color name="color_divide">#ccc</color>
     <color name="color_grey600">#757575</color>
+
+    <color name="color_place_1">#00CED1</color>
+    <color name="color_place_2">#FF7F50</color>
+    <color name="color_place_3">#3CB371</color>
+    <color name="color_place_4">#66CDAA</color>
+    <color name="color_place_5">#9ACD32</color>
+    <color name="color_place_6">#2E8B57</color>
+    <color name="color_place_7">#F08080</color>
+    <color name="color_place_8">#DB7093</color>
+    <color name="color_place_9">#F08080</color>
+    <color name="color_place_10">#FF69B4</color>
 </resources>
