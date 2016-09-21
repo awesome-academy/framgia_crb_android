@@ -15,6 +15,11 @@ public class Constant {
             R.color.color_event_4, R.color.color_event_5, R.color.color_event_6, R.color.color_event_7,
             R.color.color_event_8, R.color.color_event_9, R.color.color_event_10, R.color.color_event_11,
             R.color.color_event_12};
+
+    public static final int[] COLOR_PLACE = {R.color.color_place_1, R.color.color_place_2, R.color.color_place_3,
+            R.color.color_place_4, R.color.color_place_5, R.color.color_place_6, R.color.color_place_7,
+            R.color.color_place_8, R.color.color_place_9, R.color.color_place_10};
+
     public static final String INTENT_DATA = "intent_data";
     public static final String ID_KEY ="id_event";
     public static final String LINE_BREAK = "\n";
