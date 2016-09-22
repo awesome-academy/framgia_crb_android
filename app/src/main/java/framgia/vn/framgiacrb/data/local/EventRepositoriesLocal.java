@@ -191,7 +191,7 @@ public class EventRepositoriesLocal implements EventRepository {
             @Override
             public void onSuccess() {
                 if (onSuccess != null)
-                onSuccess.onSuccess();
+                    onSuccess.onSuccess();
             }
         });
     }

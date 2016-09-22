@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:paddingLeft="@dimen/padding_lager"
+    android:paddingRight="@dimen/padding_lager">
+
+    <ImageView
+        android:id="@+id/icon_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/padding_lager"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/icon_imageview"
+        android:layout_toLeftOf="@+id/cb_selected_calendar"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/cb_selected_calendar"
+        android:layout_width="@dimen/cb_size"
+        android:layout_height="@dimen/cb_size"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
