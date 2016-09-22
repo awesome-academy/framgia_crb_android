@@ -8,6 +8,7 @@ public class ItemLeftMenu {
     private String mTitle;
     private String mEmail;
     private int mCalendarId;
+    private boolean mIsSelected;
 
     public ItemLeftMenu() {
     }
@@ -42,5 +43,13 @@ public class ItemLeftMenu {
 
     public void setCalendarId(int mCalendarId) {
         this.mCalendarId = mCalendarId;
+    }
+
+    public boolean isSelected() {
+        return mIsSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        mIsSelected = selected;
     }
 }
