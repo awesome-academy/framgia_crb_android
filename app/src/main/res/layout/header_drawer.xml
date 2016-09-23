@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="190dp"
-    android:background="@drawable/background_material" >
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+    android:background="@color/white">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
-        android:src="@drawable/profile"
-        app:border_color="#FF000000"
-        android:layout_marginLeft="24dp"
-        android:layout_centerVertical="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/ic_account_circle"
+        android:scaleType="fitXY"/>
 
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_image"
-        android:text="Lucky Luke"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:textColor="#FFF"
-        android:gravity="left"
-        android:paddingBottom="4dp"
-        android:layout_above="@+id/email"
-        android:layout_alignLeft="@+id/profile_image"
-        android:layout_alignStart="@+id/profile_image" />
+        android:layout_toRightOf="@+id/profile_image"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/padding_lager">
 
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="mddien1994@gmail.com"
-        android:gravity="left"
-        android:layout_marginBottom="8dp"
-        android:textSize="14sp"
-        android:textColor="#fff"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/user_name"
-        android:layout_alignStart="@+id/user_name" />
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/email"
+            android:layout_alignLeft="@+id/profile_image"
+            android:layout_alignStart="@+id/profile_image"
+            android:layout_below="@+id/profile_image"
+            android:ellipsize="marquee"
+            android:gravity="left"
+            android:maxLines="1"
+            android:paddingBottom="4dp"
+            android:text="Lucky Luke"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/user_name"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/user_name"
+            android:gravity="left"
+            android:text="mddien1994@gmail.com"
+            android:textSize="14sp"/>
+    </LinearLayout>
 </RelativeLayout>

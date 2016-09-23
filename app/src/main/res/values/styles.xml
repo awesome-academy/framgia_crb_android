@@ -63,4 +63,9 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="Theme.Custom.CheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/color_grey600</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
 </resources>
