@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadeScrollbars="false"
-    android:fillViewport="true"
-    android:scrollbars="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
 
-    <LinearLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        style="@style/Theme.SWitch"
-        android:id="@+id/linearlayout_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/layout_margin_item_search"
-        android:orientation="vertical">
+    <LinearLayout android:id="@+id/linearlayout_background"
+                  style="@style/Theme.SWitch"
+                  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:paddingTop="@dimen/layout_margin_item_search">
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_view"
@@ -37,10 +37,10 @@
                     android:layout_margin="@dimen/layout_margin_5dp"
                     android:layout_marginBottom="@dimen/margin_bottom"
                     android:background="@null"
+                    android:focusableInTouchMode="true"
                     android:gravity="left|center_vertical"
                     android:hint="@string/hint_create_event_input"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/text_size_search" />
+                    android:textSize="@dimen/text_size_search"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_event" />
+                        android:src="@drawable/ic_event"/>
 
                     <TextView
                         android:id="@+id/edit_event"
@@ -68,7 +68,7 @@
                         android:paddingLeft="@dimen/margin_bottom"
                         android:text="@string/event_name"
                         android:textColor="@color/color_grey800"
-                        android:textSize="@dimen/text_size_search" />
+                        android:textSize="@dimen/text_size_search"/>
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -93,9 +93,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_height_fb"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/layout_margin_item_search"
-                    android:gravity="center_vertical">
+                    android:paddingLeft="@dimen/layout_margin_item_search">
 
                     <ImageView
                         android:id="@+id/btn_Alarm"
@@ -105,7 +105,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_clock" />
+                        android:src="@drawable/ic_clock"/>
 
                     <TextView
                         android:id="@+id/txt_AllDay"
@@ -113,12 +113,12 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                         android:text="@string/all_day"
                         android:textColor="@color/color_grey800"
-                        android:textSize="@dimen/text_size_search" />
+                        android:textSize="@dimen/text_size_search"/>
 
                     <Switch
                         android:id="@+id/sw_SwitchAlarm"
@@ -128,9 +128,9 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
+                        android:layout_marginRight="@dimen/item_create_event_margin_vertical"
                         android:background="?attr/selectableItemBackground"
-                        android:textColor="@color/white"
-                        android:layout_marginRight="@dimen/item_create_event_margin_vertical"/>
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -145,12 +145,12 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/item_create_event_start_date_margin_left"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:layout_marginLeft="@dimen/item_create_event_start_date_margin_left"
                         android:text="@string/start"
-                        android:textSize="@dimen/text_size_search"
-                        android:textColor="@color/color_grey800"/>
+                        android:textColor="@color/color_grey800"
+                        android:textSize="@dimen/text_size_search"/>
 
                     <TextView
                         android:id="@+id/txt_DateStart"
@@ -170,9 +170,9 @@
                         android:layout_height="@dimen/layout_height_fb"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginRight="@dimen/item_create_event_margin_vertical"
                         android:layout_weight="1"
                         android:gravity="right|center_vertical"
-                        android:layout_marginRight="@dimen/item_create_event_margin_vertical"
                         android:text="@string/time_start"
                         android:textSize="@dimen/text_size_search"/>
                 </LinearLayout>
@@ -188,12 +188,12 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/item_create_event_start_date_margin_left"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:layout_marginLeft="@dimen/item_create_event_start_date_margin_left"
                         android:text="@string/finish"
-                        android:textSize="@dimen/text_size_search"
-                        android:textColor="@color/color_grey800"/>
+                        android:textColor="@color/color_grey800"
+                        android:textSize="@dimen/text_size_search"/>
 
                     <TextView
                         android:id="@+id/txt_DateFinish"
@@ -209,13 +209,13 @@
 
                     <TextView
                         android:id="@+id/txt_TimeFinish"
-                        android:layout_width="@dimen/margin_top_button"
+                        android:layout_width="@dimen/layout_width_imgbt_item_search"
                         android:layout_height="@dimen/layout_height_fb"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginRight="@dimen/item_create_event_margin_vertical"
                         android:layout_weight="1"
                         android:gravity="right|center_vertical"
-                        android:layout_marginRight="@dimen/item_create_event_margin_vertical"
                         android:text="@string/time_finish"
                         android:textSize="@dimen/text_size_search"/>
                 </LinearLayout>
@@ -223,9 +223,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_height_fb"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/item_create_event_margin_vertical"
-                    android:gravity="center_vertical">
+                    android:paddingLeft="@dimen/item_create_event_margin_vertical">
 
                     <ImageView
                         android:id="@+id/btn_Repeat"
@@ -235,7 +235,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_repeat_grey" />
+                        android:src="@drawable/ic_repeat_grey"/>
 
                     <TextView
                         android:id="@+id/txt_Repeat"
@@ -243,20 +243,20 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                         android:text="@string/no_repeat"
-                        android:textSize="@dimen/text_size_search"
-                        android:textColor="@color/color_grey800"/>
+                        android:textColor="@color/color_grey800"
+                        android:textSize="@dimen/text_size_search"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_height_fb"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/item_create_event_margin_vertical"
-                    android:gravity="center_vertical">
+                    android:paddingLeft="@dimen/item_create_event_margin_vertical">
 
                     <ImageView
                         android:id="@+id/btn_Place"
@@ -266,7 +266,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_map_marker_grey" />
+                        android:src="@drawable/ic_map_marker_grey"/>
 
                     <TextView
                         android:id="@+id/txt_Place"
@@ -274,12 +274,12 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                         android:text="@string/place"
-                        android:textSize="@dimen/text_size_search"
-                        android:textColor="@color/color_grey800"/>
+                        android:textColor="@color/color_grey800"
+                        android:textSize="@dimen/text_size_search"/>
 
                 </LinearLayout>
 
@@ -318,7 +318,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center_vertical"
                         android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_calendar_grey600" />
+                        android:src="@drawable/ic_calendar_grey600"/>
 
                     <TextView
                         android:id="@+id/txt_Calendar"
@@ -326,21 +326,21 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
-                        android:gravity="left|center"
                         android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
+                        android:gravity="left|center"
                         android:text="@string/calendar_name"
-                        android:textSize="@dimen/text_size_search"
-                        android:textColor="@color/color_grey800"/>
+                        android:textColor="@color/color_grey800"
+                        android:textSize="@dimen/text_size_search"/>
                 </LinearLayout>
 
                 <Spinner
                     android:id="@+id/spin_Calendar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_height_fb"
-                    android:gravity="left|center_vertical"
                     android:layout_marginLeft="@dimen/item_sprinner_calendar_margin"
-                    android:textSize="@dimen/text_size_search"
-                    android:layout_marginRight="@dimen/item_create_event_margin_vertical"/>
+                    android:layout_marginRight="@dimen/item_create_event_margin_vertical"
+                    android:gravity="left|center_vertical"
+                    android:textSize="@dimen/text_size_search"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -355,9 +355,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/layout_height_fb"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/item_create_event_margin_vertical"
-                android:gravity="center_vertical">
+                android:paddingLeft="@dimen/item_create_event_margin_vertical">
 
                 <ImageView
                     android:id="@+id/btn_invited"
@@ -367,7 +367,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_account_multiple_plus_grey" />
+                    android:src="@drawable/ic_account_multiple_plus_grey"/>
 
                 <TextView
                     android:id="@+id/txt_Attendee"
@@ -375,12 +375,12 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                     android:layout_weight="1"
                     android:gravity="left|center"
-                    android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                     android:text="@string/invite"
-                    android:textSize="@dimen/text_size_search"
-                    android:textColor="@color/color_grey800"/>
+                    android:textColor="@color/color_grey800"
+                    android:textSize="@dimen/text_size_search"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -398,6 +398,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/item_create_event_margin_vertical"
                 android:paddingTop="@dimen/padding_normal">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -405,18 +406,19 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_note_text" />
+                    android:src="@drawable/ic_note_text"/>
+
                 <EditText
                     android:id="@+id/edt_Detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                     android:background="@null"
                     android:gravity="top"
                     android:hint="@string/desciption"
                     android:lines="5"
-                    android:layout_marginLeft="@dimen/item_create_event_margin_vertical"
                     android:paddingTop="@dimen/layout_margin_5dp"
-                    android:textSize="@dimen/text_size_search" />
+                    android:textSize="@dimen/text_size_search"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
