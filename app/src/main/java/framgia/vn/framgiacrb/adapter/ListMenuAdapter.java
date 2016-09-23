@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -74,7 +75,6 @@ public class ListMenuAdapter extends BaseAdapter {
                 holder.titleTextView = (TextView) v.findViewById(R.id.user_name);
                 holder.iconImageView = (ImageView) v.findViewById(R.id.profile_image);
                 holder.emailTextView = (TextView) v.findViewById(R.id.email);
-                holder.iconImageView.setImageResource(header.getImageResource());
                 holder.titleTextView.setText(header.getTitle());
                 holder.emailTextView.setText(header.getEmail());
                 break;
@@ -90,8 +90,8 @@ public class ListMenuAdapter extends BaseAdapter {
                 holder.titleTextView.setText(mListMenuItem.get(position).getTitle());
                 holder.iconImageView = (ImageView) v.findViewById(R.id.icon_imageview);
                 holder.iconImageView.setImageResource(this.mListMenuItem.get(position).getImageResource());
-                holder.appCompatCheckBox = (AppCompatCheckBox) v.findViewById(R.id.cb_selected_calendar);
-                holder.appCompatCheckBox.setChecked(mListMenuItem.get(position).isSelected());
+                holder.checkbox = (AppCompatCheckBox) v.findViewById(R.id.cb_selected_calendar);
+                holder.checkbox.setChecked(mListMenuItem.get(position).isSelected());
                 break;
 
             default:
@@ -109,6 +109,6 @@ public class ListMenuAdapter extends BaseAdapter {
         public TextView titleTextView;
         public ImageView iconImageView;
         public TextView emailTextView;
-        public AppCompatCheckBox appCompatCheckBox;
+        public AppCompatCheckBox checkbox;
     }
 }
