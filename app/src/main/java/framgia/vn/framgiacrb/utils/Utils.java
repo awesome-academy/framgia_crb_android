@@ -11,10 +11,10 @@ import android.support.v4.content.ContextCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.services.AlarmReceiver;
 
 /**
@@ -23,19 +23,9 @@ import framgia.vn.framgiacrb.services.AlarmReceiver;
 public class Utils {
     public static final String ERROR_JSON = "errors";
 
-    public static String formatTime(int hourOfDay, int minutes) {
-        String formatHour, formatMinute;
-        if (hourOfDay >= 10) {
-            formatHour = String.valueOf(hourOfDay);
-        } else {
-            formatHour = "0" + String.valueOf(hourOfDay);
-        }
-        if (minutes >= 10) {
-            formatMinute = String.valueOf(minutes);
-        } else {
-            formatMinute = "0" + String.valueOf(minutes);
-        }
-        return formatHour + ":" + formatMinute + " ";
+    public static String formatTime(Context context, int hourOfDay, int minutes) {
+        return String.format(context.getResources().getString(R.string.time_picker_default),
+            hourOfDay, minutes);
     }
 
     public static String formatDate(int dayOfMonth, int monthOfYear, int year) {
@@ -63,7 +53,6 @@ public class Utils {
     }
 
     public static boolean isBeforeHourInDate(Date date, Date compareDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
         calendar1.setTime(date);

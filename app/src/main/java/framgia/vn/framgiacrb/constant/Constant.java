@@ -23,13 +23,13 @@ public class Constant {
     public static final String INTENT_DATA = "intent_data";
     public static final String ID_KEY ="id_event";
     public static final String LINE_BREAK = "\n";
-    public static final String AMOUNT_DEVIDE = "-";
+    public static final String AMOUNT_DIVIDE = "-";
 
     public static final String SUNDAY = "1";
     public static final String MONDAY = "2";
     public static final String TUESDAY = "3";
     public static final String WEDNESDAY = "4";
-    public static final String THURDAY = "5";
+    public static final String THURSDAY = "5";
     public static final String FRIDAY = "6";
     public static final String SATURDAY = "7";
     public static final String WEEKLY = "Weekly";
