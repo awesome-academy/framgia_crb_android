@@ -28,19 +28,9 @@ public class Utils {
             hourOfDay, minutes);
     }
 
-    public static String formatDate(int dayOfMonth, int monthOfYear, int year) {
-        String formatDay, formatMonth;
-        if (dayOfMonth >= 10) {
-            formatDay = String.valueOf(dayOfMonth);
-        } else {
-            formatDay = "0" + String.valueOf(dayOfMonth);
-        }
-        if (monthOfYear >= 10) {
-            formatMonth = String.valueOf(monthOfYear);
-        } else {
-            formatMonth = "0" + String.valueOf(monthOfYear);
-        }
-        return formatDay + "-" + formatMonth + "-" + year;
+    public static String formatDate(Context context, int dayOfMonth, int monthOfYear, int year) {
+        return String.format(context.getResources().getString(R.string.date_picker_default),
+            dayOfMonth, monthOfYear, year);
     }
 
     public static String getStringFromJson(String stringJson) throws JSONException {
