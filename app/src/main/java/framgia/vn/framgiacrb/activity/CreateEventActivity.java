@@ -346,7 +346,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             Calendar now = Calendar.getInstance();
             if (mDateStart != null) now.setTime(mDateStart);
             mStartEditText = (EditText) v.findViewById(R.id.start_edit_text);
-            mStartEditText.setText(Utils.formatDate(
+            mStartEditText.setText(Utils.formatDate(CreateEventActivity.this,
                 now.get(Calendar.DAY_OF_MONTH),
                 now.get(Calendar.MONTH) + 1,
                 now.get(Calendar.YEAR)
@@ -459,7 +459,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 mEndEditText.setText("");
             } else {
-                mEndEditText.setText(Utils.formatDate(
+                mEndEditText.setText(Utils.formatDate(CreateEventActivity.this,
                     dayOfMonth, monthOfYear + 1, year
                 ));
                 mDateEventFinishRepeat = mCalendarEnd.getTime();
@@ -509,7 +509,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 public void onDateSet(DatePickerDialog view, int year, int monthOfYear,
                                       int dayOfMonth) {
                     mTxtDateStart.setText(
-                        Utils.formatDate((monthOfYear + 1), dayOfMonth, year));
+                        Utils.formatDate(CreateEventActivity.this, (monthOfYear + 1), dayOfMonth,
+                            year));
                     mCal.set(year, monthOfYear, dayOfMonth);
                     mDateStart = mCal.getTime();
                     Calendar calendar = Calendar.getInstance();
@@ -541,7 +542,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 public void onDateSet(DatePickerDialog view, int year, int monthOfYear,
                                       int dayOfMonth) {
                     mTxtDateFinish.setText(
-                        (Utils.formatDate((monthOfYear + 1), dayOfMonth, year)));
+                        (Utils.formatDate(CreateEventActivity.this, (monthOfYear + 1), dayOfMonth,
+                            year)));
                     mCal.set(year, monthOfYear, dayOfMonth);
                     mDateFinish = mCal.getTime();
                     Calendar calendar = Calendar.getInstance();
