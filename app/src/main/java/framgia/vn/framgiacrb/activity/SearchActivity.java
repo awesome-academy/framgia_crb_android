@@ -21,7 +21,7 @@ import io.realm.RealmList;
  */
 public class SearchActivity extends AppCompatActivity implements AsyncTaskFinishListener {
     private Toolbar mToolbar;
-    private RecyclerView mRecycler;
+    public RecyclerView mRecycler;
     private SearchView mSearchView;
     private SearchView.OnQueryTextListener mSearchViewListener;
     private LinearLayoutManager layoutManager;
@@ -31,8 +31,40 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
     public static int sMonth = Constant.INVALID_INDEX;
     public static int sYear = Constant.INVALID_INDEX;
     public static boolean sIsHasMoreEvent = true;
-    public static boolean sAsyncTaskFinish = false;
+    public static boolean sAsyncTaskFinish = true;
     public static boolean sNotNeedYear = false;
+    private boolean mHaveListener = false;
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView
+        .OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int totalItemCount = layoutManager.getItemCount();
+            int lastVisibleItem = layoutManager.findLastVisibleItemPosition() + 1;
+            if (sAsyncTaskFinish && sIsHasMoreEvent && dy >= 0 &&
+                totalItemCount == lastVisibleItem) {
+                sMonth++;
+                if (sMonth == 13) {
+                    sNotNeedYear = false;
+                    sMonth = 1;
+                    sYear++;
+                }
+                if (!mTextSearch.equals("")) {
+                    sAsyncTaskFinish = false;
+                    SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
+                        (SearchActivity.this, mRealmList);
+                    searchEventAsynTask.setListener(SearchActivity.this);
+                    searchEventAsynTask.execute(mTextSearch);
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,30 +82,6 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
         mRecycler.setHasFixedSize(true);
         mAdapter = new SearchEventAdapter(SearchActivity.this, mRealmList);
         mRecycler.setAdapter(mAdapter);
-        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItemCount = layoutManager.getItemCount();
-                int lastVisibleItem = layoutManager.findLastVisibleItemPosition() + 1;
-                if (sAsyncTaskFinish && sIsHasMoreEvent && dy >= 0 &&
-                    totalItemCount == lastVisibleItem) {
-                    sNotNeedYear = true;
-                    sMonth++;
-                    if (sMonth == 13) {
-                        sNotNeedYear = false;
-                        sMonth = 1;
-                        sYear++;
-                    }
-                    if (!mTextSearch.equals("")) {
-                        SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
-                            (SearchActivity.this, mRealmList);
-                        searchEventAsynTask.setListener(SearchActivity.this);
-                        searchEventAsynTask.execute(mTextSearch);
-                    }
-                }
-            }
-        });
     }
 
     @Override
@@ -85,6 +93,9 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (!sAsyncTaskFinish) {
+                    return false;
+                }
                 mTextSearch = query;
                 mRealmList.clear();
                 sNotNeedYear = false;
@@ -119,6 +130,15 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
 
     @Override
     public void onFinish(RealmList list) {
+        if (mAdapter.data.size() == list.size() && sIsHasMoreEvent && mHaveListener) {
+            mRecycler.removeOnScrollListener(mOnScrollListener);
+            mOnScrollListener.onScrolled(mRecycler, 0, 0);
+            mHaveListener = false;
+        } else{
+            mRecycler.addOnScrollListener(mOnScrollListener);
+            mHaveListener = true;
+        }
+        sAsyncTaskFinish = true;
         mRealmList = list;
         mAdapter.data = list;
         mAdapter.notifyDataSetChanged();
