@@ -22,6 +22,11 @@ public class SearchUtil {
     public static final String DEFINE_YEAR = "item_year";
 
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
+        if (SearchActivity.sMonth == Constant.INVALID_INDEX) {
+            Event event = data.get(0);
+            SearchActivity.sMonth = TimeUtils.getMonth(event.getStartTime());
+            SearchActivity.sYear = TimeUtils.getYear(event.getStartTime());
+        }
         RealmList<Event> list = new RealmList();
         list.addAll(generateEvent(data));
         Collections.sort(list, new Comparator<Event>() {
@@ -31,7 +36,11 @@ public class SearchUtil {
             }
         });
         if (list.size() == 0) {
-            SearchActivity.sIsHasMoreEvent = false;
+            Date finalDate = getFinalEventDay(data);
+            if (SearchActivity.sMonth > TimeUtils.getMonth(finalDate)
+                && SearchActivity.sYear > TimeUtils.getYear(finalDate)) {
+                SearchActivity.sIsHasMoreEvent = false;
+            }
             return list;
         }
         Event firstEvent = list.get(0);
@@ -39,6 +48,7 @@ public class SearchUtil {
             SearchActivity.sYear) {
             return list;
         }
+        SearchActivity.sNotNeedYear = true;
         Event yearInSearch = new Event();
         String startYear = TimeUtils.toYear(list.get(0).getStartTime());
         yearInSearch.setTitle(DEFINE_YEAR);
@@ -67,7 +77,9 @@ public class SearchUtil {
                 return list;
             }
             if (TimeUtils.getMonth(event.getStartTime()) == SearchActivity.sMonth
-                && TimeUtils.getYear(event.getStartTime()) == SearchActivity.sYear) {
+                && TimeUtils.getYear(event.getStartTime()) == SearchActivity.sYear
+                && (event.getRepeatType().equals(Constant.NO_REPEAT)
+                || event.getRepeatType().equals(Constant.REPEAT_DAILY))) {
                 list.add(new Event(event));
             }
             if (event.getRepeatType().equals(Constant.NO_REPEAT)) {
@@ -99,6 +111,18 @@ public class SearchUtil {
             if (event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {
                 list.addAll(genEventWeekly(event));
             }
+            if (event.getRepeatType().equals(Constant.REPEAT_MONTHLY)) {
+                Event eventMonthly = genEventForMonthly(event);
+                if (eventMonthly != null) {
+                    list.add(eventMonthly);
+                }
+            }
+            if (event.getRepeatType().equals(Constant.REPEAT_YEARLY)) {
+                Event eventYearly = genEventForYearly(event);
+                if (eventYearly != null) {
+                    list.add(eventYearly);
+                }
+            }
         }
         return list;
     }
@@ -106,7 +130,7 @@ public class SearchUtil {
     public static RealmList<Event> genEventWeekly(Event event) {
         RealmList listEvent = new RealmList();
         RepeatOnAttribute repeatOnAttribute = event.getRepeatOnAttribute();
-        if(repeatOnAttribute == null) {
+        if (repeatOnAttribute == null) {
             return listEvent;
         }
         listEvent.addAll(getListEventByDayOfWeekId(event, event.getRepeatOnAttribute()
@@ -168,5 +192,59 @@ public class SearchUtil {
             calendar.add(Calendar.WEEK_OF_MONTH, event.getRepeatEvery());
         }
         return listEvent;
+    }
+
+    public static Event genEventForMonthly(Event event) {
+        int month = TimeUtils.getMonth(event.getStartRepeat());
+        int endMonth = TimeUtils.getMonth(event.getEndRepeat());
+        while (month < SearchActivity.sMonth && month <= endMonth) {
+            month += event.getRepeatEvery();
+        }
+        if (month != SearchActivity.sMonth) {
+            return null;
+        }
+        Event result = new Event(event);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(event.getStartTime());
+        calendar.set(Calendar.MONTH, month);
+        result.setStartTime(calendar.getTime());
+        result.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(), event.getFinishTime
+            ()));
+        return result;
+    }
+
+    public static Event genEventForYearly(Event event) {
+        int month = TimeUtils.getMonth(event.getStartRepeat());
+        if (month != SearchActivity.sMonth) {
+            return null;
+        }
+        int year = TimeUtils.getYear(event.getStartRepeat());
+        int endYear = TimeUtils.getYear(event.getEndRepeat());
+        while (year < SearchActivity.sYear && year < endYear) {
+            year += event.getRepeatEvery();
+        }
+        if (year != SearchActivity.sYear) {
+            return null;
+        }
+        Event result = new Event(event);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(event.getStartTime());
+        calendar.set(Calendar.YEAR, year);
+        result.setStartTime(calendar.getTime());
+        result.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(), event.getFinishTime
+            ()));
+        return result;
+    }
+
+    public static Date getFinalEventDay(OrderedRealmCollection<Event> data) {
+        Date date = new Date();
+        date.setTime(data.get(0).getEndRepeat().getTime());
+        int length = data.size();
+        for (int i = 1; i < length; i++) {
+            if (date.before(data.get(i).getEndRepeat())) {
+                date.setTime(data.get(i).getEndRepeat().getTime());
+            }
+        }
+        return date;
     }
 }

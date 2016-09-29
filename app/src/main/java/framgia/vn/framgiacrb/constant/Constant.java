@@ -34,6 +34,8 @@ public class Constant {
     public static final String NO_REPEAT = "No Repeat";
     public static final String REPEAT_DAILY = "daily";
     public static final String REPEAT_WEEKLY = "weekly";
+    public static final String REPEAT_MONTHLY = "monthly";
+    public static final String REPEAT_YEARLY = "yearly";
     public static final int SHOW_DURATION = 1000;
     public static final int HIDE_DURATION = 500;
     public static final String MESSAGE = "MESSAGE";
