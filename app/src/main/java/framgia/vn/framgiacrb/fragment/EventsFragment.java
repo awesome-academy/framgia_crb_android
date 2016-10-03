@@ -43,6 +43,7 @@ import framgia.vn.framgiacrb.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.ui.MonthView;
 import framgia.vn.framgiacrb.ui.listener.OnCloseToolbarListener;
 import framgia.vn.framgiacrb.utils.Connectivity;
+import framgia.vn.framgiacrb.utils.RenderEventUtil;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import io.realm.Realm;
@@ -271,7 +272,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             mDatas.add(date);
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
-                List<Event> events = mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date));
+                List<Event> events = RenderEventUtil.getGenCodeEvent(TimeUtils.formatDate(date));
                 for (int i = 0; i < events.size(); i++) {
                     Event event = events.get(i);
                     if (event.getStartTime().getTime() > today.getTime() && !isTimelineAdded) {

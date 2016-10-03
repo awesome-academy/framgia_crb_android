@@ -1,7 +1,5 @@
 package framgia.vn.framgiacrb.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -11,13 +9,11 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import framgia.vn.framgiacrb.activity.MainActivity;
 import framgia.vn.framgiacrb.constant.ExceptionType;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.DayOfWeekId;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
-import framgia.vn.framgiacrb.data.model.Session;
 import io.realm.Realm;
 
 /**
@@ -33,173 +29,6 @@ public class RenderEventUtil {
     private static Realm sRealm = Realm.getDefaultInstance();
     private static EventRepositoriesLocal sEventRepositoriesLocal =
         new EventRepositoriesLocal(sRealm);
-
-    public static void createEvent(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(
-            MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
-        if (!sharedPreferences.getBoolean(UPDATED, false)) {
-            for (int i = 1; i < 6; i++) {
-                Calendar calendarRepeat = Calendar.getInstance();
-                calendarRepeat.set(Calendar.HOUR_OF_DAY, 18 - i % 18);
-                calendarRepeat.set(Calendar.MINUTE, 0);
-                calendarRepeat.set(Calendar.SECOND, 0);
-                Date startRepeat = calendarRepeat.getTime();
-                Date startTime = calendarRepeat.getTime();
-                calendarRepeat.set(Calendar.HOUR_OF_DAY, 20);
-                calendarRepeat.set(Calendar.MINUTE, 0);
-                Date finishTime = calendarRepeat.getTime();
-                calendarRepeat.add(Calendar.DAY_OF_MONTH, 1000);
-                calendarRepeat.set(Calendar.HOUR_OF_DAY, 22);
-                calendarRepeat.set(Calendar.MINUTE, 0);
-                Date endRepeat = calendarRepeat.getTime();
-                Event event = createEvent("test " + i, "" + i, startTime, finishTime, startRepeat,
-                    endRepeat);
-                createEventByExceptionType(event, 1);
-                createEventByExceptionType(event, 8);
-                createEventByExceptionType(event, 12);
-            }
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(UPDATED, true);
-            editor.apply();
-            createCalender(context);
-        }
-    }
-
-    private static void createEventByExceptionType(Event event, int dayOfMonth) {
-        if (!TextUtils.equals(event.getRepeatType(), NO_REPEAT)) {
-            sRealm.beginTransaction();
-            Event eventException = sRealm.createObject(Event.class);
-            eventException.setId("exception " + event.getId() + dayOfMonth);
-            eventException.setTitle(event.getTitle() + " = " + dayOfMonth);
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, dayOfMonth);
-            calendar.set(Calendar.HOUR_OF_DAY, 18);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            Date startTime = calendar.getTime();
-            calendar.set(Calendar.HOUR_OF_DAY, 20);
-            calendar.set(Calendar.MINUTE, 0);
-            Date finishTime = calendar.getTime();
-            eventException.setStartTime(startTime);
-            eventException.setFinishTime(finishTime);
-            eventException.setRepeatEvery(event.getRepeatEvery());
-            eventException.setRepeatType(event.getRepeatType());
-            eventException.setColorId(event.getColorId());
-            eventException.setParentId(event.getId());
-            eventException.setExceptionTime(startTime);
-            switch (dayOfMonth) {
-                case 1:
-                    eventException.setExceptionType(ExceptionType.EDIT_ONLY.getValues());
-                    break;
-                case 8:
-                    eventException.setExceptionType(ExceptionType.DELETE_ONLY.getValues());
-                    break;
-                case 12:
-                    eventException.setRepeatOnAttribute(event.getRepeatOnAttribute());
-                    eventException.setStartRepeat(startTime);
-                    eventException.setEndRepeat(event.getEndRepeat());
-                    eventException.setExceptionType(ExceptionType.EDIT_ALL_FOLLOW.getValues());
-                    calendar.add(Calendar.DAY_OF_MONTH, -1);
-                    event.setEndRepeat(calendar.getTime());
-                    break;
-            }
-            sRealm.commitTransaction();
-        }
-    }
-
-    private static void createCalender(Context context) {
-        sRealm.beginTransaction();
-        framgia.vn.framgiacrb.data.model.Calendar calendar = sRealm.createObject(
-            framgia.vn.framgiacrb.data.model.Calendar.class);
-        calendar.setId(1);
-        calendar.setUserId("Vũ Tuấn Anh");
-        calendar.setPermissionId(1);
-        calendar.setName("Vũ Tuấn Anh");
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.SHAREPREFF,
-            Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(Session.CALENDAR_ID, calendar.getId());
-        editor.apply();
-        sRealm.commitTransaction();
-    }
-
-    public static Event createEvent(String title, String id, Date startTime, Date finishTime, Date
-        startRepeat, Date endRepeat) {
-        sRealm.beginTransaction();
-        Event event = sRealm.createObject(Event.class);
-        event.setTitle(title);
-        event.setId(id);
-        switch (id) {
-            case "4":
-                event.setRepeatType(NO_REPEAT);
-                event.setTitle(NO_REPEAT);
-                break;
-            case "3":
-            case "15":
-            case "20":
-                event.setRepeatType(MONTHLY);
-                event.setTitle(MONTHLY);
-                break;
-            case "5":
-                event.setRepeatType(YEARLY);
-                event.setTitle(YEARLY);
-                break;
-            case "2":
-                event.setRepeatType(WEEKLY);
-                event.setTitle(WEEKLY);
-                List<String> listDayOfWeekRepeat = new ArrayList<>();
-                listDayOfWeekRepeat.add("3");
-                listDayOfWeekRepeat.add("5");
-                listDayOfWeekRepeat.add("6");
-                listDayOfWeekRepeat.add("7");
-                RepeatOnAttribute repeatOnAttribute = sRealm.createObject(RepeatOnAttribute.class);
-                if (listDayOfWeekRepeat.size() != 0) {
-                    for (int i = 0; i < listDayOfWeekRepeat.size(); i++) {
-                        DayOfWeekId dayOfWeekId = sRealm.createObject(DayOfWeekId.class);
-                        dayOfWeekId.setDayOfWeekId(listDayOfWeekRepeat.get(i));
-                        switch (i) {
-                            case 0:
-                                repeatOnAttribute.setRepeatOnAttribute1(dayOfWeekId);
-                                break;
-                            case 1:
-                                repeatOnAttribute.setRepeatOnAttribute2(dayOfWeekId);
-                                break;
-                            case 2:
-                                repeatOnAttribute.setRepeatOnAttribute3(dayOfWeekId);
-                                break;
-                            case 3:
-                                repeatOnAttribute.setRepeatOnAttribute4(dayOfWeekId);
-                                break;
-                            case 4:
-                                repeatOnAttribute.setRepeatOnAttribute5(dayOfWeekId);
-                                break;
-                            case 5:
-                                repeatOnAttribute.setRepeatOnAttribute6(dayOfWeekId);
-                                break;
-                            case 6:
-                                repeatOnAttribute.setRepeatOnAttribute7(dayOfWeekId);
-                                break;
-                        }
-                    }
-                }
-                event.setRepeatOnAttribute(repeatOnAttribute);
-                break;
-            default:
-                event.setRepeatType(DAILY);
-                event.setTitle(DAILY);
-                break;
-        }
-        if (!event.getRepeatType().equals(NO_REPEAT)) {
-            event.setStartRepeat(startRepeat);
-            event.setEndRepeat(endRepeat);
-            event.setRepeatEvery(1);
-        }
-        event.setStartTime(startTime);
-        event.setFinishTime(finishTime);
-        event.setColorId(10);
-        sRealm.commitTransaction();
-        return event;
-    }
 
     public static List<Event> getGenCodeEvent(Date date) {
         List<Event> genEventList = new ArrayList<>();
@@ -388,13 +217,5 @@ public class RenderEventUtil {
                 break;
         }
         return calendar.getTime();
-    }
-
-    public static void saveEvent(Event newEvent) {
-        sRealm.beginTransaction();
-        newEvent.setId("" + sEventRepositoriesLocal.getSize() + 1);
-        newEvent.setColorId(10);
-        sRealm.commitTransaction();
-        sEventRepositoriesLocal.updateEvent(newEvent);
     }
 }

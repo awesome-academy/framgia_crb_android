@@ -2,9 +2,13 @@ package framgia.vn.framgiacrb.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -52,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         if (event == null) {
             return;
         }
-        if (event.getDescription() != null) {
+        if (event.getDescription() != null && !event.getDescription().equals("")) {
             TextView description = (TextView) findViewById(R.id.title_description);
             description.setText(event.getDescription());
         } else {
@@ -73,10 +77,9 @@ public class DetailActivity extends AppCompatActivity {
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_attendee);
             relativeLayout.setVisibility(View.GONE);
         }
-        if (event.getColorId() > 0 && event.getColorId() <= 12) {
-            View color = (View) findViewById(R.id.view_color);
-            color.setBackgroundColor(getResources().getColor(Constant.color[event.getColorId
-                () - 1]));
+        if (event.getColorId() != null) {
+            View color = findViewById(R.id.view_color);
+            color.setBackgroundColor(Color.parseColor(event.getColorId()));
         }
         if (event.getRepeatType() != null) {
             TextView repeatTv = (TextView) findViewById(R.id.textView_repeat);
@@ -88,9 +91,23 @@ public class DetailActivity extends AppCompatActivity {
         if (event.getPlace() != null) {
             TextView placeTv = (TextView) findViewById(R.id.textView_place);
             placeTv.setText(event.getPlace().getName());
+            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById
+                (R.id.collapsing_toolbar);
+            collapsingToolbarLayout.setBackgroundColor(ContextCompat.getColor(this, Constant
+                .color[event.getPlace().getId() - 1]));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(
+                    ContextCompat.getColor(this, Constant.color[event.getPlace().getId() - 1]));
+            }
         } else {
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_place);
             relativeLayout.setVisibility(View.GONE);
+            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById
+                (R.id.collapsing_toolbar);
+            collapsingToolbarLayout.setBackgroundColor(Color.parseColor(event.getColorId()));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(Color.parseColor(event.getColorId()));
+            }
         }
     }
 
