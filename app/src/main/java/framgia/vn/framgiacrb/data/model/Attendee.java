@@ -6,9 +6,6 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by nghicv on 04/08/2016.
- */
 public class Attendee extends RealmObject {
     @PrimaryKey
     @SerializedName("id")
@@ -19,6 +16,24 @@ public class Attendee extends RealmObject {
     private int mUserId;
     @SerializedName("event_id")
     private int mEventId;
+
+    public Attendee() {
+    }
+
+    public Attendee(Attendee attendee) {
+        this.mId = attendee.getId();
+        this.mEmail = attendee.getEmail();
+        this.mUserId = attendee.getUserId();
+        this.mEventId = attendee.getEventId();
+    }
+
+    public static RealmList<Attendee> cloneListAttendee(RealmList<Attendee> attendeeList) {
+        RealmList<Attendee> result = new RealmList<>();
+        for (Attendee attendee : attendeeList) {
+            result.add(new Attendee(attendee));
+        }
+        return result;
+    }
 
     public static String getLisAttendee(RealmList<Attendee> list) {
         int length = list.size();
@@ -31,5 +46,33 @@ public class Attendee extends RealmObject {
 
     private String getEmail() {
         return mEmail;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    public void setEmail(String email) {
+        mEmail = email;
+    }
+
+    public int getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(int userId) {
+        mUserId = userId;
+    }
+
+    public int getEventId() {
+        return mEventId;
+    }
+
+    public void setEventId(int eventId) {
+        mEventId = eventId;
     }
 }

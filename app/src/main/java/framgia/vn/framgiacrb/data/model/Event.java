@@ -8,77 +8,83 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by nghicv on 20/07/2016.
- */
 public class Event extends RealmObject {
-
     @PrimaryKey
     @SerializedName("id")
     private String mId;
-
     @SerializedName("title")
     private String mTitle;
-
     @SerializedName("description")
     private String mDescription;
-
     @SerializedName("start_date")
     private Date mStartTime;
-
     @SerializedName("finish_date")
     private Date mFinishTime;
-
     @SerializedName("status")
     private String mStatus;
-
     @SerializedName("repeat_type")
     private String mRepeatType;
-
     @SerializedName("repeat_every")
     private int mRepeatEvery;
-
     @SerializedName("end_date")
     private Date mEndDate;
-
     @SerializedName("exception_date")
     private Date mExceptionDate;
-
     @SerializedName("type")
     private int mType;
-
     @SerializedName("event_id")
     private int mEventId;
-
     @SerializedName("color_id")
     private int mColorId;
-
     @SerializedName("attendees")
     private RealmList<Attendee> mAttendees;
-
     @SerializedName("place")
     private Place mPlace;
-
     @SerializedName("calendar_id")
     private int mCalendarId;
-
     @SerializedName("all_day")
     private boolean mAllDay;
-
     @SerializedName("start_repeat")
     private Date mStartRepeat;
-
     @SerializedName("end_repeat")
     private Date mEndRepeat;
-
-    @SerializedName("place_id")
-    private String mPlaceId;
-
     @SerializedName("user_id")
-    private String mUserId;
-
+    private int mUserId;
     @SerializedName("repeat_ons_attributes")
     private RepeatOnAttribute mRepeatOnAttribute;
+    @SerializedName("parent_id")
+    private String mParentId;
+    @SerializedName("exception_type")
+    private String mExceptionType;
+    @SerializedName("exception_time")
+    private Date mExceptionTime;
+
+    public Event() {
+    }
+
+    public Event(Event event) {
+        this.mId = event.getId();
+        this.mTitle = event.getTitle();
+        this.mDescription = event.getDescription();
+        this.mStartTime = event.getStartTime();
+        this.mFinishTime = event.getFinishTime();
+        this.mStatus = event.getStatus();
+        this.mRepeatType = event.getRepeatType();
+        this.mRepeatEvery = event.getRepeatEvery();
+        this.mExceptionDate = event.getExceptionDate();
+        this.mType = event.getType();
+        this.mEventId = event.getEventId();
+        this.mColorId = event.getColorId();
+        this.mPlace = (event.getPlace() == null) ? null : new Place(event.getPlace());
+        this.mAttendees = (event.getAttendees() == null) ? null : Attendee.cloneListAttendee(event
+            .getAttendees());
+        this.mCalendarId = event.getCalendarId();
+        this.mAllDay = event.isAllDay();
+        this.mUserId = event.getUserId();
+        this.mStartRepeat = event.getStartRepeat();
+        this.mEndRepeat = event.getEndRepeat();
+        this.mRepeatOnAttribute = event.getRepeatOnAttribute();
+    }
 
     public int getColorId() {
         return mColorId;
@@ -180,21 +186,16 @@ public class Event extends RealmObject {
         mEventId = eventId;
     }
 
-
-    public boolean isAllday() {
+    public boolean isAllDay() {
         return mAllDay;
     }
 
-    public void setAllday(boolean mAllday) {
-        this.mAllDay = mAllday;
+    public void setAllDay(boolean allDay) {
+        this.mAllDay = allDay;
     }
 
-    public String getUserid() {
+    public int getUserId() {
         return mUserId;
-    }
-
-    public void setUserId(String mUserId) {
-        this.mUserId = mUserId;
     }
 
     public int getCalendarId() {
@@ -237,15 +238,27 @@ public class Event extends RealmObject {
         this.mRepeatOnAttribute = mRepeatOnAttribute;
     }
 
-    public void setPlace(Place mPlace) {
-        this.mPlace = mPlace;
+    public String getParentId() {
+        return mParentId;
     }
 
-    public String getPlaceId() {
-        return mPlaceId;
+    public void setParentId(String parentId) {
+        mParentId = parentId;
     }
 
-    public void setPlaceId(String mPlaceId) {
-        this.mPlaceId = mPlaceId;
+    public String getExceptionType() {
+        return mExceptionType;
+    }
+
+    public void setExceptionType(String exceptionType) {
+        mExceptionType = exceptionType;
+    }
+
+    public Date getExceptionTime() {
+        return mExceptionTime;
+    }
+
+    public void setExceptionTime(Date exceptionTime) {
+        mExceptionTime = exceptionTime;
     }
 }

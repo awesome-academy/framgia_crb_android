@@ -21,7 +21,6 @@ import io.realm.Sort;
  * Created by nghicv on 26/07/2016.
  */
 public class EventRepositoriesLocal implements EventRepository {
-
     public static final String START_DATE_FIELD = "mStartTime";
     public static final String ID_FIELD = "mId";
     public static final String EVENT_ID_FIELD = "mEventId";
@@ -29,7 +28,9 @@ public class EventRepositoriesLocal implements EventRepository {
     public static final String PLACE_ID = "mId";
     public static final String PLACE_NAME = "mName";
     public static final String USER_ID = "mId";
-
+    public static final String START_REPEAT = "mStartRepeat";
+    public static final String END_REPEAT = "mEndRepeat";
+    public static final String PARENT_ID = "mParentId";
     private Realm mRealm;
 
     public EventRepositoriesLocal(Realm realm) {
@@ -41,16 +42,14 @@ public class EventRepositoriesLocal implements EventRepository {
     }
 
     public void addEvents(final List<Event> events, final OnLoadEventListener onLoadEventListener) {
-
         final List<Event> realmEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i++) {
             if (!isExists(events.get(i))) {
                 realmEvents.add(events.get(i));
-
             }
         }
         RegisterNotificationAsyncTask registerNotificationAsynTask
-                = new RegisterNotificationAsyncTask(true);
+            = new RegisterNotificationAsyncTask(true);
         registerNotificationAsynTask.execute(realmEvents);
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -67,7 +66,8 @@ public class EventRepositoriesLocal implements EventRepository {
         });
     }
 
-    public void addCalendars(final List<Calendar> calendars, final Realm.Transaction.OnSuccess onSuccess) {
+    public void addCalendars(final List<Calendar> calendars,
+                             final Realm.Transaction.OnSuccess onSuccess) {
         final List<Calendar> realmCalendars = new ArrayList<>();
         for (Calendar calendar : calendars) {
             if (!hasCalendar(calendar)) {
@@ -75,7 +75,6 @@ public class EventRepositoriesLocal implements EventRepository {
             } else {
             }
         }
-
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -198,12 +197,10 @@ public class EventRepositoriesLocal implements EventRepository {
 
     @Override
     public void deleteEvent(Event event) {
-
     }
 
     @Override
     public void updateEvent(Event event) {
-
     }
 
     @Override
@@ -213,7 +210,6 @@ public class EventRepositoriesLocal implements EventRepository {
 
     @Override
     public void getEventsByCalendar(String token, Calendar calendar, Context context) {
-
     }
 
     @Override
@@ -228,16 +224,17 @@ public class EventRepositoriesLocal implements EventRepository {
         calendar.add(java.util.Calendar.HOUR, 23);
         Date toDate = calendar.getTime();
         return mRealm.where(Event.class).between(START_DATE_FIELD, date, toDate)
-                .findAllSorted(START_DATE_FIELD, Sort.ASCENDING);
+            .findAllSorted(START_DATE_FIELD, Sort.ASCENDING);
     }
 
     public boolean isExists(Event event) {
         return mRealm.where(Event.class).equalTo(EVENT_ID_FIELD, event.getEventId())
-                .equalTo(START_DATE_FIELD, event.getStartTime()).count() != 0;
+            .equalTo(START_DATE_FIELD, event.getStartTime()).count() != 0;
     }
 
     public boolean hasCalendar(Calendar calendar) {
-        return mRealm.where(Calendar.class).equalTo(CALENDAR_ID_FIELD, calendar.getId()).count() != 0;
+        return mRealm.where(Calendar.class).equalTo(CALENDAR_ID_FIELD, calendar.getId()).count() !=
+            0;
     }
 
     public boolean hasPlace(Place place) {
@@ -246,5 +243,25 @@ public class EventRepositoriesLocal implements EventRepository {
 
     public boolean hasUser(User user) {
         return mRealm.where(User.class).equalTo(USER_ID, user.getId()).count() != 0;
+    }
+
+    public List<Event> getAllEventRepeatByDate(Date date) {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(java.util.Calendar.HOUR, 23);
+        Date toDate = calendar.getTime();
+        return mRealm.where(Event.class)
+            .lessThan(START_REPEAT, toDate)
+            .greaterThan(END_REPEAT, date)
+            .findAll();
+    }
+
+    public List<Event> getEventByParentId(String parentId) {
+        return mRealm.where(Event.class)
+            .equalTo(PARENT_ID, parentId).findAll();
+    }
+
+    public int getSize() {
+        return mRealm.where(Event.class).findAll().size();
     }
 }
