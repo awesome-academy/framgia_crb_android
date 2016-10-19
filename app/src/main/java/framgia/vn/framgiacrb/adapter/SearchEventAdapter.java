@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,8 +71,7 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
                 + (obj.getPlace() == null ? "" : Constant.LINE_BREAK + obj.getPlace().getName());
             holder.content.setText(content);
             holder.content.setTextColor(Utils.getColor(mActivity, R.color.white));
-            holder.content.setBackgroundColor(
-                Utils.getColor(mActivity, Constant.color[obj.getColorId() - 1]));
+            holder.content.setBackgroundColor(Color.parseColor(obj.getColorId()));
             holder.content.setTextSize(TEXT_CONTENT_SIZE);
         }
     }

@@ -34,8 +34,8 @@ public class Event extends RealmObject {
     private int mType;
     @SerializedName("event_id")
     private int mEventId;
-    @SerializedName("color_id")
-    private int mColorId;
+    @SerializedName("color")
+    private String mColorId;
     @SerializedName("attendees")
     private RealmList<Attendee> mAttendees;
     @SerializedName("place")
@@ -86,11 +86,11 @@ public class Event extends RealmObject {
         this.mRepeatOnAttribute = event.getRepeatOnAttribute();
     }
 
-    public int getColorId() {
+    public String getColorId() {
         return mColorId;
     }
 
-    public void setColorId(int colorId) {
+    public void setColorId(String colorId) {
         mColorId = colorId;
     }
 

@@ -82,7 +82,7 @@ public class EventRepositories implements EventRepository {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (error.equals(Constant.NOT_AUTHENTICATION)) {
+                    if (error != null && error.equals(Constant.NOT_AUTHENTICATION)) {
                         logout(context);
                     } else {
                         Toast.makeText(context, context.getString(R.string.message_error),
