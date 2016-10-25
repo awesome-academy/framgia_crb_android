@@ -43,17 +43,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.CreateEventResponse;
-import framgia.vn.framgiacrb.data.model.DayOfWeekId;
+import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.NewEvent;
 import framgia.vn.framgiacrb.data.model.Place;
-import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.model.User;
 import framgia.vn.framgiacrb.network.ServiceBuilder;
@@ -62,6 +62,7 @@ import framgia.vn.framgiacrb.utils.DialogUtils;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -103,7 +104,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     private String mUserId = "1";
     private RealmResults<Place> mPlaces;
     private RealmResults<User> mAttendees;
-    private ArrayList<String> mListDayOfWeekRepeat = new ArrayList<>();
+    private RealmList<DayOfWeek> mListDayOfWeekRepeat = new RealmList<>();
     boolean isRepeat;
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -474,25 +475,25 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             .show();
         switch (v.getId()) {
             case R.id.sun_checkbox:
-                mListDayOfWeekRepeat.add(Constant.SUNDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.SUNDAY, Constant.SUNDAY));
                 break;
             case R.id.mon_checkbox:
-                mListDayOfWeekRepeat.add(Constant.MONDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.MONDAY, Constant.MONDAY));
                 break;
             case R.id.tue_checkbox:
-                mListDayOfWeekRepeat.add(Constant.TUESDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.TUESDAY, Constant.TUESDAY));
                 break;
             case R.id.wed_checkbox:
-                mListDayOfWeekRepeat.add(Constant.WEDNESDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.WEDNESDAY, Constant.WEDNESDAY));
                 break;
             case R.id.thu_checkbox:
-                mListDayOfWeekRepeat.add(Constant.THURSDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.THURSDAY, Constant.THURSDAY));
                 break;
             case R.id.fri_checkbox:
-                mListDayOfWeekRepeat.add(Constant.FRIDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.FRIDAY, Constant.FRIDAY));
                 break;
             case R.id.sat_checkbox:
-                mListDayOfWeekRepeat.add(Constant.SATURDAY);
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.SATURDAY, Constant.SATURDAY));
                 break;
         }
     }
@@ -699,49 +700,11 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         if (null == mDateStart) mDateStart = new Date();
         if (null == mDateFinish) mDateFinish = new Date();
         if (isRepeat) {
-            if (mTxtRepeat.getText().toString().equalsIgnoreCase(Constant.WEEKLY)) {
-                RepeatOnAttribute repeatOnAttribute = new RepeatOnAttribute();
-                if (mListDayOfWeekRepeat.size() != 0) {
-                    for (int i = 0; i < mListDayOfWeekRepeat.size(); i++) {
-                        DayOfWeekId dayOfWeekId = new DayOfWeekId();
-                        dayOfWeekId.setDayOfWeekId(mListDayOfWeekRepeat.get(i));
-                        switch (i) {
-                            case 0:
-                                repeatOnAttribute.setRepeatOnAttribute1(dayOfWeekId);
-                                break;
-                            case 1:
-                                repeatOnAttribute.setRepeatOnAttribute2(dayOfWeekId);
-                                break;
-                            case 2:
-                                repeatOnAttribute.setRepeatOnAttribute3(dayOfWeekId);
-                                break;
-                            case 3:
-                                repeatOnAttribute.setRepeatOnAttribute4(dayOfWeekId);
-                                break;
-                            case 4:
-                                repeatOnAttribute.setRepeatOnAttribute5(dayOfWeekId);
-                                break;
-                            case 5:
-                                repeatOnAttribute.setRepeatOnAttribute6(dayOfWeekId);
-                                break;
-                            case 6:
-                                repeatOnAttribute.setRepeatOnAttribute7(dayOfWeekId);
-                                break;
-                        }
-                    }
-                } else {
-                    DayOfWeekId dayOfWeekId = new DayOfWeekId();
-                    Calendar calendar = Calendar.getInstance();
-                    dayOfWeekId
-                        .setDayOfWeekId(String.valueOf(calendar.get(Calendar.DAY_OF_WEEK)));
-                    repeatOnAttribute.setRepeatOnAttribute1(dayOfWeekId);
-                }
-                event.setRepeatOnAttribute(repeatOnAttribute);
-            }
             event.setStartRepeat(mDateStart);
             event.setEndRepeat(mDateEventFinishRepeat);
             event.setRepeatEvery(mRepeatEvery);
             event.setRepeatType(mRepeatType);
+            event.setDayOfWeeks((RealmList)mListDayOfWeekRepeat);
         }
         event.setStartTime(TimeUtils.formatDateTime(mDateStart, mTimeEventStart));
         event.setFinishTime(TimeUtils.formatDateTime(mDateFinish, mTimeEventFinish));

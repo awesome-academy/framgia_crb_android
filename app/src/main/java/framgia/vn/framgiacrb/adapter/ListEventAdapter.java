@@ -129,8 +129,15 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ContextCompat.getColor(mContext, Constant.color[event.getPlace().getId() - 1]));
             } else {
                 eventViewHolder.linearLayoutLocation.setVisibility(View.GONE);
-                eventViewHolder.cardView.setCardBackgroundColor(Color.parseColor(event.getColorId
-                    ()));
+                try {
+                    eventViewHolder.cardView
+                        .setCardBackgroundColor(Color.parseColor(event.getColorId
+                            ()));
+                } catch (IllegalArgumentException e) {
+                    eventViewHolder.cardView
+                        .setCardBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                }
             }
         }
     }

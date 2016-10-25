@@ -34,7 +34,9 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
     public SearchEventAdapter(Activity activity, OrderedRealmCollection<Event> data) {
         super(activity, data, true);
         this.mActivity = activity;
-        this.data = SearchUtil.editListDataSearch(data);
+        if (data.size() > 0) {
+            this.data = SearchUtil.editListDataSearch(data);
+        }
     }
 
     @Override
@@ -55,22 +57,30 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
             holder.type = TYPE_YEAR;
             holder.content.setText(obj.getDescription());
             holder.content.setBackgroundColor(Utils.getColor(mActivity, R.color.bg_default));
-            holder.content.setTextColor(
-                Utils.getColor(mActivity, R.color.text_default_event_color));
+            holder.content.setTextColor(mActivity.getResources().getColor(R.color
+                .text_default_event_color));
             holder.content.setTextSize(TEXT_YEAR_SIZE);
             holder.day.setText("");
             holder.month.setText("");
         } else {
             holder.type = TYPE_EVENT;
-            holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
-            holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
+            if (position > 0 && (!data.get(position - 1).getTitle().equals(SearchUtil.DEFINE_YEAR))
+                && (TimeUtils.compareDate(obj.getStartTime(), data.get(position - 1).getStartTime())
+            )) {
+                holder.day.setText("");
+                holder.month.setText("");
+            } else {
+                holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
+                holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
+            }
             String content = obj.getTitle() + Constant.LINE_BREAK +
                 TimeUtils.toStringTime(obj.getStartTime())
-                + Constant.AMOUNT_DIVIDE
+                + Constant.AMOUNT_DEVIDE
                 + TimeUtils.toStringTime(obj.getFinishTime())
                 + (obj.getPlace() == null ? "" : Constant.LINE_BREAK + obj.getPlace().getName());
             holder.content.setText(content);
-            holder.content.setTextColor(Utils.getColor(mActivity, R.color.white));
+            holder.content.setTextColor(mActivity.getResources().getColor(
+                R.color.white));
             holder.content.setBackgroundColor(Color.parseColor(obj.getColorId()));
             holder.content.setTextSize(TEXT_CONTENT_SIZE);
         }

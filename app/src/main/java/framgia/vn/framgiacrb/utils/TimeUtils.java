@@ -154,6 +154,7 @@ public class TimeUtils {
         return (calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) &&
             calendar1.get(Calendar.WEEK_OF_YEAR) == calendar2.get(Calendar.WEEK_OF_YEAR));
     }
+
     public static boolean compareDate(Date date1, Date date2) {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(date1);
@@ -162,5 +163,27 @@ public class TimeUtils {
         return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
             && calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH)
             && calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Date genFinishTime(Date trueStartTime, Date oldFinishTime) {
+        Calendar result = Calendar.getInstance();
+        result.setTime(trueStartTime);
+        Calendar oldFinishCalendar = Calendar.getInstance();
+        oldFinishCalendar.setTime(oldFinishTime);
+        result.set(Calendar.HOUR_OF_DAY, oldFinishCalendar.get(Calendar.HOUR_OF_DAY));
+        result.set(Calendar.MINUTE, oldFinishCalendar.get(Calendar.MINUTE));
+        result.set(Calendar.SECOND, oldFinishCalendar.get(Calendar.SECOND));
+        return result.getTime();
+    }
+
+    public static int getMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MONTH) + 1;
+    }
+    public static int getYear(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
     }
 }

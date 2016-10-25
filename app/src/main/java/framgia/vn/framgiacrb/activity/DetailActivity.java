@@ -79,7 +79,11 @@ public class DetailActivity extends AppCompatActivity {
         }
         if (event.getColorId() != null) {
             View color = findViewById(R.id.view_color);
-            color.setBackgroundColor(Color.parseColor(event.getColorId()));
+            try {
+                color.setBackgroundColor(Color.parseColor(event.getColorId()));
+            } catch (IllegalArgumentException e) {
+                color.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            }
         }
         if (event.getRepeatType() != null) {
             TextView repeatTv = (TextView) findViewById(R.id.textView_repeat);
@@ -104,9 +108,12 @@ public class DetailActivity extends AppCompatActivity {
             relativeLayout.setVisibility(View.GONE);
             CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById
                 (R.id.collapsing_toolbar);
-            collapsingToolbarLayout.setBackgroundColor(Color.parseColor(event.getColorId()));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(Color.parseColor(event.getColorId()));
+            try {
+                collapsingToolbarLayout.setBackgroundColor(Color.parseColor(event.getColorId()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().setStatusBarColor(Color.parseColor(event.getColorId()));
+                }
+            } catch (IllegalArgumentException e) {
             }
         }
     }

@@ -27,15 +27,19 @@ public class Constant {
     public static final String ID_KEY = "id_event";
     public static final String LINE_BREAK = "\n";
     public static final String AMOUNT_DIVIDE = "-";
-    public static final String SUNDAY = "1";
-    public static final String MONDAY = "2";
-    public static final String TUESDAY = "3";
-    public static final String WEDNESDAY = "4";
-    public static final String THURSDAY = "5";
-    public static final String FRIDAY = "6";
-    public static final String SATURDAY = "7";
+    public static final String SUNDAY = "sunday";
+    public static final String MONDAY = "monday";
+    public static final String TUESDAY = "tuesday";
+    public static final String WEDNESDAY = "wednesday";
+    public static final String THURSDAY = "thursday";
+    public static final String FRIDAY = "friday";
+    public static final String SATURDAY = "saturday";
     public static final String WEEKLY = "Weekly";
-    public static final String NO_REPEAT = "No Repeat";
+    public static final String NO_REPEAT = "No repeat";
+    public static final String REPEAT_DAILY = "daily";
+    public static final String REPEAT_WEEKLY = "weekly";
+    public static final String REPEAT_MONTHLY = "monthly";
+    public static final String REPEAT_YEARLY = "yearly";
     public static final int SHOW_DURATION = 1000;
     public static final int HIDE_DURATION = 500;
     public static final String MESSAGE = "MESSAGE";
@@ -45,4 +49,6 @@ public class Constant {
     public static final String NOT_AUTHENTICATION = "Not authenticated";
     public static final String MESSAGE_NOT_AUTHENTICATION =
         "This account has been login in other device";
+    public static final int INVALID_INDEX = -1;
+    public static final String AMOUNT_DEVIDE = "-";
 }
