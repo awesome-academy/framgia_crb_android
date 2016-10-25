@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 public class CreateEventResponse {
     @SerializedName("message")
     private String mMessage;
-    @SerializedName("events")
+    @SerializedName("event")
     private Event mUser;
     @SerializedName("owner")
     private User mOwners;

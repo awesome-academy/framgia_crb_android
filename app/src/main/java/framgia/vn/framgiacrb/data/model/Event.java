@@ -50,8 +50,8 @@ public class Event extends RealmObject {
     private Date mEndRepeat;
     @SerializedName("user_id")
     private int mUserId;
-    @SerializedName("repeat_ons_attributes")
-    private RepeatOnAttribute mRepeatOnAttribute;
+    @SerializedName("days_of_weeks")
+    private RealmList<DayOfWeek> mDayOfWeeks;
     @SerializedName("parent_id")
     private String mParentId;
     @SerializedName("exception_type")
@@ -83,7 +83,18 @@ public class Event extends RealmObject {
         this.mUserId = event.getUserId();
         this.mStartRepeat = event.getStartRepeat();
         this.mEndRepeat = event.getEndRepeat();
-        this.mRepeatOnAttribute = event.getRepeatOnAttribute();
+        this.mDayOfWeeks =
+            (event.getDayOfWeeks() == null) ? null : DayOfWeek.cloneListDayOfWeek(event
+                .getDayOfWeeks());
+    }
+
+    public RealmList<DayOfWeek> getDayOfWeeks() {
+        return mDayOfWeeks;
+    }
+
+    public void setDayOfWeeks(
+        RealmList<DayOfWeek> dayOfWeeks) {
+        mDayOfWeeks = dayOfWeeks;
     }
 
     public String getColorId() {
@@ -228,14 +239,6 @@ public class Event extends RealmObject {
 
     public void setEndRepeat(Date mEndRepeat) {
         this.mEndRepeat = mEndRepeat;
-    }
-
-    public RepeatOnAttribute getRepeatOnAttribute() {
-        return mRepeatOnAttribute;
-    }
-
-    public void setRepeatOnAttribute(RepeatOnAttribute mRepeatOnAttribute) {
-        this.mRepeatOnAttribute = mRepeatOnAttribute;
     }
 
     public String getParentId() {

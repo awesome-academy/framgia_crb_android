@@ -285,7 +285,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                     mDatas.add(null);
                 }
             } else {
-                mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+                mDatas.addAll(RenderEventUtil.getGenCodeEvent(TimeUtils.formatDate(date)));
             }
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
@@ -313,7 +313,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         while ((month < mLastMonth + 1) && !(mLastMonth == 12 && month == 1)) {
             mDatas.add(date);
-            mDatas.addAll(mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+            mDatas.addAll(RenderEventUtil.getGenCodeEvent(TimeUtils.formatDate(date)));
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
@@ -336,7 +336,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         String stringMonth = android.text.format.DateFormat.format("MMM", date).toString();
         while ((month >= mFirstMonth) && !(mFirstMonth == 1 && month == 12)) {
             mDatas.add(0, date);
-            mDatas.addAll(1, mEventRepositoriesLocal.getEventByDate(TimeUtils.formatDate(date)));
+            mDatas.addAll(1, RenderEventUtil.getGenCodeEvent(TimeUtils.formatDate(date)));
             calendar.add(Calendar.DATE, -1);
             date = calendar.getTime();
             month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());

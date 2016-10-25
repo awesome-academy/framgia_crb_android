@@ -1,7 +1,5 @@
 package framgia.vn.framgiacrb.utils;
 
-import android.text.TextUtils;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -11,9 +9,8 @@ import java.util.List;
 
 import framgia.vn.framgiacrb.constant.ExceptionType;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
-import framgia.vn.framgiacrb.data.model.DayOfWeekId;
+import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
-import framgia.vn.framgiacrb.data.model.RepeatOnAttribute;
 import io.realm.Realm;
 
 /**
@@ -32,7 +29,13 @@ public class RenderEventUtil {
 
     public static List<Event> getGenCodeEvent(Date date) {
         List<Event> genEventList = new ArrayList<>();
-        genEventList.addAll(sEventRepositoriesLocal.getEventByDate(date));
+        List<Event> eventInDatabase = new ArrayList<>();
+        eventInDatabase.addAll(sEventRepositoriesLocal.getEventByDate(date));
+        for (Event event : eventInDatabase) {
+            if (event.getRepeatType() == null) {
+                genEventList.add(event);
+            }
+        }
         List<Event> eventRepeatList = sEventRepositoriesLocal.getAllEventRepeatByDate(date);
         Event eventGen = null;
         for (Event event : eventRepeatList) {
@@ -123,24 +126,14 @@ public class RenderEventUtil {
     }
 
     private static boolean isRepeatOnAttribute(Event event, Date date) {
-        RepeatOnAttribute repeatOnAttribute = event.getRepeatOnAttribute();
-        List<DayOfWeekId> dayOfWeekIdList = new ArrayList<>();
-        if (repeatOnAttribute != null) {
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute1());
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute2());
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute3());
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute4());
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute5());
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute6());
-            dayOfWeekIdList.add(repeatOnAttribute.getRepeatOnAttribute7());
-        }
+        List<DayOfWeek> dayOfWeeks = event.getDayOfWeeks();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        String dayOfWeekSearch = String.valueOf(calendar.get(Calendar.DAY_OF_WEEK));
-        for (DayOfWeekId dayOfWeekId : dayOfWeekIdList) {
-            if (dayOfWeekId != null) {
-                String dayOfWeekNow = dayOfWeekId.getDayOfWeekId();
-                if (TextUtils.equals(dayOfWeekNow, dayOfWeekSearch)) return true;
+        for (DayOfWeek dayOfWeek : dayOfWeeks) {
+            if (dayOfWeek != null) {
+                if (dayOfWeek.getId() == calendar.get(Calendar.DAY_OF_WEEK)) {
+                    return true;
+                }
             }
         }
         return false;

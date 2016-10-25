@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +38,6 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     private Button mButtonLogin, mButtonLoginFb, mButtonLoginGg;
     private SharedPreferences mSharedPreferences;
     private ProgressDialog mProgressDialog;
-
     private List<Calendar> mListUserCalendar;
     private List<Calendar> mListShareUserCalendar;
     private List<Calendar> mListCalendar;
@@ -49,8 +47,8 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+            getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         if (sharedPreferences.contains(Session.AUTHTOKEN)) {
             Session.sAuthToken = sharedPreferences.getString(Session.AUTHTOKEN, null);
             Session.sCalendarId = sharedPreferences.getInt(Session.CALENDAR_ID, -1);
@@ -58,32 +56,30 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
             startActivity(intent);
             finish();
         }
-
         mEditTextEmail = (EditText) findViewById(R.id.edit_email);
         mEditTextPassword = (EditText) findViewById(R.id.edit_password);
         mButtonLogin = (Button) findViewById(R.id.btn_login);
         mButtonLoginFb = (Button) findViewById(R.id.btn_facebook);
         mButtonLoginGg = (Button) findViewById(R.id.btn_google);
         mProgressDialog = new ProgressDialog(LoginActivity.this);
-
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                boolean isValidEmail = ValidationLogin.isValidEmail(LoginActivity.this, mEditTextEmail);
-                boolean isValidPass = ValidationLogin.isValidatePassword(LoginActivity.this, mEditTextPassword);
-
+                boolean isValidEmail =
+                    ValidationLogin.isValidEmail(LoginActivity.this, mEditTextEmail);
+                boolean isValidPass =
+                    ValidationLogin.isValidatePassword(LoginActivity.this, mEditTextPassword);
                 if (!NetworkUtil.isInternetConnected(LoginActivity.this)) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.msg_no_internet), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.msg_no_internet),
+                        Toast.LENGTH_SHORT).show();
                 } else {
                     if (isValidEmail && isValidPass) {
                         mProgressDialog.setMessage(Constant.LOADING);
                         mProgressDialog.show();
                         getDataFromInternet(user());
-
                     } else {
-                        Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid),
+                            Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -91,38 +87,43 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     }
 
     public void getDataFromInternet(User user) {
-
         ServiceBuilder.getService().authenticate(user).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 mProgressDialog.cancel();
                 if (response.body() == null) {
-                    Toast.makeText(LoginActivity.this, R.string.error_email_invalid, Toast.LENGTH_SHORT).show();
-                } else if (response.body().getMessage() != null && response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
+                    Toast.makeText(LoginActivity.this, R.string.error_email_invalid,
+                        Toast.LENGTH_SHORT).show();
+                } else if (response.body().getMessage() != null &&
+                    response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
                     mUserLogin = response.body().getUser();
                     Session.sAuthToken = mUserLogin.getAuth_token();
-                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences =
+                        getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(Session.AUTHTOKEN, Session.sAuthToken);
                     editor.apply();
                     mListUserCalendar = mUserLogin.getUserCalendars();
                     mListShareUserCalendar = mUserLogin.getShareUserCalendars();
                     mListCalendar = new ArrayList<Calendar>();
-                    new EventRepositoriesLocal(Realm.getDefaultInstance()).clearCalendarFromDatabase(new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            saveCalendarToDatabase();
-                        }
-                    });
+                    new EventRepositoriesLocal(Realm.getDefaultInstance())
+                        .clearCalendarFromDatabase(new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                saveCalendarToDatabase();
+                            }
+                        });
                 } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid),
+                        Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 mProgressDialog.cancel();
-                Toast.makeText(LoginActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getString(R.string.error), Toast.LENGTH_SHORT)
+                    .show();
             }
         });
     }
@@ -144,7 +145,8 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
         Realm realm = Realm.getDefaultInstance();
         new EventRepositoriesLocal(realm).addCalendars(mListCalendar, LoginActivity.this);
         Session.sCalendarId = mListUserCalendar.get(0).getCalendarId();
-        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+            getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MainActivity.NAME_TITLE, mUserLogin.getName());
         editor.putString(MainActivity.EMAIL_TITLE, mUserLogin.getEmail());
@@ -174,20 +176,20 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
             public void onResponse(Call<List<Place>> call, final Response<List<Place>> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                Realm realm = Realm.getDefaultInstance();
-                                new EventRepositoriesLocal(realm).addPlaces(response.body(), new Realm.Transaction.OnSuccess() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-                                });
-                            }
-                        });
+                        new EventRepositoriesLocal(Realm.getDefaultInstance())
+                            .clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
+                                @Override
+                                public void onSuccess() {
+                                    Realm realm = Realm.getDefaultInstance();
+                                    new EventRepositoriesLocal(realm).addPlaces(response.body(),
+                                        new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                            }
+                                        });
+                                }
+                            });
                     }
-                } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -203,20 +205,23 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
             public void onResponse(Call<List<User>> call, final Response<List<User>> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        new EventRepositoriesLocal(Realm.getDefaultInstance()).clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                Realm realm = Realm.getDefaultInstance();
-                                new EventRepositoriesLocal(realm).addUser(response.body(), new Realm.Transaction.OnSuccess() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-                                });
-                            }
-                        });
+                        new EventRepositoriesLocal(Realm.getDefaultInstance())
+                            .clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
+                                @Override
+                                public void onSuccess() {
+                                    Realm realm = Realm.getDefaultInstance();
+                                    new EventRepositoriesLocal(realm).addUser(response.body(),
+                                        new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                            }
+                                        });
+                                }
+                            });
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid),
+                        Toast.LENGTH_SHORT).show();
                 }
             }
 
