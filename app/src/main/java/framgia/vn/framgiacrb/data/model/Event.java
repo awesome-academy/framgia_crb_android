@@ -11,7 +11,7 @@ import io.realm.annotations.PrimaryKey;
 public class Event extends RealmObject {
     @PrimaryKey
     @SerializedName("id")
-    private String mId;
+    private int mId;
     @SerializedName("title")
     private String mTitle;
     @SerializedName("description")
@@ -105,11 +105,11 @@ public class Event extends RealmObject {
         mColorId = colorId;
     }
 
-    public String getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         mId = id;
     }
 

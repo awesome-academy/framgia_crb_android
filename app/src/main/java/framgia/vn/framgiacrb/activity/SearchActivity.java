@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -43,6 +44,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            Log.d("tag", "run in onscroll");
             super.onScrolled(recyclerView, dx, dy);
             int totalItemCount = layoutManager.getItemCount();
             int lastVisibleItem = layoutManager.findLastVisibleItemPosition() + 1;
@@ -54,6 +56,8 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
                     sMonth = 1;
                     sYear++;
                 }
+                Log.d("month", Integer.toString(sMonth));
+                Log.d("year", Integer.toString(sYear));
                 if (!mTextSearch.equals("")) {
                     sAsyncTaskFinish = false;
                     SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
@@ -101,6 +105,10 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
                 sNotNeedYear = false;
                 sIsHasMoreEvent = true;
                 sMonth = Constant.INVALID_INDEX;
+                if (mHaveListener) {
+                    mRecycler.removeOnScrollListener(mOnScrollListener);
+                    mHaveListener = false;
+                }
                 if (!query.equals("")) {
                     SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
                         (SearchActivity.this, mRealmList);
@@ -130,24 +138,22 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
 
     @Override
     public void onFinish(RealmList list) {
+        Log.d("list size", Integer.toString(list.size()));
         sAsyncTaskFinish = true;
         if (mAdapter.data.size() == list.size() && sIsHasMoreEvent && mHaveListener) {
-            mRecycler.removeOnScrollListener(mOnScrollListener);
             mOnScrollListener.onScrolled(mRecycler, 0, 0);
+            mRecycler.removeOnScrollListener(mOnScrollListener);
             mHaveListener = false;
-            mRealmList.clear();
-            mRealmList.addAll(list);
-            mAdapter.data.clear();
-            mAdapter.data.addAll(list);
-            mAdapter.notifyDataSetChanged();
-        } else {
+        } else if (!mHaveListener) {
             mRecycler.addOnScrollListener(mOnScrollListener);
             mHaveListener = true;
-            mRealmList.clear();
-            mRealmList.addAll(list);
-            mAdapter.data.clear();
-            mAdapter.data.addAll(list);
-            mAdapter.notifyDataSetChanged();
         }
+        if (!sIsHasMoreEvent) {
+            mRecycler.removeOnScrollListener(mOnScrollListener);
+            mHaveListener = false;
+        }
+        mRealmList = list;
+        mAdapter.data = list;
+        mAdapter.notifyDataSetChanged();
     }
 }

@@ -51,7 +51,7 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        String eventId = getIntent().getStringExtra(Constant.ID_KEY);
+        int eventId = getIntent().getIntExtra(Constant.ID_KEY, Constant.INVALID_INDEX);
         Event event = RealmController.with(this).getEventById(eventId);
         if (event == null) {
             return;

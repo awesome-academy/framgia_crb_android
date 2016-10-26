@@ -193,7 +193,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         touchHelper.attachToRecyclerView(mRecyclerViewEvents);
         mAdapter.setOnEventSelectedListener(new ListEventAdapter.OnEventSelectedListener() {
             @Override
-            public void onSelected(String idSelected) {
+            public void onSelected(int idSelected) {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra(Constant.ID_KEY, idSelected);
                 getActivity().startActivity(intent);
@@ -251,7 +251,6 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             }
         });
     }
-
 
     private void initDatas() throws ParseException {
         mDatas.clear();

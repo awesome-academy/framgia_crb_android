@@ -95,18 +95,11 @@ public class RenderEventUtil {
         }
         Event eventGen = null;
         if (TimeUtils.compareWeek(date, startTime) && isRepeatOnAttribute(event, date)) {
-            eventGen = new Event();
+            eventGen = new Event(event);
             startTime = getTimeRepeat(date, startTime);
             finishTime = getTimeRepeat(date, finishTime);
             eventGen.setStartTime(startTime);
             eventGen.setFinishTime(finishTime);
-            eventGen.setId(event.getId());
-            eventGen.setTitle(event.getTitle());
-            eventGen.setStartRepeat(event.getStartRepeat());
-            eventGen.setEndRepeat(event.getEndRepeat());
-            eventGen.setRepeatEvery(repeatEvery);
-            eventGen.setRepeatType(repeatType);
-            eventGen.setColorId(event.getColorId());
             if (event.getParentId() == null) {
                 eventGen = checkException(date, event, eventGen);
             }
@@ -148,19 +141,12 @@ public class RenderEventUtil {
         }
         Event eventGen = null;
         if (TimeUtils.compareDate(date, startTime)) {
-            eventGen = new Event();
+            eventGen = new Event(event);
             startTime = getTimeRepeat(date, startTime);
             finishTime = getTimeRepeat(date, finishTime);
             eventGen.setStartTime(startTime);
             eventGen.setFinishTime(finishTime);
-            eventGen.setId(event.getId());
-            eventGen.setTitle(event.getTitle());
-            eventGen.setStartRepeat(event.getStartRepeat());
-            eventGen.setEndRepeat(event.getEndRepeat());
-            eventGen.setRepeatEvery(repeatEvery);
-            eventGen.setRepeatType(repeatType);
-            eventGen.setColorId(event.getColorId());
-            if (event.getParentId() == null) {
+            if (event.getParentId() != null) {
                 eventGen = checkException(date, event, eventGen);
             }
         }
@@ -168,7 +154,8 @@ public class RenderEventUtil {
     }
 
     private static Event checkException(Date date, Event event, Event eventGen) {
-        List<Event> eventChangeList = sEventRepositoriesLocal.getEventByParentId(event.getId());
+        List<Event> eventChangeList =
+            sEventRepositoriesLocal.getEventByParentId(event.getParentId());
         for (Event eventChange : eventChangeList) {
             switch (ExceptionType.getExceptionType(eventChange.getExceptionType())) {
                 case DELETE_ONLY:
