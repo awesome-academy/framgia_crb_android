@@ -3,6 +3,7 @@ package framgia.vn.framgiacrb.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,18 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
             holder.content.setText(content);
             holder.content.setTextColor(mActivity.getResources().getColor(
                 R.color.white));
-            holder.content.setBackgroundColor(Color.parseColor(obj.getColorId()));
+            if (obj.getPlace() != null) {
+                holder.content.setBackgroundColor(
+                    ContextCompat.getColor(mActivity, Constant.color[obj.getPlace().getId() - 1]));
+            } else {
+                try {
+                    holder.content.setBackgroundColor(Color.parseColor(obj.getColorId()));
+                } catch (IllegalArgumentException e) {
+                    holder.content
+                        .setBackgroundColor(
+                            ContextCompat.getColor(mActivity, R.color.colorPrimary));
+                }
+            }
             holder.content.setTextSize(TEXT_CONTENT_SIZE);
         }
     }

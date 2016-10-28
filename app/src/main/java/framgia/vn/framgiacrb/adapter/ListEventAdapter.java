@@ -186,7 +186,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         CardView cardView;
         LinearLayout linearLayoutLocation;
         TextView tvLocation;
-        private String mId;
+        private int mId;
 
         public EventViewHolder(View itemView) {
             super(itemView);
@@ -205,7 +205,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
         }
 
-        public void setId(String id) {
+        public void setId(int id) {
             mId = id;
         }
     }
@@ -217,6 +217,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public interface OnEventSelectedListener {
-        void onSelected(String idSelected);
+        void onSelected(int idSelected);
     }
 }

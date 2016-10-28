@@ -1,6 +1,7 @@
 package framgia.vn.framgiacrb.utils;
 
 import android.app.AlarmManager;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,6 +24,7 @@ public class SearchUtil {
 
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
         if (SearchActivity.sMonth == Constant.INVALID_INDEX) {
+            Log.d("tag", "sMonth = -1");
             Event event = data.get(0);
             SearchActivity.sMonth = TimeUtils.getMonth(event.getStartTime());
             SearchActivity.sYear = TimeUtils.getYear(event.getStartTime());
@@ -133,7 +135,7 @@ public class SearchUtil {
         if (dayOfWeeks == null) {
             return listEvent;
         }
-        for(DayOfWeek dayOfWeek : dayOfWeeks) {
+        for (DayOfWeek dayOfWeek : dayOfWeeks) {
             listEvent.addAll(getListEventByDayOfWeekId(event, dayOfWeek));
         }
         return listEvent;
@@ -185,21 +187,28 @@ public class SearchUtil {
 
     public static Event genEventForMonthly(Event event) {
         int month = TimeUtils.getMonth(event.getStartRepeat());
+        int year = TimeUtils.getYear(event.getStartRepeat());
+        int endYear = TimeUtils.getYear(event.getEndRepeat());
         int endMonth = TimeUtils.getMonth(event.getEndRepeat());
-        while (month < SearchActivity.sMonth && month <= endMonth) {
-            month += event.getRepeatEvery();
-        }
-        if (month != SearchActivity.sMonth) {
+        if(SearchActivity.sYear >= endYear && SearchActivity.sMonth > endMonth) {
             return null;
         }
-        Event result = new Event(event);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(event.getStartTime());
-        calendar.set(Calendar.MONTH, month);
-        result.setStartTime(calendar.getTime());
-        result.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(), event.getFinishTime
-            ()));
-        return result;
+        if (endYear >= SearchActivity.sYear
+            && (Math.abs(SearchActivity.sMonth - month + (SearchActivity.sYear - year) * 12) % event
+            .getRepeatEvery
+                () == 0)
+            ) {
+            Event result = new Event(event);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(event.getStartTime());
+            calendar.set(Calendar.MONTH, SearchActivity.sMonth - 1);
+            calendar.set(Calendar.YEAR, SearchActivity.sYear);
+            result.setStartTime(calendar.getTime());
+            result.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(), event.getFinishTime
+                ()));
+            return result;
+        }
+        return null;
     }
 
     public static Event genEventForYearly(Event event) {
@@ -209,28 +218,29 @@ public class SearchUtil {
         }
         int year = TimeUtils.getYear(event.getStartRepeat());
         int endYear = TimeUtils.getYear(event.getEndRepeat());
-        while (year < SearchActivity.sYear && year < endYear) {
-            year += event.getRepeatEvery();
+        if (SearchActivity.sYear <= endYear
+            && (Math.abs(SearchActivity.sYear - year) % event.getRepeatEvery() == 0)) {
+            Event result = new Event(event);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(event.getStartTime());
+            calendar.set(Calendar.YEAR, SearchActivity.sYear);
+            result.setStartTime(calendar.getTime());
+            result.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(), event.getFinishTime
+                ()));
+            return result;
         }
-        if (year != SearchActivity.sYear) {
-            return null;
-        }
-        Event result = new Event(event);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(event.getStartTime());
-        calendar.set(Calendar.YEAR, year);
-        result.setStartTime(calendar.getTime());
-        result.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(), event.getFinishTime
-            ()));
-        return result;
+        return null;
     }
 
     public static Date getFinalEventDay(OrderedRealmCollection<Event> data) {
         Date date = new Date();
         date.setTime(data.get(0).getEndRepeat().getTime());
         int length = data.size();
+        if (length == 1) {
+            return date;
+        }
         for (int i = 1; i < length; i++) {
-            if (date.before(data.get(i).getEndRepeat())) {
+            if (data.get(i).getEndRepeat() != null && date.before(data.get(i).getEndRepeat())) {
                 date.setTime(data.get(i).getEndRepeat().getTime());
             }
         }

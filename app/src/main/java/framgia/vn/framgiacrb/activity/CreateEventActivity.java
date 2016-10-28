@@ -513,7 +513,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                         Utils.formatDate(CreateEventActivity.this, (monthOfYear + 1), dayOfMonth,
                             year));
                     mCal.set(year, monthOfYear, dayOfMonth);
-                    mDateStart = mCal.getTime();
+                    mDateStart = new Date(mCal.getTimeInMillis());
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, monthOfYear);
@@ -697,14 +697,18 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
         calendarStartFinishTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(tmp[0]));
         calendarStartFinishTime.set(Calendar.MINUTE, Integer.parseInt(tmp[1]));
         mTimeEventFinish = calendarStartFinishTime.getTime();
-        if (null == mDateStart) mDateStart = new Date();
-        if (null == mDateFinish) mDateFinish = new Date();
+        if (null == mDateStart) {
+            mDateStart = new Date();
+        }
+        if (null == mDateFinish) {
+            mDateFinish = new Date();
+        }
         if (isRepeat) {
             event.setStartRepeat(mDateStart);
             event.setEndRepeat(mDateEventFinishRepeat);
             event.setRepeatEvery(mRepeatEvery);
             event.setRepeatType(mRepeatType);
-            event.setDayOfWeeks((RealmList)mListDayOfWeekRepeat);
+            event.setDayOfWeeks(mListDayOfWeekRepeat);
         }
         event.setStartTime(TimeUtils.formatDateTime(mDateStart, mTimeEventStart));
         event.setFinishTime(TimeUtils.formatDateTime(mDateFinish, mTimeEventFinish));
