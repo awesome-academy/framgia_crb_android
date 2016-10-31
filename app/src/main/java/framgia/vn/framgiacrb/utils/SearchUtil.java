@@ -1,7 +1,6 @@
 package framgia.vn.framgiacrb.utils;
 
 import android.app.AlarmManager;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -21,10 +20,10 @@ import io.realm.RealmList;
  */
 public class SearchUtil {
     public static final String DEFINE_YEAR = "item_year";
+    public static final int COUNT_MONTH_IN_YEAR = 12;
 
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
         if (SearchActivity.sMonth == Constant.INVALID_INDEX) {
-            Log.d("tag", "sMonth = -1");
             Event event = data.get(0);
             SearchActivity.sMonth = TimeUtils.getMonth(event.getStartTime());
             SearchActivity.sYear = TimeUtils.getYear(event.getStartTime());
@@ -39,8 +38,11 @@ public class SearchUtil {
         });
         if (list.size() == 0) {
             Date finalDate = getFinalEventDay(data);
+            if (SearchActivity.sYear > TimeUtils.getYear(finalDate)) {
+                SearchActivity.sIsHasMoreEvent = false;
+            }
             if (SearchActivity.sMonth > TimeUtils.getMonth(finalDate)
-                && SearchActivity.sYear > TimeUtils.getYear(finalDate)) {
+                && SearchActivity.sYear == TimeUtils.getYear(finalDate)) {
                 SearchActivity.sIsHasMoreEvent = false;
             }
             return list;
@@ -171,16 +173,24 @@ public class SearchUtil {
                 calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
                 break;
         }
-        while (TimeUtils.getMonth(calendar.getTime()) == SearchActivity.sMonth) {
+        if (SearchActivity.sMonth == 1) {
+            int i = 0;
+            i++;
+        }
+        while ((TimeUtils.getMonth(calendar.getTime()) + TimeUtils.getYear(calendar.getTime()) *
+            COUNT_MONTH_IN_YEAR)
+            <= (SearchActivity.sMonth + SearchActivity.sYear * COUNT_MONTH_IN_YEAR)) {
             if (calendar.getTime().after(event.getStartRepeat())
-                && calendar.getTime().before(event.getEndRepeat())) {
+                && calendar.getTime().before(event.getEndRepeat())
+                && TimeUtils.getMonth(calendar.getTime()) == SearchActivity.sMonth
+                && TimeUtils.getYear(calendar.getTime()) == SearchActivity.sYear) {
                 Event suitableEvent = new Event(event);
                 suitableEvent.setStartTime(calendar.getTime());
                 suitableEvent.setFinishTime(TimeUtils.genFinishTime(calendar.getTime(),
                     event.getFinishTime()));
                 listEvent.add(suitableEvent);
             }
-            calendar.add(Calendar.WEEK_OF_MONTH, event.getRepeatEvery());
+            calendar.add(Calendar.WEEK_OF_YEAR, event.getRepeatEvery());
         }
         return listEvent;
     }
@@ -190,7 +200,7 @@ public class SearchUtil {
         int year = TimeUtils.getYear(event.getStartRepeat());
         int endYear = TimeUtils.getYear(event.getEndRepeat());
         int endMonth = TimeUtils.getMonth(event.getEndRepeat());
-        if(SearchActivity.sYear >= endYear && SearchActivity.sMonth > endMonth) {
+        if (SearchActivity.sYear >= endYear && SearchActivity.sMonth > endMonth) {
             return null;
         }
         if (endYear >= SearchActivity.sYear
