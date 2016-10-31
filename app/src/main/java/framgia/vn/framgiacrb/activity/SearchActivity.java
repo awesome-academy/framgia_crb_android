@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,40 +33,6 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
     public static boolean sIsHasMoreEvent = true;
     public static boolean sAsyncTaskFinish = true;
     public static boolean sNotNeedYear = false;
-    private boolean mHaveListener = false;
-    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView
-        .OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            Log.d("tag", "run in onscroll");
-            super.onScrolled(recyclerView, dx, dy);
-            int totalItemCount = layoutManager.getItemCount();
-            int lastVisibleItem = layoutManager.findLastVisibleItemPosition() + 1;
-            if (sAsyncTaskFinish && sIsHasMoreEvent && dy >= 0 &&
-                totalItemCount == lastVisibleItem) {
-                sMonth++;
-                if (sMonth == 13) {
-                    sNotNeedYear = false;
-                    sMonth = 1;
-                    sYear++;
-                }
-                Log.d("month", Integer.toString(sMonth));
-                Log.d("year", Integer.toString(sYear));
-                if (!mTextSearch.equals("")) {
-                    sAsyncTaskFinish = false;
-                    SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
-                        (SearchActivity.this, mRealmList);
-                    searchEventAsynTask.setListener(SearchActivity.this);
-                    searchEventAsynTask.execute(mTextSearch);
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +62,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mSearchView.clearFocus();
                 if (!sAsyncTaskFinish) {
                     return false;
                 }
@@ -105,10 +71,6 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
                 sNotNeedYear = false;
                 sIsHasMoreEvent = true;
                 sMonth = Constant.INVALID_INDEX;
-                if (mHaveListener) {
-                    mRecycler.removeOnScrollListener(mOnScrollListener);
-                    mHaveListener = false;
-                }
                 if (!query.equals("")) {
                     SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
                         (SearchActivity.this, mRealmList);
@@ -138,22 +100,23 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
 
     @Override
     public void onFinish(RealmList list) {
-        Log.d("list size", Integer.toString(list.size()));
         sAsyncTaskFinish = true;
-        if (mAdapter.data.size() == list.size() && sIsHasMoreEvent && mHaveListener) {
-            mOnScrollListener.onScrolled(mRecycler, 0, 0);
-            mRecycler.removeOnScrollListener(mOnScrollListener);
-            mHaveListener = false;
-        } else if (!mHaveListener) {
-            mRecycler.addOnScrollListener(mOnScrollListener);
-            mHaveListener = true;
-        }
-        if (!sIsHasMoreEvent) {
-            mRecycler.removeOnScrollListener(mOnScrollListener);
-            mHaveListener = false;
-        }
         mRealmList = list;
         mAdapter.data = list;
         mAdapter.notifyDataSetChanged();
+        if (!sIsHasMoreEvent) {
+            return;
+        }
+        sMonth++;
+        if (sMonth == 13) {
+            sNotNeedYear = false;
+            sMonth = 1;
+            sYear++;
+        }
+        sAsyncTaskFinish = false;
+        SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
+            (SearchActivity.this, mRealmList);
+        searchEventAsynTask.setListener(SearchActivity.this);
+        searchEventAsynTask.execute(mTextSearch);
     }
 }
