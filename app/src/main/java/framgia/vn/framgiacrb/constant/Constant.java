@@ -51,4 +51,6 @@ public class Constant {
         "This account has been login in other device";
     public static final int INVALID_INDEX = -1;
     public static final String AMOUNT_DEVIDE = "-";
+    public static final String INTENT_START_TIME = "intent start time";
+    public static final String INTENT_FINISH_TIME = "intent finish time";
 }

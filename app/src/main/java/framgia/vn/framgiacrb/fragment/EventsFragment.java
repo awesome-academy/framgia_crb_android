@@ -52,7 +52,6 @@ import io.realm.Realm;
  * Created by nghicv on 04/07/2016.
  */
 public class EventsFragment extends Fragment implements OnLoadEventListener {
-
     public static final int REQUEST_CODE = 1;
     public static final int OFFSET_ITEM_TODAY = 60;
     private View mViewEvents;
@@ -80,7 +79,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         mViewEvents = inflater.inflate(R.layout.fragment_events, container, false);
         initViews();
         mCalendar = new framgia.vn.framgiacrb.data.model.Calendar();
@@ -112,10 +112,12 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 if (intent.getAction().equals(MainActivity.ACTION_SCROLL_DAY)) {
                     String timeString = intent.getStringExtra(MonthView.TITLE);
                     Date date = TimeUtils.stringToDate(timeString, "d MMM yyyy");
-                    int month = Integer.parseInt(android.text.format.DateFormat.format("MM", date).toString());
+                    int month = Integer
+                        .parseInt(android.text.format.DateFormat.format("MM", date).toString());
                     int year = Integer.parseInt(DateFormat.format("yyyy", date).toString());
                     int position = -1;
-                    if ((month > mLastMonth && year == mLastYear) || (month == 1 && year > mLastYear)) {
+                    if ((month > mLastMonth && year == mLastYear) ||
+                        (month == 1 && year > mLastYear)) {
                         try {
                             loadDatasForNextMonth();
                             mAdapter.notifyDataSetChanged();
@@ -123,7 +125,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                    } else if ((month < mFirstMonth && year == mFirstYear) || (month == 12 && year < mFirstYear)) {
+                    } else if ((month < mFirstMonth && year == mFirstYear) ||
+                        (month == 12 && year < mFirstYear)) {
                         position = 0;
                         try {
                             loadDatasForPrevMonth();
@@ -137,8 +140,10 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 }
             }
         };
-        getActivity().registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
-        getActivity().registerReceiver(mBroadcastReceiverToDate, new IntentFilter(MainActivity.ACTION_SCROLL_DAY));
+        getActivity()
+            .registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
+        getActivity().registerReceiver(mBroadcastReceiverToDate,
+            new IntentFilter(MainActivity.ACTION_SCROLL_DAY));
         return mViewEvents;
     }
 
@@ -147,8 +152,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
     }
 
     private void loadDatas() {
-
-        if (Connectivity.isConnected(getActivity()) && Connectivity.isConnectedFast(getActivity())) {
+        if (Connectivity.isConnected(getActivity()) &&
+            Connectivity.isConnectedFast(getActivity())) {
             mEventRepositories.getEventsByCalendar(Session.sAuthToken, mCalendar, getActivity());
         } else {
             try {
@@ -157,7 +162,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getActivity().getString(R.string.message_not_connect),
+                Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -174,7 +180,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
     }
 
     private void initViews() {
-        mRefreshLayout = (SwipeRefreshLayout) mViewEvents.findViewById(R.id.swipe_refresh_layout_events);
+        mRefreshLayout =
+            (SwipeRefreshLayout) mViewEvents.findViewById(R.id.swipe_refresh_layout_events);
         mRecyclerViewEvents = (RecyclerView) mViewEvents.findViewById(R.id.rv_events);
         mRecyclerViewEvents.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -188,24 +195,27 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         mAdapter = new ListEventAdapter(getActivity(), mDatas);
         mRecyclerViewEvents.setAdapter(mAdapter);
         ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(mAdapter);
+            new SimpleItemTouchHelperCallback(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerViewEvents);
         mAdapter.setOnEventSelectedListener(new ListEventAdapter.OnEventSelectedListener() {
             @Override
-            public void onSelected(int idSelected) {
+            public void onSelected(int idSelected, int position) {
+                Event event = (Event) mDatas.get(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra(Constant.ID_KEY, idSelected);
+                intent.putExtra(Constant.INTENT_START_TIME, event.getStartTime());
+                intent.putExtra(Constant.INTENT_FINISH_TIME, event.getFinishTime());
                 getActivity().startActivity(intent);
             }
         });
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getActivity(), CreateEventActivity.class), REQUEST_CODE);
+                startActivityForResult(new Intent(getActivity(), CreateEventActivity.class),
+                    REQUEST_CODE);
             }
         });
-
         mRecyclerViewEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -215,10 +225,11 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findLastVisibleItemPosition();
+                int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findFirstVisibleItemPosition();
                 if (dy > 0) {
                     setDateForCalendar(firstVisibleItem);
                     if (totalItemCount - 10 < lastVisibleItem + 1) {
@@ -236,7 +247,6 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 } else {
                     setDateForCalendar(firstVisibleItem);
                     if (10 > firstVisibleItem) {
-
                         if (!isLoading) {
                             isLoading = true;
                             try {
@@ -260,14 +270,14 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         mLastMonth = month;
         mFirstMonth = month;
         String stringMonth = android.text.format.DateFormat.format("MMM", today).toString();
-        mLastYear = Integer.parseInt(android.text.format.DateFormat.format("yyyy", today).toString());
+        mLastYear =
+            Integer.parseInt(android.text.format.DateFormat.format("yyyy", today).toString());
         mFirstYear = mLastYear;
         calendar.set(mLastYear, month - 1, 1);
         Date date = calendar.getTime();
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         boolean isTimelineAdded = false;
         while (month < mLastMonth + 1) {
-
             mDatas.add(date);
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
@@ -359,7 +369,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             mCurrentDate = (Date) object;
             MainActivity.sCurrentDate = mCurrentDate;
             mCurrentPosition = position;
-            ((MainActivity) getActivity()).setSubTitle(TimeUtils.toStringDate(mCurrentDate, TimeUtils.DATE_FORMAT_TOOLBAR));
+            ((MainActivity) getActivity())
+                .setSubTitle(TimeUtils.toStringDate(mCurrentDate, TimeUtils.DATE_FORMAT_TOOLBAR));
         }
     }
 
@@ -384,17 +395,18 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             if (mCurrentDate.before(TimeUtils.formatDate(date))) {
                 left = mCurrentPosition;
                 for (int i = left; i <= right; i++) {
-                    if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                    if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i))
+                        .equals(TimeUtils.formatDate(date)))
                         return i;
                 }
             } else {
                 right = mCurrentPosition;
                 for (int i = right; i >= left; i--) {
-                    if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                    if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i))
+                        .equals(TimeUtils.formatDate(date)))
                         return i;
                 }
             }
-
         } catch (ParseException e) {
             e.printStackTrace();
             return -1;
@@ -411,9 +423,11 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
     }
 
     private void scrollToposition(int position, int offSet) {
-        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
+        LinearLayoutManager linearLayoutManager =
+            (LinearLayoutManager) mRecyclerViewEvents.getLayoutManager();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int offSetPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, offSet, metrics);
+        int offSetPx =
+            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, offSet, metrics);
         linearLayoutManager.scrollToPositionWithOffset(position, (int) offSetPx);
     }
 
@@ -423,12 +437,14 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             calendar.setTime(MainActivity.sCurrentDate);
             int month = calendar.get(Calendar.MONTH) + 1;
             int year = calendar.get(Calendar.YEAR);
-            if ((month == mLastMonth && year == mLastYear) || (month == mFirstMonth && year == mFirstYear)) {
+            if ((month == mLastMonth && year == mLastYear) ||
+                (month == mFirstMonth && year == mFirstYear)) {
                 int position = findDate(left, right, MainActivity.sCurrentDate);
                 scrollToposition(position, 0);
                 return;
             }
-            if ((month > mLastMonth && mLastYear == year) ||(month <= mLastMonth && year > mLastYear)) {
+            if ((month > mLastMonth && mLastYear == year) ||
+                (month <= mLastMonth && year > mLastYear)) {
                 left = mDatas.size();
                 loadDatasForNextMonth();
                 restoreData(left, mDatas.size());
@@ -436,17 +452,16 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 loadDatasForPrevMonth();
                 restoreData(left, mDatas.size() - right);
             }
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
 
     private int findDate(int left, int right, Date date) {
         for (int i = left; i < right; i++) {
             try {
-                if (mDatas.get(i) instanceof Date && TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
+                if (mDatas.get(i) instanceof Date &&
+                    TimeUtils.formatDate((Date) mDatas.get(i)).equals(TimeUtils.formatDate(date)))
                     return i;
             } catch (ParseException e) {
                 e.printStackTrace();
