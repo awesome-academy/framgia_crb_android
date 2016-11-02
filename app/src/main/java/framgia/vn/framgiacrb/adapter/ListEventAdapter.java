@@ -35,7 +35,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private LayoutInflater mLayoutInflater;
     private List<Object> mDatas;
     private OnEventSelectedListener mOnEventSelectedListener;
-
     public void setOnEventSelectedListener(OnEventSelectedListener onEventSelectedListener) {
         mOnEventSelectedListener = onEventSelectedListener;
     }
@@ -199,7 +198,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View view) {
                     if (mOnEventSelectedListener != null) {
-                        mOnEventSelectedListener.onSelected(mId);
+                        mOnEventSelectedListener.onSelected(mId, getLayoutPosition());
                     }
                 }
             });
@@ -217,6 +216,6 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public interface OnEventSelectedListener {
-        void onSelected(int idSelected);
+        void onSelected(int idSelected, int position);
     }
 }

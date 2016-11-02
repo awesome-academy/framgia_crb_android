@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Attendee;
@@ -52,10 +54,15 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
         int eventId = getIntent().getIntExtra(Constant.ID_KEY, Constant.INVALID_INDEX);
-        Event event = RealmController.with(this).getEventById(eventId);
-        if (event == null) {
+        Date startTime = (Date) getIntent().getSerializableExtra(Constant.INTENT_START_TIME);
+        Date finishTime = (Date) getIntent().getSerializableExtra(Constant.INTENT_FINISH_TIME);
+        Event eventParent = RealmController.with(this).getEventById(eventId);
+        if (eventParent == null) {
             return;
         }
+        Event event = new Event(eventParent);
+        event.setStartTime(startTime);
+        event.setFinishTime(finishTime);
         if (event.getDescription() != null && !event.getDescription().equals("")) {
             TextView description = (TextView) findViewById(R.id.title_description);
             description.setText(event.getDescription());

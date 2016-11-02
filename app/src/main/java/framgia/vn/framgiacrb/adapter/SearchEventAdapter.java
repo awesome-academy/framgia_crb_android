@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -118,6 +117,10 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
             if (type == TYPE_EVENT) {
                 Intent intent = new Intent(mActivity, DetailActivity.class);
                 intent.putExtra(Constant.ID_KEY, data.get(getAdapterPosition()).getId());
+                intent.putExtra(Constant.INTENT_START_TIME,
+                    data.get(getAdapterPosition()).getStartTime());
+                intent.putExtra(Constant.INTENT_FINISH_TIME, data.get(getAdapterPosition())
+                    .getFinishTime());
                 mActivity.startActivity(intent);
             }
         }

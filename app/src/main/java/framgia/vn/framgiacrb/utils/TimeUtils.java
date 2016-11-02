@@ -1,10 +1,15 @@
 package framgia.vn.framgiacrb.utils;
 
+import android.app.Activity;
+import android.content.Context;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import framgia.vn.framgiacrb.object.RealmController;
 
 /**
  * Created by nghicv on 18/07/2016.
@@ -174,6 +179,17 @@ public class TimeUtils {
         result.set(Calendar.MINUTE, oldFinishCalendar.get(Calendar.MINUTE));
         result.set(Calendar.SECOND, oldFinishCalendar.get(Calendar.SECOND));
         return result.getTime();
+    }
+
+    public static Date genStartTime(Activity activity, int eventId, Date date) {
+        RealmController.with(activity).getEventById(eventId);
+        Calendar dateCalendar = Calendar.getInstance();
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.setTime(date);
+        startCalendar.set(Calendar.DAY_OF_MONTH, dateCalendar.get(Calendar.DAY_OF_MONTH));
+        startCalendar.set(Calendar.MONTH, dateCalendar.get(Calendar.MONTH));
+        startCalendar.set(Calendar.YEAR, dateCalendar.get(Calendar.YEAR));
+        return new Date(startCalendar.getTimeInMillis());
     }
 
     public static int getMonth(Date date) {
