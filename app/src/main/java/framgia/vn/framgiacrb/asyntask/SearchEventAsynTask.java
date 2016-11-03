@@ -2,14 +2,13 @@ package framgia.vn.framgiacrb.asyntask;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
-import framgia.vn.framgiacrb.activity.SearchActivity;
+import framgia.vn.framgiacrb.ui.activity.SearchActivity;
 import framgia.vn.framgiacrb.data.model.Event;
-import framgia.vn.framgiacrb.object.EventField;
-import framgia.vn.framgiacrb.ui.listener.AsyncTaskFinishListener;
+import framgia.vn.framgiacrb.data.model.EventField;
+import framgia.vn.framgiacrb.listener.AsyncTaskFinishListener;
 import framgia.vn.framgiacrb.utils.SearchUtil;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;

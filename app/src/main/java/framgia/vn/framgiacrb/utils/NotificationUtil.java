@@ -15,7 +15,7 @@ import java.util.Date;
 
 import framgia.vn.framgiacrb.CrbApplication;
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.activity.DetailActivity;
+import framgia.vn.framgiacrb.ui.activity.DetailActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.services.AlarmReceiver;

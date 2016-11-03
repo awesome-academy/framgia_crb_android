@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
-import framgia.vn.framgiacrb.data.EventRepository;
-import framgia.vn.framgiacrb.data.OnLoadEventListener;
+import framgia.vn.framgiacrb.data.model.EventRepository;
+import framgia.vn.framgiacrb.listener.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.Place;
@@ -146,10 +146,6 @@ public class EventRepositoriesLocal implements EventRepository {
 
     public RealmResults<User> getAllUsers() {
         return mRealm.where(User.class).findAll();
-    }
-
-    public Place getPlaceByName(String name) {
-        return mRealm.where(Place.class).equalTo(PLACE_NAME, name).findFirst();
     }
 
     public void clearCalendarFromDatabase(final Realm.Transaction.OnSuccess onSuccess) {

@@ -22,7 +22,7 @@
             android:paddingTop="?attr/actionBarSize"
             app:layout_collapseMode="parallax"
             app:layout_collapseParallaxMultiplier="1.0">
-            <framgia.vn.framgiacrb.ui.WrapContentHeightViewPager
+            <framgia.vn.framgiacrb.ui.widget.WrapContentHeightViewPager
                 android:background="@android:color/white"
                 android:id="@+id/calendar_view_pager"
                 android:layout_width="match_parent"

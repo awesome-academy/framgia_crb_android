@@ -3,9 +3,7 @@ package framgia.vn.framgiacrb.utils;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,12 +11,9 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.adapter.ListEventAdapter;
+import framgia.vn.framgiacrb.ui.adapter.ListEventAdapter;
 
 /**
  * Created by nghicv on 05/07/2016.

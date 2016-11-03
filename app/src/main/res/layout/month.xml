@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<framgia.vn.framgiacrb.ui.MonthView xmlns:android="http://schemas.android.com/apk/res/android"
+<framgia.vn.framgiacrb.ui.widget.MonthView
     android:id="@+id/item_month"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-</framgia.vn.framgiacrb.ui.MonthView>
+    android:orientation="vertical"/>

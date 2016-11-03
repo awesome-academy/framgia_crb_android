@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.activity.LoginActivity;
-import framgia.vn.framgiacrb.activity.MainActivity;
+import framgia.vn.framgiacrb.ui.activity.LoginActivity;
+import framgia.vn.framgiacrb.ui.activity.MainActivity;
 import framgia.vn.framgiacrb.constant.Constant;
-import framgia.vn.framgiacrb.data.EventRepository;
-import framgia.vn.framgiacrb.data.OnLoadEventListener;
+import framgia.vn.framgiacrb.data.model.EventRepository;
+import framgia.vn.framgiacrb.listener.OnLoadEventListener;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;

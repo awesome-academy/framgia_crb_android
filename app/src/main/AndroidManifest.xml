@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,37 +31,34 @@
         </activity>
 
         <activity
-            android:name=".activity.SearchActivity"
+            android:name=".ui.activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".activity.DetailActivity"
+            android:name=".ui.activity.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activity.CreateEventActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity
-            android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".ui.activity.CreateEventActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activity.EditActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".ui.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activity.AttendeeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".ui.activity.EditActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activity.PlaceActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".ui.activity.AttendeeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".activity.SplashActivity"
+        <activity
+            android:name=".ui.activity.PlaceActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".ui.activity.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <receiver

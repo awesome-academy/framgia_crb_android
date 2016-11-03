@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
-    <framgia.vn.framgiacrb.ui.TimeLineView
+    <framgia.vn.framgiacrb.ui.widget.TimeLineView
         android:layout_width="match_parent"
         android:layout_height="@dimen/time_line_height"
         android:layout_marginLeft="@dimen/item_timeline_margin_left"

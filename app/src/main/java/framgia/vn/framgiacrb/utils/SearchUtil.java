@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import framgia.vn.framgiacrb.activity.SearchActivity;
+import framgia.vn.framgiacrb.ui.activity.SearchActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
