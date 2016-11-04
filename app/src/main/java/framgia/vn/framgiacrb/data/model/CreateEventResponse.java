@@ -10,12 +10,11 @@ public class CreateEventResponse {
     private String mMessage;
     @SerializedName("event")
     private Event mUser;
-    @SerializedName("owner")
-    private User mOwners;
-    @SerializedName("error")
+    @SerializedName("errors")
     private String mError;
 
-    public CreateEventResponse(){}
+    public CreateEventResponse() {
+    }
 
     public String getMessage() {
         return mMessage;
@@ -31,14 +30,6 @@ public class CreateEventResponse {
 
     public void setUser(Event mUser) {
         this.mUser = mUser;
-    }
-
-    public User getOwners() {
-        return mOwners;
-    }
-
-    public void setOwners(User mOwners) {
-        this.mOwners = mOwners;
     }
 
     public String getError() {

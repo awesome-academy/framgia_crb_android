@@ -1,15 +1,11 @@
 package framgia.vn.framgiacrb.utils;
 
-import android.app.Activity;
-import android.content.Context;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
-import framgia.vn.framgiacrb.object.RealmController;
+import java.util.TimeZone;
 
 /**
  * Created by nghicv on 18/07/2016.
@@ -26,31 +22,7 @@ public class TimeUtils {
     private static final String FORMAT_OTHER_YEAR = "HH:mm EEE dd MMM yyyy";
     private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm EEE dd MMM";
     private static final String FORMAT_TODAY = "HH:mm";
-
-    public static String toStringDate(long milisec) {
-        return new SimpleDateFormat(DATE_OUTPUT, Locale.getDefault()).format(new Date(milisec));
-    }
-
-    public static long toTime(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat();
-        try {
-            Date date = dateFormat.parse(dateString);
-            return date.getTime();
-        } catch (ParseException e) {
-            return 0;
-        }
-    }
-
-    public static Date stringToDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT, Locale.ENGLISH);
-        Date date = new Date();
-        try {
-            date = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            return null;
-        }
-        return date;
-    }
+    private static final String GMT_0 = "Europe/London";
 
     public static Date stringToDate(String dateString, String dateInput) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
@@ -92,26 +64,6 @@ public class TimeUtils {
         return new SimpleDateFormat(YEAR_FORMAT).format(date);
     }
 
-    public static Date convertDateFormat(String date, String givenFormat, String resultFormat) {
-        String result = "";
-        Date resultDate;
-        SimpleDateFormat sdf;
-        SimpleDateFormat sdf1;
-        try {
-            sdf = new SimpleDateFormat(givenFormat);
-            sdf1 = new SimpleDateFormat(resultFormat);
-            result = sdf1.format(sdf.parse(date));
-            resultDate = sdf1.parse(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Date();
-        } finally {
-            sdf = null;
-            sdf1 = null;
-        }
-        return resultDate;
-    }
-
     public static String getTimeStringBeauty(Date date) {
         if (date == null) {
             return "";
@@ -133,11 +85,14 @@ public class TimeUtils {
         return getTimeStringBeauty(startDate) + DEVIDE_TIME + getTimeStringBeauty(endDate);
     }
 
-    @SuppressWarnings("deprecation")
     public static Date formatDateTime(Date date, Date time) {
-        date.setHours(time.getHours());
-        date.setMinutes(time.getMinutes());
-        return date;
+        Calendar calendarTime = Calendar.getInstance();
+        calendarTime.setTime(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE));
+        return calendar.getTime();
     }
 
     public static Date convertStringToDate(String dateString) {
@@ -181,25 +136,22 @@ public class TimeUtils {
         return result.getTime();
     }
 
-    public static Date genStartTime(Activity activity, int eventId, Date date) {
-        RealmController.with(activity).getEventById(eventId);
-        Calendar dateCalendar = Calendar.getInstance();
-        Calendar startCalendar = Calendar.getInstance();
-        startCalendar.setTime(date);
-        startCalendar.set(Calendar.DAY_OF_MONTH, dateCalendar.get(Calendar.DAY_OF_MONTH));
-        startCalendar.set(Calendar.MONTH, dateCalendar.get(Calendar.MONTH));
-        startCalendar.set(Calendar.YEAR, dateCalendar.get(Calendar.YEAR));
-        return new Date(startCalendar.getTimeInMillis());
-    }
-
     public static int getMonth(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.MONTH) + 1;
     }
+
     public static int getYear(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.YEAR);
+    }
+
+    public static Date convertToTimeZoneZero(Date date) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(GMT_0));
+        String dateInZeroTimeZone = simpleDateFormat.format(date);
+        return new SimpleDateFormat().parse(dateInZeroTimeZone);
     }
 }

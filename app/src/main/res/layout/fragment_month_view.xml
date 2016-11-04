@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <framgia.vn.framgiacrb.ui.MonthView
+    <framgia.vn.framgiacrb.ui.widget.MonthView
         android:id="@+id/month_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
