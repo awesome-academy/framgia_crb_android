@@ -2,7 +2,6 @@ package framgia.vn.framgiacrb.utils;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,10 +14,10 @@ import java.util.Date;
 
 import framgia.vn.framgiacrb.CrbApplication;
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.ui.activity.DetailActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.services.AlarmReceiver;
+import framgia.vn.framgiacrb.ui.activity.DetailActivity;
 
 /**
  * Created by framgia on 18/07/2016.
@@ -32,21 +31,24 @@ public class NotificationUtil {
         if (timeReal.before(Calendar.getInstance().getTime())) {
             return;
         }
-        Date time = (Date) timeReal.clone();
-        time.setTime(time.getTime() - TIME_EARLY);
         SharedPreferences prefs = context.getSharedPreferences(Activity.class.getSimpleName(),
             Context.MODE_PRIVATE);
         int notificationNumber = prefs.getInt(NOTIFICATION_ID, 0);
+        Date time = (Date) timeReal.clone();
+        time.setTime(time.getTime() - TIME_EARLY);
+        StringBuilder content = new StringBuilder(TimeUtils.createAmountTime(timeReal, event
+            .getFinishTime()));
+        content.append((event.getPlace() == null ? "" :
+            Constant.Format.LINE_BREAK));
+        content.append(event.getPlace().getName());
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        alarmIntent.putExtra(AlarmReceiver.INTENT_TITLE, event.getTitle());
         alarmIntent.putExtra(AlarmReceiver.INTENT_NOTIFICATION_ID, notificationNumber);
-        alarmIntent.putExtra(Constant.ID_KEY, event.getId());
-        String content = TimeUtils.createAmountTime(timeReal, event.getFinishTime())
-            + (event.getPlace() == null ? "" : Constant.LINE_BREAK + event.getPlace().getName());
-        alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content);
+        alarmIntent.putExtra(Constant.Intent.INTENT_ID_EVENT, event.getId());
+        alarmIntent.putExtra(Constant.Intent.INTENT_START_TIME, timeReal);
+        alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content.toString());
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context
             , notificationNumber, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         manager.set(AlarmManager.RTC_WAKEUP, time.getTime(), pendingIntent);
         SharedPreferences.Editor editor = prefs.edit();
         notificationNumber++;
@@ -54,10 +56,12 @@ public class NotificationUtil {
         editor.apply();
     }
 
-    public static void pushNotification(Context context, String title, String content, String
-        eventId, int notificationNumber) {
+    public static void pushNotification(Context context, String title, String content, int
+        eventId, int notificationNumber, Date startTime, Date finishTime) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(Constant.ID_KEY, eventId);
+        intent.putExtra(Constant.Intent.INTENT_ID_EVENT, eventId);
+        intent.putExtra(Constant.Intent.INTENT_START_TIME, startTime);
+        intent.putExtra(Constant.Intent.INTENT_FINISH_TIME, finishTime);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
             notificationNumber, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder =
@@ -66,7 +70,6 @@ public class NotificationUtil {
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true);
         NotificationManager notificationManager =
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

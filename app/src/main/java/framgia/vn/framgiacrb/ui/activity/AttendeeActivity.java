@@ -31,18 +31,16 @@ public class AttendeeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee);
-        init();
+        initViews();
     }
 
-    private void init() {
-        mRealm = RealmController.with(this).getRealm();
-
+    private void initViews() {
+        mRealm = RealmController.getInstance().getRealm();
         mToolbar = (Toolbar) findViewById(R.id.toolbar_repeat);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mRecycler = (RecyclerView) findViewById(R.id.recycler);
         layoutManager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(layoutManager);

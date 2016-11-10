@@ -43,10 +43,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
         findViewById(R.id.fab_edit).setOnClickListener(this);
-        int eventId = getIntent().getIntExtra(Constant.ID_KEY, Constant.INVALID_INDEX);
-        Date startTime = (Date) getIntent().getSerializableExtra(Constant.INTENT_START_TIME);
-        Date finishTime = (Date) getIntent().getSerializableExtra(Constant.INTENT_FINISH_TIME);
-        Event eventParent = RealmController.with(this).getEventById(eventId);
+        int eventId = getIntent().getIntExtra(Constant.Intent.INTENT_ID_EVENT,
+            Constant.Number.INVALID_INDEX);
+        Date startTime = (Date) getIntent().getSerializableExtra(Constant.Intent.INTENT_START_TIME);
+        Date finishTime = (Date) getIntent().getSerializableExtra(Constant.Intent.INTENT_FINISH_TIME);
+        Event eventParent = RealmController.getInstance().getEventById(eventId);
         if (eventParent == null) {
             return;
         }
@@ -64,7 +65,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         timeText.setText(TimeUtils.createAmountTime(event.getStartTime(), event.getFinishTime()));
         getSupportActionBar().setTitle(event.getTitle() == null ? "" : event.getTitle());
         TextView calendarTv = (TextView) findViewById(R.id.textView_calendar);
-        Calendar calendar = RealmController.with(this)
+        Calendar calendar = RealmController.getInstance()
             .getCalenderByid(event.getCalendarId());
         calendarTv.setText(calendar.getName());
         if (Attendee.getLisAttendee(event.getAttendees()) != "") {
@@ -159,7 +160,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v.getId() == R.id.fab_edit) {
             Intent intent = new Intent(DetailActivity.this, EditActivity.class);
-            intent.putExtra(Constant.ID_KEY, getIntent().getStringExtra(Constant.ID_KEY));
+            intent.putExtra(Constant.Intent.INTENT_ID_EVENT, getIntent().getStringExtra(Constant.Intent.INTENT_ID_EVENT));
             startActivity(intent);
         }
     }

@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.ui.activity.DetailActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.ui.activity.DetailActivity;
 import framgia.vn.framgiacrb.utils.SearchUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 import framgia.vn.framgiacrb.utils.Utils;
@@ -74,11 +74,13 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
                 holder.day.setText(TimeUtils.toDay(obj.getStartTime()));
                 holder.month.setText(TimeUtils.toMonth(obj.getStartTime()));
             }
-            String content = obj.getTitle() + Constant.LINE_BREAK +
-                TimeUtils.toStringTime(obj.getStartTime())
-                + Constant.AMOUNT_DEVIDE
-                + TimeUtils.toStringTime(obj.getFinishTime())
-                + (obj.getPlace() == null ? "" : Constant.LINE_BREAK + obj.getPlace().getName());
+            StringBuilder content = new StringBuilder(obj.getTitle());
+            content.append(Constant.Format.LINE_BREAK)
+                .append(TimeUtils.toStringTime(obj.getStartTime()))
+                .append(Constant.Format.AMOUNT_DEVIDE)
+                .append(TimeUtils.toStringTime(obj.getFinishTime()))
+                .append((obj.getPlace() == null ? "" : Constant.Format.LINE_BREAK + obj.getPlace
+                    ().getName()));
             holder.content.setText(content);
             holder.content.setTextColor(mActivity.getResources().getColor(
                 R.color.white));
@@ -116,10 +118,11 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
         public void onClick(View v) {
             if (type == TYPE_EVENT) {
                 Intent intent = new Intent(mActivity, DetailActivity.class);
-                intent.putExtra(Constant.ID_KEY, data.get(getAdapterPosition()).getId());
-                intent.putExtra(Constant.INTENT_START_TIME,
+                intent.putExtra(Constant.Intent.INTENT_ID_EVENT, data.get(getAdapterPosition())
+                    .getId());
+                intent.putExtra(Constant.Intent.INTENT_START_TIME,
                     data.get(getAdapterPosition()).getStartTime());
-                intent.putExtra(Constant.INTENT_FINISH_TIME, data.get(getAdapterPosition())
+                intent.putExtra(Constant.Intent.INTENT_FINISH_TIME, data.get(getAdapterPosition())
                     .getFinishTime());
                 mActivity.startActivity(intent);
             }

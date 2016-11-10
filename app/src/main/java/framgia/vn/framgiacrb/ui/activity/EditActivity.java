@@ -56,10 +56,10 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-        init();
+        initViews();
     }
 
-    private void init() {
+    private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_event);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -75,15 +75,12 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         cardView.setOnTouchListener(this);
         mTxtEditEvent = (TextView) findViewById(R.id.txt_NewEvent);
         mTxtEditEvent.setText(R.string.edit_event);
-        findView();
+        int eventId = getIntent().getIntExtra(Constant.Intent.INTENT_ID_EVENT,
+            Constant.Number.INVALID_INDEX);
+        Event event = RealmController.getInstance().getEventById(eventId);
+        mEdtEvent.setText(event.getTitle() == null ? "" : event.getTitle());
         getDefaultInfor();
         addEventFormWidgets();
-    }
-
-    private void findView() {
-        int eventId = getIntent().getIntExtra(Constant.ID_KEY, Constant.INVALID_INDEX);
-        Event event = RealmController.with(this).getEventById(eventId);
-        mEdtEvent.setText(event.getTitle() == null ? "" : event.getTitle());
     }
 
     @Override

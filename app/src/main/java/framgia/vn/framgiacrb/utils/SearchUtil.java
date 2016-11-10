@@ -23,7 +23,7 @@ public class SearchUtil {
     public static final int COUNT_MONTH_IN_YEAR = 12;
 
     public static final RealmList<Event> editListDataSearch(OrderedRealmCollection<Event> data) {
-        if (SearchActivity.sMonth == Constant.INVALID_INDEX) {
+        if (SearchActivity.sMonth == Constant.Number.INVALID_INDEX) {
             Event event = data.get(0);
             SearchActivity.sMonth = TimeUtils.getMonth(event.getStartTime());
             SearchActivity.sYear = TimeUtils.getYear(event.getStartTime());
@@ -83,13 +83,13 @@ public class SearchUtil {
             if (TimeUtils.getMonth(event.getStartTime()) == SearchActivity.sMonth
                 && TimeUtils.getYear(event.getStartTime()) == SearchActivity.sYear
                 && ((event.getRepeatType() == null)
-                || event.getRepeatType().equals(Constant.REPEAT_DAILY))) {
+                || event.getRepeatType().equals(Constant.Time.REPEAT_DAILY))) {
                 list.add(new Event(event));
             }
             if (event.getRepeatType() == null) {
                 continue;
             }
-            if (event.getRepeatType().equals(Constant.REPEAT_DAILY) && event.getEndRepeat() !=
+            if (event.getRepeatType().equals(Constant.Time.REPEAT_DAILY) && event.getEndRepeat() !=
                 null) {
                 Date childEventDate = event.getStartTime();
                 Date childEventFinishTime = event.getFinishTime();
@@ -112,16 +112,16 @@ public class SearchUtil {
                     }
                 }
             }
-            if (event.getRepeatType().equals(Constant.REPEAT_WEEKLY)) {
+            if (event.getRepeatType().equals(Constant.Time.REPEAT_WEEKLY)) {
                 list.addAll(genEventWeekly(event));
             }
-            if (event.getRepeatType().equals(Constant.REPEAT_MONTHLY)) {
+            if (event.getRepeatType().equals(Constant.Time.REPEAT_MONTHLY)) {
                 Event eventMonthly = genEventForMonthly(event);
                 if (eventMonthly != null) {
                     list.add(eventMonthly);
                 }
             }
-            if (event.getRepeatType().equals(Constant.REPEAT_YEARLY)) {
+            if (event.getRepeatType().equals(Constant.Time.REPEAT_YEARLY)) {
                 Event eventYearly = genEventForYearly(event);
                 if (eventYearly != null) {
                     list.add(eventYearly);

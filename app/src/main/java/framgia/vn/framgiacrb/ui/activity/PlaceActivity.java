@@ -34,19 +34,16 @@ public class PlaceActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
-        init();
-
+        initViews();
     }
 
-    private void init() {
-        mRealm = RealmController.with(this).getRealm();
-
+    private void initViews() {
+        mRealm = RealmController.getInstance().getRealm();
         mToolbar = (Toolbar) findViewById(R.id.toolbar_repeat);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mRecycler = (RecyclerView) findViewById(R.id.recycler);
         layoutManager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(layoutManager);
@@ -59,7 +56,6 @@ public class PlaceActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_attendee, menu);
         mSearchView = (SearchView) menu.findItem(R.id.action_save).getActionView();
         mSearchView.onActionViewExpanded();
-
         return true;
     }
 

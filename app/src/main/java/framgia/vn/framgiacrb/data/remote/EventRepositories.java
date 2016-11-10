@@ -82,7 +82,7 @@ public class EventRepositories implements EventRepository {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (error != null && error.equals(Constant.NOT_AUTHENTICATION)) {
+                    if (error != null && error.equals(Constant.Message.NOT_AUTHENTICATION)) {
                         logout(context);
                     } else {
                         Toast.makeText(context, context.getString(R.string.message_error),
@@ -105,7 +105,7 @@ public class EventRepositories implements EventRepository {
 
     private void logout(final Context context) {
         Utils.cancelAllAlarm(context);
-        Toast.makeText(context, Constant.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, Constant.Message.MESSAGE_NOT_AUTHENTICATION, Toast.LENGTH_SHORT).show();
         new EventRepositoriesLocal(Realm.getDefaultInstance()).clearDatabase(null);
         SharedPreferences sharedPreferences =
             context.getSharedPreferences(MainActivity.SHAREPREFF, Context.MODE_PRIVATE);
