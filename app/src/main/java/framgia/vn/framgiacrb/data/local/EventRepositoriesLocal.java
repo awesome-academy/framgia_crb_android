@@ -48,9 +48,6 @@ public class EventRepositoriesLocal implements EventRepository {
                 realmEvents.add(events.get(i));
             }
         }
-        RegisterNotificationAsyncTask registerNotificationAsynTask
-            = new RegisterNotificationAsyncTask(true);
-        registerNotificationAsynTask.execute(realmEvents);
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -59,6 +56,9 @@ public class EventRepositoriesLocal implements EventRepository {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
+                RegisterNotificationAsyncTask registerNotificationAsynTask
+                    = new RegisterNotificationAsyncTask(true);
+                registerNotificationAsynTask.execute(realmEvents);
                 if (onLoadEventListener != null) {
                     onLoadEventListener.onSuccess();
                 }

@@ -10,10 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import framgia.vn.framgiacrb.R;
-import framgia.vn.framgiacrb.ui.adapter.SearchEventAdapter;
 import framgia.vn.framgiacrb.asyntask.SearchEventAsynTask;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.listener.AsyncTaskFinishListener;
+import framgia.vn.framgiacrb.ui.adapter.SearchEventAdapter;
 import io.realm.RealmList;
 
 /**
@@ -28,8 +28,8 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
     private SearchEventAdapter mAdapter;
     private String mTextSearch;
     private RealmList mRealmList = new RealmList();
-    public static int sMonth = Constant.INVALID_INDEX;
-    public static int sYear = Constant.INVALID_INDEX;
+    public static int sMonth = Constant.Number.INVALID_INDEX;
+    public static int sYear = Constant.Number.INVALID_INDEX;
     public static boolean sIsHasMoreEvent = true;
     public static boolean sAsyncTaskFinish = true;
     public static boolean sNotNeedYear = false;
@@ -38,10 +38,10 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        init();
+        initViews();
     }
 
-    private void init() {
+    private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,7 +70,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncTaskFinish
                 mRealmList.clear();
                 sNotNeedYear = false;
                 sIsHasMoreEvent = true;
-                sMonth = Constant.INVALID_INDEX;
+                sMonth = Constant.Number.INVALID_INDEX;
                 if (!query.equals("")) {
                     SearchEventAsynTask searchEventAsynTask = new SearchEventAsynTask
                         (SearchActivity.this, mRealmList);

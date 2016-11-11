@@ -203,9 +203,9 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             public void onSelected(int idSelected, int position) {
                 Event event = (Event) mDatas.get(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(Constant.ID_KEY, idSelected);
-                intent.putExtra(Constant.INTENT_START_TIME, event.getStartTime());
-                intent.putExtra(Constant.INTENT_FINISH_TIME, event.getFinishTime());
+                intent.putExtra(Constant.Intent.INTENT_ID_EVENT, idSelected);
+                intent.putExtra(Constant.Intent.INTENT_START_TIME, event.getStartTime());
+                intent.putExtra(Constant.Intent.INTENT_FINISH_TIME, event.getFinishTime());
                 getActivity().startActivity(intent);
             }
         });

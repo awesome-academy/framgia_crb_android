@@ -1,8 +1,5 @@
 package framgia.vn.framgiacrb.data.local;
 
-import android.app.Activity;
-import android.app.Application;
-
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.CalendarField;
 import framgia.vn.framgiacrb.data.model.Event;
@@ -19,25 +16,14 @@ public class RealmController implements EventField, CalendarField {
     private static RealmController instance;
     private final Realm realm;
 
-    public RealmController(Application application) {
+    public RealmController() {
         realm = Realm.getDefaultInstance();
     }
 
-    public static RealmController with(Activity activity) {
-        if (instance == null) {
-            instance = new RealmController(activity.getApplication());
-        }
-        return instance;
-    }
-
-    public static RealmController with(Application application) {
-        if (instance == null) {
-            instance = new RealmController(application);
-        }
-        return instance;
-    }
-
     public static RealmController getInstance() {
+        if (instance == null) {
+            instance = new RealmController();
+        }
         return instance;
     }
 

@@ -34,7 +34,7 @@ public class ServiceBuilder {
                 .create();
         if (sInstance == null) {
             sInstance = new Retrofit.Builder()
-                    .baseUrl(Constant.BASE_URL)
+                    .baseUrl(Constant.Url.BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();

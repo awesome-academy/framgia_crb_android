@@ -118,10 +118,10 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-        init();
+        initViews();
     }
 
-    private void init() {
+    private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_event);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -206,12 +206,12 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 2) {
-                String message = data.getStringExtra(Constant.MESSAGE);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constant.RequestCode.CHOOSE_ATTENDEE) {
+                String message = data.getStringExtra(Constant.Message.MESSAGE);
                 mTxtAttendee.setText(message);
-            } else if (requestCode == 3) {
-                String message = data.getStringExtra(Constant.MESSAGE);
+            } else if (requestCode == Constant.RequestCode.CHOOSE_PLACE) {
+                String message = data.getStringExtra(Constant.Message.MESSAGE);
                 mTxtPlace.setText(message);
             }
         }
@@ -220,17 +220,17 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     public void getDefaultInForm() {
         mCal = Calendar.getInstance();
         SimpleDateFormat dateFormat =
-            new SimpleDateFormat(Constant.FORMAT_DATE, Locale.getDefault());
+            new SimpleDateFormat(Constant.Format.FORMAT_DATE, Locale.getDefault());
         String strDate = dateFormat.format(mCal.getTime());
         mTxtDateStart.setText(strDate);
         mTxtDateFinish.setText(strDate);
-        dateFormat = new SimpleDateFormat(Constant.FORMAT_TIME, Locale.getDefault());
+        dateFormat = new SimpleDateFormat(Constant.Format.FORMAT_TIME, Locale.getDefault());
         String strTime = dateFormat.format(mCal.getTime());
         mTxtTimeStart.setText(strTime);
         mCal.add(Calendar.HOUR_OF_DAY, 1);
         strTime = dateFormat.format(mCal.getTime());
         mTxtTimeFinish.setText(strTime);
-        dateFormat = new SimpleDateFormat(Constant.FORMAT_TIME, Locale.getDefault());
+        dateFormat = new SimpleDateFormat(Constant.Format.FORMAT_TIME, Locale.getDefault());
         mTxtTimeStart.setTag(dateFormat.format(mCal.getTime()));
         mCal.add(Calendar.HOUR_OF_DAY, 1);
         mTxtTimeFinish.setTag(dateFormat.format(mCal.getTime()));
@@ -249,7 +249,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             @Override
             public void onClick(View v) {
                 MyDialogRepeat md = new MyDialogRepeat(mCurrentIndexOfSpinnerChoice);
-                md.show(CreateEventActivity.this.getFragmentManager(), Constant.MESSAGE);
+                md.show(CreateEventActivity.this.getFragmentManager(), Constant.Message.MESSAGE);
             }
         });
     }
@@ -329,15 +329,17 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 public void onItemSelected(AdapterView<?> parent, View view, int position,
                                            long id) {
                     mCurrentItemSelectedOnSpinnerChoice = position;
-                    if (parent.getSelectedItem().toString().equalsIgnoreCase(Constant.NO_REPEAT) ||
+                    if (parent.getSelectedItem().toString().equalsIgnoreCase(Constant.Time
+                        .NO_REPEAT) ||
                         (!parent.getSelectedItem().toString()
-                            .equalsIgnoreCase(Constant.NO_REPEAT) &&
+                            .equalsIgnoreCase(Constant.Time.NO_REPEAT) &&
                             !mEndEditText.getText().toString().isEmpty())) {
                         mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     } else {
                         mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                     }
-                    if (parent.getSelectedItem().toString().equalsIgnoreCase(Constant.NO_REPEAT)) {
+                    if (parent.getSelectedItem().toString().equalsIgnoreCase(Constant.Time
+                        .NO_REPEAT)) {
                         mRepeatEverySpinner.setEnabled(false);
                         mEndEditText.setEnabled(false);
                     } else {
@@ -345,7 +347,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                         mEndEditText.setEnabled(true);
                     }
                     boolean isShowDayOfWeek =
-                        mRepeatSpinner.getSelectedItem().equals(Constant.WEEKLY);
+                        mRepeatSpinner.getSelectedItem().equals(Constant.Time.WEEKLY);
                     showDayOfWeek(isShowDayOfWeek);
                 }
 
@@ -376,7 +378,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                 }
             });
             mDayOfWeekLinearLayout = (LinearLayout) v.findViewById(R.id.day_of_week_container);
-            if (!mRepeatSpinner.getSelectedItem().equals(Constant.WEEKLY))
+            if (!mRepeatSpinner.getSelectedItem().equals(Constant.Time.WEEKLY))
                 mDayOfWeekLinearLayout.setVisibility(View.INVISIBLE);
             builder.setView(v)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -389,7 +391,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                             Integer.parseInt(mRepeatEverySpinner.getSelectedItem().toString());
                         mRepeatType = mTxtRepeat.getText().toString();
                         if (!mRepeatSpinner.getSelectedItem().toString()
-                            .equalsIgnoreCase(Constant.NO_REPEAT)) {
+                            .equalsIgnoreCase(Constant.Time.NO_REPEAT)) {
                             isRepeat = true;
                         } else {
                             isRepeat = false;
@@ -412,7 +414,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
 
         private void showDayOfWeek(boolean isShow) {
             if (isShow) {
-                mDayOfWeekLinearLayout.animate().alpha(1.0f).setDuration(Constant.SHOW_DURATION)
+                mDayOfWeekLinearLayout.animate().alpha(1.0f)
+                    .setDuration(Constant.Number.SHOW_DURATION)
                     .setListener(
                         new Animator.AnimatorListener() {
                             @Override
@@ -434,7 +437,8 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                         }
                     );
             } else {
-                mDayOfWeekLinearLayout.animate().alpha(0.0f).setDuration(Constant.HIDE_DURATION)
+                mDayOfWeekLinearLayout.animate().alpha(0.0f)
+                    .setDuration(Constant.Number.HIDE_DURATION)
                     .setListener(
                         new Animator.AnimatorListener() {
                             @Override
@@ -484,25 +488,26 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
             .show();
         switch (v.getId()) {
             case R.id.sun_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.SUNDAY, Constant.SUNDAY));
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.SUNDAY, Constant.Time.SUNDAY));
                 break;
             case R.id.mon_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.MONDAY, Constant.MONDAY));
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.MONDAY, Constant.Time.MONDAY));
                 break;
             case R.id.tue_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.TUESDAY, Constant.TUESDAY));
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.TUESDAY, Constant.Time.TUESDAY));
                 break;
             case R.id.wed_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.WEDNESDAY, Constant.WEDNESDAY));
+                mListDayOfWeekRepeat
+                    .add(new DayOfWeek(Calendar.WEDNESDAY, Constant.Time.WEDNESDAY));
                 break;
             case R.id.thu_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.THURSDAY, Constant.THURSDAY));
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.THURSDAY, Constant.Time.THURSDAY));
                 break;
             case R.id.fri_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.FRIDAY, Constant.FRIDAY));
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.FRIDAY, Constant.Time.FRIDAY));
                 break;
             case R.id.sat_checkbox:
-                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.SATURDAY, Constant.SATURDAY));
+                mListDayOfWeekRepeat.add(new DayOfWeek(Calendar.SATURDAY, Constant.Time.SATURDAY));
                 break;
         }
     }
@@ -649,7 +654,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        if (error.equals(Constant.NOT_AUTHENTICATION)) {
+                        if (error.equals(Constant.Message.NOT_AUTHENTICATION)) {
                             logout();
                             CreateEventActivity.this.finish();
                         } else {
@@ -657,7 +662,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
                                 Toast.LENGTH_SHORT).show();
                         }
                         DialogUtils.dismissProgressDialog();
-                    } else if (response.body().getMessage().equals(Constant.SUCCESS)) {
+                    } else if (response.body().getMessage().equals(Constant.Message.SUCCESS)) {
                         Toast.makeText(CreateEventActivity.this, R.string.success,
                             Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK, new Intent());
@@ -675,7 +680,7 @@ public class CreateEventActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void logout() {
-        Toast.makeText(CreateEventActivity.this, Constant.MESSAGE_NOT_AUTHENTICATION,
+        Toast.makeText(CreateEventActivity.this, Constant.Message.MESSAGE_NOT_AUTHENTICATION,
             Toast.LENGTH_SHORT).show();
         new EventRepositoriesLocal(Realm.getDefaultInstance())
             .clearDatabase(new Realm.Transaction.OnSuccess() {

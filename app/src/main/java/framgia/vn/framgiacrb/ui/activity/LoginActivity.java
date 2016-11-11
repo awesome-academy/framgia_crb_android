@@ -76,7 +76,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                 Toast.LENGTH_SHORT).show();
             return;
         }
-        mProgressDialog.setMessage(Constant.LOADING);
+        mProgressDialog.setMessage(Constant.Message.LOADING);
         mProgressDialog.show();
         getDataFromInternet(user());
     }
@@ -90,7 +90,7 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
                     Toast.makeText(LoginActivity.this, R.string.error_email_invalid,
                         Toast.LENGTH_SHORT).show();
                 } else if (response.body().getMessage() != null &&
-                    response.body().getMessage().equals(Constant.LOGIN_SUCCESS)) {
+                    response.body().getMessage().equals(Constant.Message.LOGIN_SUCCESS)) {
                     mUserLogin = response.body().getUser();
                     Session.sAuthToken = mUserLogin.getAuth_token();
                     SharedPreferences sharedPreferences =
