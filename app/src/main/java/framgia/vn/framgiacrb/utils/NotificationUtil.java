@@ -38,9 +38,10 @@ public class NotificationUtil {
         time.setTime(time.getTime() - TIME_EARLY);
         StringBuilder content = new StringBuilder(TimeUtils.createAmountTime(timeReal, event
             .getFinishTime()));
-        content.append((event.getPlace() == null ? "" :
-            Constant.Format.LINE_BREAK));
-        content.append(event.getPlace().getName());
+        if (event.getPlace() != null) {
+            content.append(Constant.Format.LINE_BREAK);
+            content.append(event.getPlace().getName());
+        }
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         alarmIntent.putExtra(AlarmReceiver.INTENT_NOTIFICATION_ID, notificationNumber);
         alarmIntent.putExtra(Constant.Intent.INTENT_ID_EVENT, event.getId());
