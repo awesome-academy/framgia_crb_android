@@ -1,5 +1,7 @@
 package framgia.vn.framgiacrb.utils;
 
+import android.app.Activity;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -27,7 +29,7 @@ public class RenderEventUtil {
     private static EventRepositoriesLocal sEventRepositoriesLocal =
         new EventRepositoriesLocal(sRealm);
 
-    public static List<Event> getGenCodeEvent(Date date) {
+    public static List<Event> getGenCodeEvent(Activity activity, Date date) {
         List<Event> genEventList = new ArrayList<>();
         List<Event> eventInDatabase = new ArrayList<>();
         eventInDatabase.addAll(sEventRepositoriesLocal.getEventByDate(date));
@@ -54,6 +56,7 @@ public class RenderEventUtil {
                 genEventList.add(eventGen);
             }
         }
+        genEventList.addAll(GoogleCalendarUtil.getAllGoogleEventNoRepeatByDate(activity, date));
         Collections.sort(genEventList, new Comparator<Event>() {
                 @Override
                 public int compare(Event event1, Event event2) {
