@@ -14,8 +14,11 @@ public class TimeUtils {
     public static final String DATE_INPUT = "yyy-MM-dd";
     public static final String DATE_OUTPUT = "dd-MM-yyyy";
     public static final String TIME_FORMAT = "HH:mm";
-    public static final String DAY_FORMAT = "d";
-    public static final String MONTH_FORMAT = "MMM";
+    public static final String DAY_FORMAT_SINGLE = "d";
+    public static final String DAY_FORMAT_COUPLE = "dd";
+    public static final String DAY_IN_WEEK_STRING_FORMAT = "EEE";
+    public static final String MONTH_STRING_FORMAT = "MMM";
+    public static final String MONTH_NUMBER_FORMAT = "MM";
     public static final String YEAR_FORMAT = "yyyy";
     public static final String DATE_FORMAT_TOOLBAR = "d MMMM yyyy";
     private static final String DEVIDE_TIME = " - ";
@@ -23,6 +26,7 @@ public class TimeUtils {
     private static final String FORMAT_THIS_YEAR_OTHER_DAY = "HH:mm EEE dd MMM";
     private static final String FORMAT_TODAY = "HH:mm";
     private static final String GMT_0 = "Europe/London";
+    public static final String DATE_STRING_FORMAT = "d MMM yyyy";
 
     public static Date stringToDate(String dateString, String dateInput) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
@@ -53,11 +57,11 @@ public class TimeUtils {
     }
 
     public static String toDay(Date date) {
-        return new SimpleDateFormat(DAY_FORMAT).format(date);
+        return new SimpleDateFormat(DAY_FORMAT_SINGLE).format(date);
     }
 
     public static String toMonth(Date date) {
-        return new SimpleDateFormat(MONTH_FORMAT).format(date);
+        return new SimpleDateFormat(MONTH_STRING_FORMAT).format(date);
     }
 
     public static String toYear(Date date) {
@@ -153,5 +157,8 @@ public class TimeUtils {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone(GMT_0));
         String dateInZeroTimeZone = simpleDateFormat.format(date);
         return new SimpleDateFormat().parse(dateInZeroTimeZone);
+    }
+    public static Date convertMillionStringToDate(String million) {
+        return new Date(Long.parseLong(million));
     }
 }

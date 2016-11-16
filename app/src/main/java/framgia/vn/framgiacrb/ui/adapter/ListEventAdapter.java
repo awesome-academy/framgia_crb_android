@@ -35,6 +35,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private LayoutInflater mLayoutInflater;
     private List<Object> mDatas;
     private OnEventSelectedListener mOnEventSelectedListener;
+
     public void setOnEventSelectedListener(OnEventSelectedListener onEventSelectedListener) {
         mOnEventSelectedListener = onEventSelectedListener;
     }
@@ -86,58 +87,15 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Object object = mDatas.get(position);
         if (object instanceof ItemMonth) {
-            ItemMonth itemMonth = (ItemMonth) object;
-            String text = itemMonth.getStringMonth() + " " + itemMonth.getYear();
-            MonthViewHolder monthViewHolder = (MonthViewHolder) holder;
-            monthViewHolder.tvMonth.setText(text);
-        } else if (object instanceof Date) {
-            Date date = (Date) object;
-            Date today = java.util.Calendar.getInstance().getTime();
-            String dayOfMonth = (String) DateFormat.format("dd", date);
-            String dayOfWeek = (String) DateFormat.format("EEE", date);
-            DateViewHolder dateViewHolder = (DateViewHolder) holder;
-            dateViewHolder.tvDate.setText(dayOfMonth);
-            dateViewHolder.tvDay.setText(dayOfWeek);
-            if (TimeUtils.toStringDate(date).compareTo(TimeUtils.toStringDate(today)) == 0) {
-                dateViewHolder.tvDate
-                    .setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-                dateViewHolder.tvDay
-                    .setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-            } else {
-                dateViewHolder.tvDate.setTextColor(
-                    mContext.getResources().getColor(R.color.text_default_event_color));
-                dateViewHolder.tvDay.setTextColor(
-                    mContext.getResources().getColor(R.color.text_default_event_color));
-            }
-        } else if (object instanceof Event) {
-            Event event = (Event) object;
-            EventViewHolder eventViewHolder = (EventViewHolder) holder;
-            eventViewHolder.setId(event.getId());
-            eventViewHolder.tvTitleEvent.setText(event.getTitle());
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            Date startDate = event.getStartTime();
-            Date finishDate = event.getFinishTime();
-            String startTime = format.format(startDate);
-            String finishTime = format.format(finishDate);
-            String time = startTime + "-" + finishTime;
-            eventViewHolder.tvTime.setText(time);
-            if (event.getPlace() != null) {
-                eventViewHolder.tvLocation.setText(event.getPlace().getName());
-                eventViewHolder.linearLayoutLocation.setVisibility(View.VISIBLE);
-                eventViewHolder.cardView.setCardBackgroundColor(
-                    ContextCompat.getColor(mContext, Constant.color[event.getPlace().getId() - 1]));
-            } else {
-                eventViewHolder.linearLayoutLocation.setVisibility(View.GONE);
-                try {
-                    eventViewHolder.cardView
-                        .setCardBackgroundColor(Color.parseColor(event.getColorId
-                            ()));
-                } catch (IllegalArgumentException e) {
-                    eventViewHolder.cardView
-                        .setCardBackgroundColor(
-                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                }
-            }
+            ((MonthViewHolder) holder).bindView((ItemMonth) object);
+            return;
+        }
+        if (object instanceof Date) {
+            ((DateViewHolder) holder).bindView((Date) object);
+            return;
+        }
+        if (object instanceof Event) {
+            ((EventViewHolder) holder).bindView((Event) object);
         }
     }
 
@@ -155,36 +113,57 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return mContext;
     }
 
-    public List<Object> getDatas() {
-        return mDatas;
-    }
-
     class MonthViewHolder extends RecyclerView.ViewHolder {
-        TextView tvMonth;
+        private TextView tvMonth;
 
         public MonthViewHolder(View itemView) {
             super(itemView);
             tvMonth = (TextView) itemView.findViewById(R.id.tv_month);
         }
+
+        public void bindView(ItemMonth itemMonth) {
+            String text = itemMonth.getStringMonth() + " " + itemMonth.getYear();
+            tvMonth.setText(text);
+        }
     }
 
     class DateViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate;
-        TextView tvDay;
+        private TextView tvDate;
+        private TextView tvDay;
 
         public DateViewHolder(View itemView) {
             super(itemView);
             tvDate = (TextView) itemView.findViewById(R.id.tv_date);
             tvDay = (TextView) itemView.findViewById(R.id.tv_day);
         }
+
+        public void bindView(Date date) {
+            Date today = java.util.Calendar.getInstance().getTime();
+            String dayOfMonth = (String) DateFormat.format(TimeUtils.DAY_FORMAT_COUPLE, date);
+            String dayOfWeek =
+                (String) DateFormat.format(TimeUtils.DAY_IN_WEEK_STRING_FORMAT, date);
+            tvDate.setText(dayOfMonth);
+            tvDay.setText(dayOfWeek);
+            if (TimeUtils.toStringDate(date).compareTo(TimeUtils.toStringDate(today)) == 0) {
+                tvDate
+                    .setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                tvDay
+                    .setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            } else {
+                tvDate.setTextColor(
+                    mContext.getResources().getColor(R.color.text_default_event_color));
+                tvDay.setTextColor(
+                    mContext.getResources().getColor(R.color.text_default_event_color));
+            }
+        }
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitleEvent;
-        TextView tvTime;
-        CardView cardView;
-        LinearLayout linearLayoutLocation;
-        TextView tvLocation;
+        private TextView tvTitleEvent;
+        private TextView tvTime;
+        private CardView cardView;
+        private LinearLayout linearLayoutLocation;
+        private TextView tvLocation;
         private int mId;
 
         public EventViewHolder(View itemView) {
@@ -202,6 +181,48 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                 }
             });
+        }
+
+        public void bindView(Event event) {
+            setId(event.getId());
+            tvTitleEvent.setText(event.getTitle());
+            if (event.isAllDay()) {
+                tvTime.setVisibility(View.GONE);
+            } else {
+                SimpleDateFormat format =
+                    new SimpleDateFormat(TimeUtils.TIME_FORMAT, Locale.getDefault());
+                Date startDate = event.getStartTime();
+                Date finishDate = event.getFinishTime();
+                String startTime = format.format(startDate);
+                String finishTime = format.format(finishDate);
+                String time = startTime + "-" + finishTime;
+                tvTime.setVisibility(View.VISIBLE);
+                tvTime.setText(time);
+            }
+            if (event.getPlace() != null) {
+                tvLocation.setText(event.getPlace().getName());
+                linearLayoutLocation.setVisibility(View.VISIBLE);
+                cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(mContext, Constant.color[event.getPlace().getId() - 1]));
+            }
+            if (event.getPlace() == null && event.getColorId() == null) {
+                linearLayoutLocation.setVisibility(View.GONE);
+                cardView
+                    .setCardBackgroundColor(
+                        ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            }
+            if (event.getPlace() == null && event.getColorId() != null) {
+                linearLayoutLocation.setVisibility(View.GONE);
+                try {
+                    cardView
+                        .setCardBackgroundColor(Color.parseColor(event.getColorId
+                            ()));
+                } catch (IllegalArgumentException e) {
+                    cardView
+                        .setCardBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                }
+            }
         }
 
         public void setId(int id) {

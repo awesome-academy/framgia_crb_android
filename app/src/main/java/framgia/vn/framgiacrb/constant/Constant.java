@@ -26,6 +26,7 @@ public class Constant {
         public static final int SHOW_DURATION = 1000;
         public static final int HIDE_DURATION = 500;
         public static final int INVALID_INDEX = -1;
+        public static final int MAX_POSITION_TODAY = 20;
     }
 
     public class Format {
@@ -51,6 +52,10 @@ public class Constant {
         public static final String REPEAT_YEARLY = "yearly";
     }
 
+    public class GoogleCalendar {
+        public static final String IS_ALL_DAY_TRUE = "1";
+    }
+
     public class Url {
         public static final String BASE_URL = "http://crb.framgia.vn/api/";
     }
@@ -58,6 +63,7 @@ public class Constant {
     public class RequestCode {
         public static final int CHOOSE_ATTENDEE = 2;
         public static final int CHOOSE_PLACE = 3;
+        public static final int PERMISSIONS_READ_CALENDAR = 4;
     }
 
     public static final int[] color =
