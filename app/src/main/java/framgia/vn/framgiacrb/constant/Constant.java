@@ -20,6 +20,7 @@ public class Constant {
         public static final String INTENT_ID_EVENT = "intent_id_event";
         public static final String INTENT_START_TIME = "intent_start_time";
         public static final String INTENT_FINISH_TIME = "intent_finish_time";
+        public static final String INTENT_IS_GOOGLE_EVENT = "is_google_event";
     }
 
     public class Number {

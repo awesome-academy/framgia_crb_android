@@ -208,6 +208,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 intent.putExtra(Constant.Intent.INTENT_ID_EVENT, idSelected);
                 intent.putExtra(Constant.Intent.INTENT_START_TIME, event.getStartTime());
                 intent.putExtra(Constant.Intent.INTENT_FINISH_TIME, event.getFinishTime());
+                intent.putExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT, event.isGoogleEvent());
                 getActivity().startActivity(intent);
             }
         });

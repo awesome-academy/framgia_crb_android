@@ -8,6 +8,7 @@ import framgia.vn.framgiacrb.utils.TimeUtils;
  * Created by framgia on 11/11/2016.
  */
 public class GoogleEvent {
+    private int mId;
     private String mTitle;
     private String mDescription;
     private Date mStartTime;
@@ -16,6 +17,24 @@ public class GoogleEvent {
     private Date mEndRepeat;
     private long mDuration;
     private String mRule;
+
+    public String getCalendarName() {
+        return mCalendarName;
+    }
+
+    public void setCalendarName(String calendarName) {
+        mCalendarName = calendarName;
+    }
+
+    private String mCalendarName;
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
 
     public String getIsAllDay() {
         return mIsAllDay;
