@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+import framgia.vn.framgiacrb.constant.Constant;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -86,6 +87,17 @@ public class Event extends RealmObject {
         this.mDayOfWeeks =
             (event.getDayOfWeeks() == null) ? null : DayOfWeek.cloneListDayOfWeek(event
                 .getDayOfWeeks());
+    }
+
+    public Event(GoogleEvent googleEvent) {
+        this.mTitle = googleEvent.getTitle();
+        this.mDescription = googleEvent.getDescription();
+        this.mStartTime = googleEvent.getStartTime();
+        this.mFinishTime = googleEvent.getFinishTime();
+        this.mColorId = googleEvent.getColor();
+        this.mStartRepeat = this.mStartTime;
+        this.mEndRepeat = googleEvent.getEndRepeat();
+        this.mAllDay = googleEvent.getIsAllDay().equals(Constant.GoogleCalendar.IS_ALL_DAY_TRUE);
     }
 
     public RealmList<DayOfWeek> getDayOfWeeks() {
