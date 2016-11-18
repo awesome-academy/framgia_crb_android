@@ -36,6 +36,9 @@ public class Attendee extends RealmObject {
     }
 
     public static String getLisAttendee(RealmList<Attendee> list) {
+        if (list == null) {
+            return "";
+        }
         int length = list.size();
         String attendees = "";
         for (int i = 0; i < length; i++) {
