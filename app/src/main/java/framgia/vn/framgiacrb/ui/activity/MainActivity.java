@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private int mPositionSelected;
     private boolean mMenuIsSelected;
     public static final SimpleDateFormat dateFormat =
-            new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
+            new SimpleDateFormat(TimeUtils.DATE_FORMAT_TOOLBAR, Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -27,6 +27,7 @@ public class TimeUtils {
     private static final String FORMAT_TODAY = "HH:mm";
     private static final String GMT_0 = "Europe/London";
     public static final String DATE_STRING_FORMAT = "d MMM yyyy";
+    public static final String FORMAT_ALL_DAY = "EEE dd MMM yyyy";
 
     public static Date stringToDate(String dateString, String dateInput) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput, Locale.getDefault());
@@ -83,6 +84,13 @@ public class TimeUtils {
             return new SimpleDateFormat(FORMAT_TODAY, Locale.getDefault()).format(date);
         }
         return new SimpleDateFormat(FORMAT_THIS_YEAR_OTHER_DAY, Locale.getDefault()).format(date);
+    }
+
+    public static String getTimeForAllDay(Date date) {
+        if (date == null) {
+            return "";
+        }
+        return new SimpleDateFormat(FORMAT_ALL_DAY, Locale.getDefault()).format(date);
     }
 
     public static String createAmountTime(Date startDate, Date endDate) {
@@ -158,6 +166,7 @@ public class TimeUtils {
         String dateInZeroTimeZone = simpleDateFormat.format(date);
         return new SimpleDateFormat().parse(dateInZeroTimeZone);
     }
+
     public static Date convertMillionStringToDate(String million) {
         return new Date(Long.parseLong(million));
     }
