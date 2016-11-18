@@ -25,10 +25,13 @@ import framgia.vn.framgiacrb.data.local.RealmController;
 import framgia.vn.framgiacrb.data.model.Attendee;
 import framgia.vn.framgiacrb.data.model.Calendar;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar mToolbar;
+    private boolean mIsGoogleCalendar;
+    private int mEventId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,11 +46,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
         findViewById(R.id.fab_edit).setOnClickListener(this);
-        int eventId = getIntent().getIntExtra(Constant.Intent.INTENT_ID_EVENT,
+        Intent intent = getIntent();
+        mEventId = intent.getIntExtra(Constant.Intent.INTENT_ID_EVENT,
             Constant.Number.INVALID_INDEX);
-        Date startTime = (Date) getIntent().getSerializableExtra(Constant.Intent.INTENT_START_TIME);
-        Date finishTime = (Date) getIntent().getSerializableExtra(Constant.Intent.INTENT_FINISH_TIME);
-        Event eventParent = RealmController.getInstance().getEventById(eventId);
+        Date startTime = (Date) intent.getSerializableExtra(Constant.Intent.INTENT_START_TIME);
+        Date finishTime =
+            (Date) intent.getSerializableExtra(Constant.Intent.INTENT_FINISH_TIME);
+        Event eventParent;
+        mIsGoogleCalendar = intent.getBooleanExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT,
+            false);
+        if (mIsGoogleCalendar) {
+            eventParent = GoogleCalendarUtil.getEventById(this, mEventId);
+        } else {
+            eventParent = RealmController.getInstance().getEventById(mEventId);
+        }
         if (eventParent == null) {
             return;
         }
@@ -62,15 +74,24 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             relativeLayout.setVisibility(View.GONE);
         }
         TextView timeText = (TextView) findViewById(R.id.textView_time);
-        timeText.setText(TimeUtils.createAmountTime(event.getStartTime(), event.getFinishTime()));
+        if (event.isAllDay()) {
+            timeText.setText(TimeUtils.getTimeForAllDay(event.getStartTime()));
+        } else {
+            timeText
+                .setText(TimeUtils.createAmountTime(event.getStartTime(), event.getFinishTime()));
+        }
         getSupportActionBar().setTitle(event.getTitle() == null ? "" : event.getTitle());
         TextView calendarTv = (TextView) findViewById(R.id.textView_calendar);
-        Calendar calendar = RealmController.getInstance()
-            .getCalenderByid(event.getCalendarId());
-        calendarTv.setText(calendar.getName());
-        if (Attendee.getLisAttendee(event.getAttendees()) != "") {
+        if (mIsGoogleCalendar) {
+            calendarTv.setText(event.getGoogleCalendarName());
+        } else {
+            Calendar calendar = RealmController.getInstance()
+                .getCalenderByid(event.getCalendarId());
+            calendarTv.setText(calendar.getName());
+        }
+        if (Attendee.getListAttendee(event.getAttendees()) != "") {
             TextView listAttendee = (TextView) findViewById(R.id.attendee_list);
-            listAttendee.setText(Attendee.getLisAttendee(event.getAttendees()));
+            listAttendee.setText(Attendee.getListAttendee(event.getAttendees()));
         } else {
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_attendee);
             relativeLayout.setVisibility(View.GONE);
@@ -139,7 +160,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO: 20/09/2016
                     }
                 });
                 builder.create().show();
@@ -160,7 +180,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v.getId() == R.id.fab_edit) {
             Intent intent = new Intent(DetailActivity.this, EditActivity.class);
-            intent.putExtra(Constant.Intent.INTENT_ID_EVENT, getIntent().getStringExtra(Constant.Intent.INTENT_ID_EVENT));
+            intent.putExtra(Constant.Intent.INTENT_ID_EVENT, mEventId);
             startActivity(intent);
         }
     }

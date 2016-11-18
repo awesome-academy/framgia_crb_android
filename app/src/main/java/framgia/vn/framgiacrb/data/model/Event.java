@@ -60,6 +60,26 @@ public class Event extends RealmObject {
     @SerializedName("exception_time")
     private Date mExceptionTime;
 
+    public String getGoogleCalendarName() {
+        return mGoogleCalendarName;
+    }
+
+    public void setGoogleCalendarName(String googleCalendarName) {
+        mGoogleCalendarName = googleCalendarName;
+    }
+
+    private String mGoogleCalendarName;
+
+    public boolean isGoogleEvent() {
+        return mIsGoogleEvent;
+    }
+
+    public void setGoogleEvent(boolean googleEvent) {
+        mIsGoogleEvent = googleEvent;
+    }
+
+    private boolean mIsGoogleEvent;
+
     public Event() {
     }
 
@@ -90,6 +110,8 @@ public class Event extends RealmObject {
     }
 
     public Event(GoogleEvent googleEvent) {
+        this.mId = googleEvent.getId();
+        this.mIsGoogleEvent = true;
         this.mTitle = googleEvent.getTitle();
         this.mDescription = googleEvent.getDescription();
         this.mStartTime = googleEvent.getStartTime();
@@ -98,6 +120,7 @@ public class Event extends RealmObject {
         this.mStartRepeat = this.mStartTime;
         this.mEndRepeat = googleEvent.getEndRepeat();
         this.mAllDay = googleEvent.getIsAllDay().equals(Constant.GoogleCalendar.IS_ALL_DAY_TRUE);
+        this.mGoogleCalendarName = googleEvent.getCalendarName();
     }
 
     public RealmList<DayOfWeek> getDayOfWeeks() {

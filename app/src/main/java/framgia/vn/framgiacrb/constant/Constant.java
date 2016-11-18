@@ -20,6 +20,7 @@ public class Constant {
         public static final String INTENT_ID_EVENT = "intent_id_event";
         public static final String INTENT_START_TIME = "intent_start_time";
         public static final String INTENT_FINISH_TIME = "intent_finish_time";
+        public static final String INTENT_IS_GOOGLE_EVENT = "is_google_event";
     }
 
     public class Number {
@@ -27,6 +28,8 @@ public class Constant {
         public static final int HIDE_DURATION = 500;
         public static final int INVALID_INDEX = -1;
         public static final int MAX_POSITION_TODAY = 20;
+        public static final int NUM_MONTH_IN_YEAR = 12;
+        public static final int MAX_LEFT_MENU_ITEM = 4;
     }
 
     public class Format {
@@ -54,6 +57,7 @@ public class Constant {
 
     public class GoogleCalendar {
         public static final String IS_ALL_DAY_TRUE = "1";
+        public static final String IS_VISIBLE_TRUE = "1";
     }
 
     public class Url {
@@ -64,6 +68,10 @@ public class Constant {
         public static final int CHOOSE_ATTENDEE = 2;
         public static final int CHOOSE_PLACE = 3;
         public static final int PERMISSIONS_READ_CALENDAR = 4;
+    }
+
+    public class Tag {
+        public static final String MONTH_VIEW_TAG = "month";
     }
 
     public static final int[] color =
