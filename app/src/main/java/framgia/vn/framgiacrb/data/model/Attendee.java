@@ -2,6 +2,8 @@ package framgia.vn.framgiacrb.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -35,12 +37,12 @@ public class Attendee extends RealmObject {
         return result;
     }
 
-    public static String getLisAttendee(RealmList<Attendee> list) {
+    public static String getListAttendee(List<Attendee> list) {
+        if (list == null) return "";
         int length = list.size();
         String attendees = "";
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++)
             attendees += list.get(i).getEmail() + "\n";
-        }
         return attendees;
     }
 
