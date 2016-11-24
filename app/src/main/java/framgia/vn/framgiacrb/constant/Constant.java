@@ -37,6 +37,8 @@ public class Constant {
         public static final String FORMAT_DATE = "MM-dd-yyyy";
         public static final String FORMAT_TIME = "HH:mm";
         public static final String AMOUNT_DEVIDE = "-";
+        public static final String RULE_SPLIT = ";";
+        public static final String RULE_SPLIT_RESULT = "=";
     }
 
     public class Time {
@@ -58,6 +60,20 @@ public class Constant {
     public class GoogleCalendar {
         public static final String IS_ALL_DAY_TRUE = "1";
         public static final String IS_VISIBLE_TRUE = "1";
+        public static final String REPEAT_DAILY = "DAILY";
+        public static final String REPEAT_MONTHLY = "MONTHLY";
+        public static final String REPEAT_YEARLY = "YEARLY";
+        public static final String REPEAT_WEEKLY = "WEEKLY";
+        public static final String RULE_INTERVAL = "INTERVAL";
+        public static final String RULE_FREQ = "FREQ";
+        public static final String RULE_UNTIL = "UNTIL";
+        public static final String RULE_BYDAY = "BYDAY";
+        public static final int RULE_NAME_INDEX = 0;
+        public static final int RULE_VALUE_INDEX = 1;
+        public static final String FORMAT_DATE = "yyyymmdd'T'hhmmss'Z'";
+        public static final int RULE_ENOUGH_NAME_VALUE = 2;
+        public static final int REPEAT_EVERY_FOR_NO_REPEAT = 0;
+        public static final int REPEAT_EVERY_DEFAULT = 1;
     }
 
     public class Url {

@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb.data.model;
 
 import java.util.Date;
 
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 
 /**
@@ -15,7 +16,7 @@ public class GoogleEvent {
     private Date mFinishTime;
     private String mColor;
     private Date mEndRepeat;
-    private long mDuration;
+    private long mRepeatEvery;
     private String mRule;
 
     public String getCalendarName() {
@@ -46,12 +47,12 @@ public class GoogleEvent {
 
     private String mIsAllDay;
 
-    public long getDuration() {
-        return mDuration;
+    public long getRepeatEvery() {
+        return mRepeatEvery;
     }
 
-    public void setDuration(long duration) {
-        mDuration = duration;
+    public void setRepeatEvery(String rDate) {
+        if (rDate != null) mRepeatEvery = Long.getLong(rDate);
     }
 
     public String getRule() {
@@ -74,9 +75,8 @@ public class GoogleEvent {
         return mEndRepeat;
     }
 
-    public void setEndRepeat(String endRepeat) {
-        mEndRepeat = (endRepeat == null ? mStartTime : TimeUtils.convertMillionStringToDate
-            (endRepeat));
+    public void setEndRepeat() {
+        mEndRepeat = GoogleCalendarUtil.getEndRepeat(mRule);
     }
 
     public String getTitle() {
