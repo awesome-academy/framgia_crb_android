@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -27,8 +28,6 @@ public class Event extends RealmObject {
     private String mRepeatType;
     @SerializedName("repeat_every")
     private int mRepeatEvery;
-    @SerializedName("end_date")
-    private Date mEndDate;
     @SerializedName("exception_date")
     private Date mExceptionDate;
     @SerializedName("type")
@@ -118,9 +117,11 @@ public class Event extends RealmObject {
         this.mFinishTime = googleEvent.getFinishTime();
         this.mColorId = googleEvent.getColor();
         this.mStartRepeat = this.mStartTime;
-        this.mEndRepeat = googleEvent.getEndRepeat();
+        this.mEndRepeat = GoogleCalendarUtil.getEndRepeat(googleEvent.getRule());
         this.mAllDay = googleEvent.getIsAllDay().equals(Constant.GoogleCalendar.IS_ALL_DAY_TRUE);
         this.mGoogleCalendarName = googleEvent.getCalendarName();
+        this.mRepeatType = GoogleCalendarUtil.getRepeatType(googleEvent.getRule());
+        this.mRepeatEvery = GoogleCalendarUtil.getRepeatEvery(googleEvent.getRule());
     }
 
     public RealmList<DayOfWeek> getDayOfWeeks() {
@@ -202,10 +203,6 @@ public class Event extends RealmObject {
 
     public void setRepeatEvery(int repeatEvery) {
         mRepeatEvery = repeatEvery;
-    }
-
-    public void setEndDate(Date endDate) {
-        mEndDate = endDate;
     }
 
     public Date getExceptionDate() {

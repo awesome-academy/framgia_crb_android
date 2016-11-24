@@ -38,7 +38,10 @@ public class RenderEventUtil {
                 genEventList.add(event);
             }
         }
-        List<Event> eventRepeatList = sEventRepositoriesLocal.getAllEventRepeatByDate(date);
+        List<Event> eventRepeatList = new ArrayList<>();
+        eventRepeatList.addAll(sEventRepositoriesLocal.getAllEventRepeatByDate(date));
+        eventRepeatList.addAll(
+            GoogleCalendarUtil.getAllGoogleEventRepeatByDate(activity, date));
         Event eventGen = null;
         for (Event event : eventRepeatList) {
             String repeatType = event.getRepeatType();
