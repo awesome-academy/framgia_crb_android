@@ -8,10 +8,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import framgia.vn.framgiacrb.ui.activity.SearchActivity;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.ui.activity.SearchActivity;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmList;
 
@@ -244,7 +244,10 @@ public class SearchUtil {
 
     public static Date getFinalEventDay(OrderedRealmCollection<Event> data) {
         Date date = new Date();
-        date.setTime(data.get(0).getEndRepeat().getTime());
+        if (data == null || data.size() == 0) return date;
+        if (data.get(0).getEndRepeat() != null) {
+            date.setTime(data.get(0).getEndRepeat().getTime());
+        }
         int length = data.size();
         if (length == 1) {
             return date;

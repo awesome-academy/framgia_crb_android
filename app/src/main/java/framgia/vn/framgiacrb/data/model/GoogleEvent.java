@@ -3,6 +3,7 @@ package framgia.vn.framgiacrb.data.model;
 import java.util.Date;
 
 import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
+import framgia.vn.framgiacrb.utils.RFC5545Reader;
 import framgia.vn.framgiacrb.utils.TimeUtils;
 
 /**
@@ -18,6 +19,16 @@ public class GoogleEvent {
     private Date mEndRepeat;
     private long mRepeatEvery;
     private String mRule;
+
+    public String getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(String duration) {
+        mDuration = duration;
+    }
+
+    private String mDuration;
 
     public String getCalendarName() {
         return mCalendarName;
@@ -108,7 +119,12 @@ public class GoogleEvent {
     }
 
     public void setFinishTime(String finishTime) {
-        mFinishTime = (finishTime == null ? mStartTime : TimeUtils.convertMillionStringToDate
-            (finishTime));
+        if (mDuration != null) {
+            mFinishTime = new Date(mStartTime.getTime() + RFC5545Reader.getDurationInSecond
+                (mDuration));
+        } else {
+            mFinishTime =
+                finishTime == null ? mStartTime : TimeUtils.convertMillionStringToDate(finishTime);
+        }
     }
 }
