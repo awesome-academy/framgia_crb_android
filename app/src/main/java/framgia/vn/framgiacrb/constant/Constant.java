@@ -39,6 +39,7 @@ public class Constant {
         public static final String AMOUNT_DEVIDE = "-";
         public static final String RULE_SPLIT = ";";
         public static final String RULE_SPLIT_RESULT = "=";
+        public static final String RULE_SPLIT_DAY_OF_WEEK = ",";
     }
 
     public class Time {
@@ -74,6 +75,13 @@ public class Constant {
         public static final int RULE_ENOUGH_NAME_VALUE = 2;
         public static final int REPEAT_EVERY_FOR_NO_REPEAT = 0;
         public static final int REPEAT_EVERY_DEFAULT = 1;
+        public static final String SUNDAY = "SU";
+        public static final String MONDAY = "MO";
+        public static final String TUESDAY = "TU";
+        public static final String WEDNESDAY = "WE";
+        public static final String THURSDAY = "TH";
+        public static final String FRIDAY = "FR";
+        public static final String SATURDAY = "SA";
     }
 
     public class Url {

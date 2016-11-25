@@ -39,7 +39,6 @@ import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.listener.OnCloseToolbarListener;
 import framgia.vn.framgiacrb.ui.adapter.ListMenuAdapter;
 import framgia.vn.framgiacrb.ui.adapter.MonthToolbarPagerAdapter;
-import framgia.vn.framgiacrb.ui.fragment.EventFollowWeekFragment;
 import framgia.vn.framgiacrb.ui.fragment.EventsFragment;
 import framgia.vn.framgiacrb.ui.fragment.MonthFragment;
 import framgia.vn.framgiacrb.ui.fragment.item.ItemLeftMenu;
@@ -326,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 break;
             case WEEK:
-                mCurrentFragment = new EventFollowWeekFragment();
+                // TODO: next version
                 break;
             case MONTH:
                 mCurrentFragment = new MonthFragment();

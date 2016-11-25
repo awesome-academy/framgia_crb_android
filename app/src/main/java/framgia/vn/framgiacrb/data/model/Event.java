@@ -122,6 +122,7 @@ public class Event extends RealmObject {
         this.mGoogleCalendarName = googleEvent.getCalendarName();
         this.mRepeatType = GoogleCalendarUtil.getRepeatType(googleEvent.getRule());
         this.mRepeatEvery = GoogleCalendarUtil.getRepeatEvery(googleEvent.getRule());
+        this.mDayOfWeeks = GoogleCalendarUtil.getListDayOfWeek(googleEvent.getRule());
     }
 
     public RealmList<DayOfWeek> getDayOfWeeks() {
