@@ -11,12 +11,15 @@ import android.support.v4.app.ActivityCompat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import framgia.vn.framgiacrb.constant.Constant;
+import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.GoogleEvent;
+import io.realm.RealmList;
 
 /**
  * Created by framgia on 11/11/2016.
@@ -218,6 +221,52 @@ public class GoogleCalendarUtil {
                 } catch (ParseException e) {
                     return null;
                 }
+            }
+        }
+        return null;
+    }
+
+    public static RealmList<DayOfWeek> getListDayOfWeek(String rule) {
+        if (rule == null) return null;
+        String[] listRule = rule.split(Constant.Format.RULE_SPLIT);
+        for (String ruleChild : listRule) {
+            String[] rulePair = ruleChild.split(Constant.Format.RULE_SPLIT_RESULT);
+            if (rulePair.length != Constant.GoogleCalendar.RULE_ENOUGH_NAME_VALUE) return null;
+            if (rulePair[Constant.GoogleCalendar.RULE_NAME_INDEX].equals(Constant.GoogleCalendar
+                .RULE_BYDAY)) {
+                String[] listDays = rulePair[Constant.GoogleCalendar.RULE_VALUE_INDEX].split
+                    (Constant.Format.RULE_SPLIT_DAY_OF_WEEK);
+                RealmList listDayOfWeek = new RealmList();
+                for (String day : listDays) {
+                    switch (day) {
+                        case Constant.GoogleCalendar.SUNDAY:
+                            listDayOfWeek.add(new DayOfWeek(Calendar.SUNDAY, Constant.Time.SUNDAY));
+                            break;
+                        case Constant.GoogleCalendar.MONDAY:
+                            listDayOfWeek.add(new DayOfWeek(Calendar.MONDAY, Constant.Time.MONDAY));
+                            break;
+                        case Constant.GoogleCalendar.TUESDAY:
+                            listDayOfWeek
+                                .add(new DayOfWeek(Calendar.TUESDAY, Constant.Time.TUESDAY));
+                            break;
+                        case Constant.GoogleCalendar.WEDNESDAY:
+                            listDayOfWeek
+                                .add(new DayOfWeek(Calendar.WEDNESDAY, Constant.Time.WEDNESDAY));
+                            break;
+                        case Constant.GoogleCalendar.THURSDAY:
+                            listDayOfWeek
+                                .add(new DayOfWeek(Calendar.THURSDAY, Constant.Time.THURSDAY));
+                            break;
+                        case Constant.GoogleCalendar.FRIDAY:
+                            listDayOfWeek.add(new DayOfWeek(Calendar.FRIDAY, Constant.Time.FRIDAY));
+                            break;
+                        case Constant.GoogleCalendar.SATURDAY:
+                            listDayOfWeek
+                                .add(new DayOfWeek(Calendar.SATURDAY, Constant.Time.SATURDAY));
+                            break;
+                    }
+                }
+                return listDayOfWeek;
             }
         }
         return null;
