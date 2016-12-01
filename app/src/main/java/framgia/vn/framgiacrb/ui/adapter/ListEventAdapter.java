@@ -30,7 +30,7 @@ public class ListEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_MONTH = 0;
     private static final int VIEW_TYPE_DATE = 1;
     private static final int VIEW_TYPE_EVENT = 2;
-    private static final int VIEW_TYPE_TIMELINE = 3;
+    public static final int VIEW_TYPE_TIMELINE = 3;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<Object> mDatas;
