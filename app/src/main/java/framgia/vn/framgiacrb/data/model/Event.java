@@ -83,46 +83,46 @@ public class Event extends RealmObject {
     }
 
     public Event(Event event) {
-        this.mId = event.getId();
-        this.mTitle = event.getTitle();
-        this.mDescription = event.getDescription();
-        this.mStartTime = event.getStartTime();
-        this.mFinishTime = event.getFinishTime();
-        this.mStatus = event.getStatus();
-        this.mRepeatType = event.getRepeatType();
-        this.mRepeatEvery = event.getRepeatEvery();
-        this.mExceptionDate = event.getExceptionDate();
-        this.mType = event.getType();
-        this.mEventId = event.getEventId();
-        this.mColorId = event.getColorId();
-        this.mPlace = (event.getPlace() == null) ? null : new Place(event.getPlace());
-        this.mAttendees = (event.getAttendees() == null) ? null : Attendee.cloneListAttendee(event
-            .getAttendees());
-        this.mCalendarId = event.getCalendarId();
-        this.mAllDay = event.isAllDay();
-        this.mUserId = event.getUserId();
-        this.mStartRepeat = event.getStartRepeat();
-        this.mEndRepeat = event.getEndRepeat();
-        this.mDayOfWeeks =
-            (event.getDayOfWeeks() == null) ? null : DayOfWeek.cloneListDayOfWeek(event
-                .getDayOfWeeks());
+        mId = event.getId();
+        mIsGoogleEvent = event.isGoogleEvent();
+        mTitle = event.getTitle();
+        mDescription = event.getDescription();
+        mStartTime = event.getStartTime();
+        mFinishTime = event.getFinishTime();
+        mStatus = event.getStatus();
+        mRepeatType = event.getRepeatType();
+        mRepeatEvery = event.getRepeatEvery();
+        mExceptionDate = event.getExceptionDate();
+        mType = event.getType();
+        mEventId = event.getEventId();
+        mColorId = event.getColorId();
+        mPlace = event.getPlace() == null ? null : new Place(event.getPlace());
+        mAttendees =
+            event.getAttendees() == null ? null : Attendee.cloneListAttendee(event.getAttendees());
+        mCalendarId = event.getCalendarId();
+        mAllDay = event.isAllDay();
+        mUserId = event.getUserId();
+        mStartRepeat = event.getStartRepeat();
+        mEndRepeat = event.getEndRepeat();
+        mDayOfWeeks = event.getDayOfWeeks() == null ? null :
+            DayOfWeek.cloneListDayOfWeek(event.getDayOfWeeks());
     }
 
     public Event(GoogleEvent googleEvent) {
-        this.mId = googleEvent.getId();
-        this.mIsGoogleEvent = true;
-        this.mTitle = googleEvent.getTitle();
-        this.mDescription = googleEvent.getDescription();
-        this.mStartTime = googleEvent.getStartTime();
-        this.mFinishTime = googleEvent.getFinishTime();
-        this.mColorId = googleEvent.getColor();
-        this.mStartRepeat = this.mStartTime;
-        this.mEndRepeat = GoogleCalendarUtil.getEndRepeat(googleEvent.getRule());
-        this.mAllDay = googleEvent.getIsAllDay().equals(Constant.GoogleCalendar.IS_ALL_DAY_TRUE);
-        this.mGoogleCalendarName = googleEvent.getCalendarName();
-        this.mRepeatType = GoogleCalendarUtil.getRepeatType(googleEvent.getRule());
-        this.mRepeatEvery = GoogleCalendarUtil.getRepeatEvery(googleEvent.getRule());
-        this.mDayOfWeeks = GoogleCalendarUtil.getListDayOfWeek(googleEvent.getRule());
+        mId = googleEvent.getId();
+        mIsGoogleEvent = true;
+        mTitle = googleEvent.getTitle();
+        mDescription = googleEvent.getDescription();
+        mStartTime = googleEvent.getStartTime();
+        mFinishTime = googleEvent.getFinishTime();
+        mColorId = googleEvent.getColor();
+        mStartRepeat = mStartTime;
+        mEndRepeat = GoogleCalendarUtil.getEndRepeat(googleEvent.getRule());
+        mAllDay = googleEvent.getIsAllDay().equals(Constant.GoogleCalendar.IS_ALL_DAY_TRUE);
+        mGoogleCalendarName = googleEvent.getCalendarName();
+        mRepeatType = GoogleCalendarUtil.getRepeatType(googleEvent.getRule());
+        mRepeatEvery = GoogleCalendarUtil.getRepeatEvery(googleEvent.getRule());
+        mDayOfWeeks = GoogleCalendarUtil.getListDayOfWeek(googleEvent.getRule());
     }
 
     public RealmList<DayOfWeek> getDayOfWeeks() {

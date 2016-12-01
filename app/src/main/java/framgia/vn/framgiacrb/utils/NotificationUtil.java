@@ -2,6 +2,7 @@ package framgia.vn.framgiacrb.utils;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -71,6 +72,7 @@ public class NotificationUtil {
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)
                 .setContentText(content)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true);
         NotificationManager notificationManager =
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

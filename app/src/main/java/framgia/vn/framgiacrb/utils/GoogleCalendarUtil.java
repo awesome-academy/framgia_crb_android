@@ -36,7 +36,8 @@ public class GoogleCalendarUtil {
         CalendarContract.Events.RRULE,  // 7
         CalendarContract.Events.ALL_DAY, // 8
         CalendarContract.Events._ID, // 9
-        CalendarContract.Events.ACCOUNT_NAME // 10
+        CalendarContract.Events.ACCOUNT_NAME, // 10
+        CalendarContract.Events.DURATION //11
     };
     // The indices for the projection array above.
     private static final int PROJECTION_TITLE_INDEX = 0;
@@ -50,6 +51,7 @@ public class GoogleCalendarUtil {
     private static final int PROJECTION_ALL_DAY_INDEX = 8;
     private static final int PROJECTION_ID_INDEX = 9;
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 10;
+    private static final int PROJECTION_DURATION_INDEX = 11;
 
     public static List getAllGoogleEventNoRepeatByDate(Activity activity, Date today) {
         List eventList = new ArrayList<>();
@@ -139,6 +141,7 @@ public class GoogleCalendarUtil {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     GoogleEvent googleEvent = new GoogleEvent();
+                    googleEvent.setDuration(cursor.getString(PROJECTION_DURATION_INDEX));
                     googleEvent.setId(cursor.getInt(PROJECTION_ID_INDEX));
                     googleEvent.setTitle(cursor.getString(PROJECTION_TITLE_INDEX));
                     googleEvent.setDescription(cursor.getString(PROJECTION_DESCRIPTION_INDEX));
