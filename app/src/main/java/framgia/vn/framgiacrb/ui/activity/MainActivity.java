@@ -153,26 +153,27 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (!mToolbarIsTouched) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.YEAR, position / Constant.Number.NUM_MONTH_IN_YEAR +
-                        MonthToolbarPagerAdapter
-                            .MIN_YEAR);
-                    calendar.set(Calendar.MONTH, position % Constant.Number.NUM_MONTH_IN_YEAR);
-                    calendar.set(Calendar.DAY_OF_MONTH, 1);
-                    sendBroadcastGotoToday(MainActivity.dateFormat.format(calendar.getTime()));
-                    Date date = calendar.getTime();
-                    setSubTitle(MainActivity.dateFormat.format(date));
-                    if (position == mPreviousSelected) {
-                        MonthView monthView = (MonthView) mCalendarViewPager
-                            .findViewWithTag(Constant.Tag.MONTH_VIEW_TAG + mPreviousSelected);
-                        monthView.setSelected(false);
-                    } else if (position == mCurrentPosition) {
-                        MonthView monthView = (MonthView) mCalendarViewPager
-                            .findViewWithTag(Constant.Tag.MONTH_VIEW_TAG + mCurrentPosition);
-                        monthView.setSelect(X, Y);
-                        monthView.setSelected(true);
-                    }
+                if (mToolbarIsTouched) {
+                    return;
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, position / Constant.Number.NUM_MONTH_IN_YEAR +
+                    MonthToolbarPagerAdapter
+                        .MIN_YEAR);
+                calendar.set(Calendar.MONTH, position % Constant.Number.NUM_MONTH_IN_YEAR);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                sendBroadcastGotoToday(MainActivity.dateFormat.format(calendar.getTime()));
+                Date date = calendar.getTime();
+                setSubTitle(MainActivity.dateFormat.format(date));
+                if (position == mPreviousSelected) {
+                    MonthView monthView = (MonthView) mCalendarViewPager
+                        .findViewWithTag(Constant.Tag.MONTH_VIEW_TAG + mPreviousSelected);
+                    monthView.setSelected(false);
+                } else if (position == mCurrentPosition) {
+                    MonthView monthView = (MonthView) mCalendarViewPager
+                        .findViewWithTag(Constant.Tag.MONTH_VIEW_TAG + mCurrentPosition);
+                    monthView.setSelect(X, Y);
+                    monthView.setSelected(true);
                 }
             }
 
@@ -450,7 +451,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         mCurrentMenuItemPosition = savedInstanceState.getInt(CURRENT_MENU_ITEM, 1);
-        //reCheckMenuItem(mNavigationView);
         updateDisplayView(mCurrentMenuItemPosition);
         super.onRestoreInstanceState(savedInstanceState);
     }

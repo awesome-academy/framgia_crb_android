@@ -128,7 +128,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                             e.printStackTrace();
                         }
                     } else if ((month < mFirstMonth && year == mFirstYear) ||
-                        (month == 12 && year < mFirstYear)) {
+                        (month == Constant.Number.NUM_MONTH_IN_YEAR && year < mFirstYear)) {
                         position = 0;
                         try {
                             loadDatasForPrevMonth();
@@ -269,21 +269,18 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         mDatas.clear();
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        int month = Integer.parseInt(
-            android.text.format.DateFormat.format(TimeUtils.MONTH_NUMBER_FORMAT, today).toString());
+        int month = TimeUtils.getMonth(today);
         mLastMonth = month;
         mFirstMonth = month;
         String stringMonth =
             android.text.format.DateFormat.format(TimeUtils.MONTH_STRING_FORMAT, today).toString();
-        mLastYear =
-            Integer.parseInt(
-                android.text.format.DateFormat.format(TimeUtils.YEAR_FORMAT, today).toString());
+        mLastYear = TimeUtils.getYear(today);
         mFirstYear = mLastYear;
         calendar.set(mLastYear, month - 1, 1);
         Date date = calendar.getTime();
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
         boolean isTimelineAdded = false;
-        while (month < mLastMonth + 1) {
+        while (month == mLastMonth) {
             mDatas.add(date);
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
@@ -292,13 +289,13 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 for (int i = 0; i < events.size(); i++) {
                     Event event = events.get(i);
                     if (event.getStartTime().getTime() > today.getTime() && !isTimelineAdded) {
-                        mDatas.add(null);
+                        mDatas.add(ListEventAdapter.VIEW_TYPE_TIMELINE);
                         isTimelineAdded = true;
                     }
                     mDatas.add(event);
                 }
                 if (!isTimelineAdded) {
-                    mDatas.add(null);
+                    mDatas.add(ListEventAdapter.VIEW_TYPE_TIMELINE);
                 }
             } else {
                 mDatas.addAll(RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
@@ -306,9 +303,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             }
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
-            month = Integer
-                .parseInt(android.text.format.DateFormat.format(TimeUtils.MONTH_NUMBER_FORMAT, date)
-                    .toString());
+            month = TimeUtils.getMonth(date);
         }
         mAdapter.notifyDataSetChanged();
         if (mPositionToday > Constant.Number.MAX_POSITION_TODAY) {
@@ -319,7 +314,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
 
     private synchronized void loadDatasForNextMonth() throws ParseException {
         Calendar calendar = Calendar.getInstance();
-        if (mLastMonth < 12) {
+        if (mLastMonth < Constant.Number.NUM_MONTH_IN_YEAR) {
             mLastMonth += 1;
         } else {
             mLastMonth = 1;
@@ -331,7 +326,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         String stringMonth =
             android.text.format.DateFormat.format(TimeUtils.MONTH_STRING_FORMAT, date).toString();
         mDatas.add(new ItemMonth(month, stringMonth, mLastYear));
-        while ((month < mLastMonth + 1) && !(mLastMonth == 12 && month == 1)) {
+        while ((month < mLastMonth + 1) &&
+            !(mLastMonth == Constant.Number.NUM_MONTH_IN_YEAR && month == 1)) {
             mDatas.add(date);
             mDatas.addAll(RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
                 (date)));
@@ -349,7 +345,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         if (mFirstMonth > 1) {
             mFirstMonth -= 1;
         } else {
-            mFirstMonth = 12;
+            mFirstMonth = Constant.Number.NUM_MONTH_IN_YEAR;
             mFirstYear -= 1;
         }
         int month = mFirstMonth;
@@ -358,7 +354,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         Date date = calendar.getTime();
         String stringMonth =
             android.text.format.DateFormat.format(TimeUtils.MONTH_STRING_FORMAT, date).toString();
-        while ((month >= mFirstMonth) && !(mFirstMonth == 1 && month == 12)) {
+        while ((month >= mFirstMonth) &&
+            !(mFirstMonth == 1 && month == Constant.Number.NUM_MONTH_IN_YEAR)) {
             mDatas.add(0, date);
             mDatas.addAll(1, RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
                 (date)));
