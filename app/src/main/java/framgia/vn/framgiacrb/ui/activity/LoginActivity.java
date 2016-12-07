@@ -160,7 +160,6 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
     public void onSuccess() {
         Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
         getPlaceFromServer(Session.sAuthToken);
-        getUserFromServer(Session.sAuthToken);
         startActivity(intent);
         finish();
     }
@@ -190,38 +189,6 @@ public class LoginActivity extends Activity implements Realm.Transaction.OnSucce
 
             @Override
             public void onFailure(Call<List<Place>> call, Throwable t) {
-            }
-        });
-    }
-
-    public void getUserFromServer(String authToken) {
-        ServiceBuilder.getService().listAttendee(authToken).enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, final Response<List<User>> response) {
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        new EventRepositoriesLocal(Realm.getDefaultInstance())
-                            .clearPlaceFromDatabase(new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
-                                    Realm realm = Realm.getDefaultInstance();
-                                    new EventRepositoriesLocal(realm).addUser(response.body(),
-                                        new Realm.Transaction.OnSuccess() {
-                                            @Override
-                                            public void onSuccess() {
-                                            }
-                                        });
-                                }
-                            });
-                    }
-                } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.error_email_invalid),
-                        Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
             }
         });
     }
