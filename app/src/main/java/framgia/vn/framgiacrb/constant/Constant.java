@@ -82,6 +82,7 @@ public class Constant {
         public static final String THURSDAY = "TH";
         public static final String FRIDAY = "FR";
         public static final String SATURDAY = "SA";
+        public static final String ALL_CALENDAR = "All calendar";
     }
 
     public class Url {
@@ -89,6 +90,7 @@ public class Constant {
     }
 
     public class RequestCode {
+        public static final int SETTING = 1;
         public static final int CHOOSE_ATTENDEE = 2;
         public static final int CHOOSE_PLACE = 3;
         public static final int PERMISSIONS_READ_CALENDAR = 4;

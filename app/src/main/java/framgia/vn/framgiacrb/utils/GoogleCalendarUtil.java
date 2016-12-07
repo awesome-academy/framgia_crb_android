@@ -13,11 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.data.model.GoogleCalendar;
 import framgia.vn.framgiacrb.data.model.GoogleEvent;
 import io.realm.RealmList;
 
@@ -25,6 +28,12 @@ import io.realm.RealmList;
  * Created by framgia on 11/11/2016.
  */
 public class GoogleCalendarUtil {
+    public static final String[] CALENDAR_PROJECTION = new String[]{
+        CalendarContract.Calendars._ID,  //0
+        CalendarContract.Calendars.ACCOUNT_NAME //1
+    };
+    public static final int PROJECTION_CALENDAR_ID_INDEX = 0;
+    public static final int PROJECTION_CALENDAR_ACCOUNT_NAME_INDEX = 1;
     public static final String[] EVENT_PROJECTION = new String[]{
         CalendarContract.Events.TITLE,             // 0
         CalendarContract.Events.DESCRIPTION,      // 1
@@ -273,5 +282,37 @@ public class GoogleCalendarUtil {
             }
         }
         return null;
+    }
+
+    public static List getAllCalendarName(Activity activity) {
+        List result = new ArrayList();
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
+            PackageManager.PERMISSION_GRANTED) {
+            Cursor cursor =
+                activity.getContentResolver().query(CalendarContract.Calendars.CONTENT_URI,
+                    CALENDAR_PROJECTION,
+                    CalendarContract.Calendars.VISIBLE + " = " +
+                        Constant.GoogleCalendar.IS_VISIBLE_TRUE,
+                    null,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    GoogleCalendar googleCalendar = new GoogleCalendar();
+                    googleCalendar.setId(cursor.getInt(PROJECTION_CALENDAR_ID_INDEX));
+                    googleCalendar
+                        .setAccountName(cursor.getString(PROJECTION_CALENDAR_ACCOUNT_NAME_INDEX));
+                    result.add(googleCalendar);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return removeSameCalendar(result);
+    }
+
+    private static List removeSameCalendar(List listCalendar) {
+        Set<GoogleCalendar> set = new LinkedHashSet<>(listCalendar);
+        listCalendar.clear();
+        listCalendar.addAll(set);
+        return listCalendar;
     }
 }

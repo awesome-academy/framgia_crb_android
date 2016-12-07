@@ -405,6 +405,10 @@ public class MainActivity extends AppCompatActivity {
                     ((EventsFragment) mCurrentFragment).refreshData();
                 }
                 break;
+            case R.id.action_setting:
+                startActivityForResult(new Intent(MainActivity.this, SettingActivity.class),
+                    Constant.RequestCode.SETTING);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
