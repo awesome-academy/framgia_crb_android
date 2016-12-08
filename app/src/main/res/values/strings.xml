@@ -167,4 +167,14 @@
     <string name="error_create_event">Can\'t create event, please check connection</string>
     <string name="message_logout_success">Logout Success!</string>
     <string name="parse_exception">Date time unknown</string>
+    <string name="action_setting">Setting</string>
+    <string name="spinner_calendar_title">calendar</string>
+    <string name="checkbox_birthday_title">birthday</string>
+    <string name="checkbox_holiday_title">holiday</string>
+    <string name="checkbox_reminder_title">reminder</string>
+    <string name="calendar_key">calendarKey</string>
+    <string name="birthday_key">birthDayKey</string>
+    <string name="holiday_key">holidayKey</string>
+    <string name="reminder_key">reminderKey</string>
+    <string name="action_done">Done</string>
 </resources>

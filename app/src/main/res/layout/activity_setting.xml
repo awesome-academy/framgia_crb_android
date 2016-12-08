@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+    <ListPreference
+        android:id="@+id/calendar_spinner"
+        android:key="@string/calendar_key"
+        android:title="@string/spinner_calendar_title"/>
+
+    <CheckBoxPreference
+        android:id="@+id/birthday_cb"
+        android:defaultValue="true"
+        android:key="@string/birthday_key"
+        android:title="@string/checkbox_birthday_title"/>
+
+    <CheckBoxPreference
+        android:id="@+id/holiday_cb"
+        android:defaultValue="true"
+        android:key="@string/holiday_key"
+        android:title="@string/checkbox_holiday_title"/>
+
+    <CheckBoxPreference
+        android:id="@+id/reminder_cb"
+        android:defaultValue="true"
+        android:key="@string/reminder_key"
+        android:title="@string/checkbox_reminder_title"/>
+</PreferenceScreen>
