@@ -20,7 +20,8 @@ public class Constant {
         public static final String INTENT_ID_EVENT = "intent_id_event";
         public static final String INTENT_START_TIME = "intent_start_time";
         public static final String INTENT_FINISH_TIME = "intent_finish_time";
-        public static final String INTENT_IS_GOOGLE_EVENT = "is_google_event";
+        public static final String INTENT_IS_GOOGLE_EVENT = "intent_is_google_event";
+        public static final String INTENT_LIST_CALENDAR = "intent_list_calendar";
     }
 
     public class Number {
@@ -30,6 +31,7 @@ public class Constant {
         public static final int MAX_POSITION_TODAY = 20;
         public static final int NUM_MONTH_IN_YEAR = 12;
         public static final int MAX_LEFT_MENU_ITEM = 4;
+        public static final int MIN_MONTH = 1;
     }
 
     public class Format {
@@ -83,6 +85,9 @@ public class Constant {
         public static final String FRIDAY = "FR";
         public static final String SATURDAY = "SA";
         public static final String ALL_CALENDAR = "All calendar";
+        public static final String CONNECT_CONDITION = " AND ";
+        public static final String EQUAL_CONDITION = " = ";
+        public static final String QUOTE_VALUE = "'";
     }
 
     public class Url {
