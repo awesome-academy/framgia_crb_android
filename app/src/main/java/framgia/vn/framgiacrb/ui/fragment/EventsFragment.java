@@ -43,6 +43,7 @@ import framgia.vn.framgiacrb.ui.adapter.ListEventAdapter;
 import framgia.vn.framgiacrb.ui.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.ui.widget.MonthView;
 import framgia.vn.framgiacrb.utils.Connectivity;
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.RenderEventUtil;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -355,7 +356,8 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         String stringMonth =
             android.text.format.DateFormat.format(TimeUtils.MONTH_STRING_FORMAT, date).toString();
         while ((month >= mFirstMonth) &&
-            !(mFirstMonth == Constant.Number.MIN_MONTH && month == Constant.Number.NUM_MONTH_IN_YEAR)) {
+            !(mFirstMonth == Constant.Number.MIN_MONTH &&
+                month == Constant.Number.NUM_MONTH_IN_YEAR)) {
             mDatas.add(0, date);
             mDatas.addAll(1, RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
                 (date), MainActivity.sGoogleCalendarList));

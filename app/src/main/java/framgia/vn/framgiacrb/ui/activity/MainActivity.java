@@ -524,8 +524,9 @@ public class MainActivity extends AppCompatActivity {
             sIsHasBirthday = sharedPreferences.getBoolean(getString(R.string.birthday_key), true);
             sIsHasHoliday = sharedPreferences.getBoolean(getString(R.string.holiday_key), true);
             sIsHasReminder = sharedPreferences.getBoolean(getString(R.string.reminder_key), true);
-            sendBroadcastGotoToday(
-                MainActivity.dateFormat.format(Calendar.getInstance().getTime()));
+            if (mCurrentFragment instanceof EventsFragment) {
+                ((EventsFragment) mCurrentFragment).refreshData();
+            }
         }
     }
 }
