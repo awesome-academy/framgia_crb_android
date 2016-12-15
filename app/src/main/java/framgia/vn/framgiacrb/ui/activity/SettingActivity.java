@@ -1,7 +1,8 @@
 package framgia.vn.framgiacrb.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.ListPreference;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,9 +18,10 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.model.GoogleCalendar;
 import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 
-public class SettingActivity extends PreferenceActivity
-    implements Preference.OnPreferenceChangeListener {
+public class SettingActivity extends PreferenceActivity implements
+    Preference.OnPreferenceChangeListener {
     private Toolbar mToolbar;
+    private ArrayList mListCalendar = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +31,25 @@ public class SettingActivity extends PreferenceActivity
     }
 
     private void initViews() {
-        ListPreference listPreference = (ListPreference) findPreference(getResources().getString(R
-            .string.calendar_key));
         List<GoogleCalendar> calendarList = GoogleCalendarUtil.getAllCalendarName(this);
-        List listEntry = new ArrayList();
         for (GoogleCalendar googleCalendar : calendarList) {
-            listEntry.add(googleCalendar.getAccountName());
+            mListCalendar.add(googleCalendar.getAccountName());
+            CheckBoxPreference checkBoxPreference = new CheckBoxPreference(this);
+            checkBoxPreference.setKey(googleCalendar.getAccountName());
+            checkBoxPreference.setDefaultValue(true);
+            checkBoxPreference.setTitle(googleCalendar.getAccountName());
+            checkBoxPreference.setOnPreferenceChangeListener(this);
+            getPreferenceScreen().addPreference(checkBoxPreference);
         }
-        listEntry.add(0, Constant.GoogleCalendar.ALL_CALENDAR);
-        CharSequence[] entries = (CharSequence[]) listEntry.toArray(new
-            CharSequence[listEntry.size()]);
-        listPreference.setEntries(entries);
-        listPreference.setEntryValues(entries);
-        listPreference.setSummary(Constant.GoogleCalendar.ALL_CALENDAR);
-        listPreference.setDefaultValue(Constant.GoogleCalendar.ALL_CALENDAR);
-        listPreference.setOnPreferenceChangeListener(this);
+        CheckBoxPreference checkBoxBirthday = (CheckBoxPreference) findPreference(getResources()
+            .getString(R.string.birthday_key));
+        checkBoxBirthday.setDefaultValue(true);
+        CheckBoxPreference checkBoxHoliday = (CheckBoxPreference) findPreference(getResources()
+            .getString(R.string.holiday_key));
+        checkBoxHoliday.setDefaultValue(true);
+        CheckBoxPreference checkBoxReminder = (CheckBoxPreference) findPreference(getResources()
+            .getString(R.string.reminder_key));
+        checkBoxReminder.setDefaultValue(true);
     }
 
     @Override
@@ -57,7 +63,10 @@ public class SettingActivity extends PreferenceActivity
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Constant.RequestCode.SETTING);
+                Intent data = new Intent();
+                data.putCharSequenceArrayListExtra(Constant.Intent.INTENT_LIST_CALENDAR,
+                    mListCalendar);
+                setResult(RESULT_OK, data);
                 finish();
             }
         });
@@ -65,7 +74,9 @@ public class SettingActivity extends PreferenceActivity
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        preference.setSummary((String) newValue);
+        if (!(Boolean) newValue) {
+            mListCalendar.remove(preference.getKey());
+        } else mListCalendar.add(preference.getKey());
         return true;
     }
 }

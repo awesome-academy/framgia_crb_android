@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String MONTH = "Month";
     private static final String LABEL = "Calendar";
     private static final String LOGOUT = "Logout";
+    public static ArrayList sGoogleCalendarList = new ArrayList();
+    public static boolean sIsAllCalendar = true;
+    public static boolean sIsHasBirthday = true;
+    public static boolean sIsHasHoliday = true;
+    public static boolean sIsHasReminder = true;
     private DrawerLayout mDrawerLayout;
     private ListView mNavigationListView;
     private ArrayList<ItemLeftMenu> mListMenu;
@@ -504,5 +510,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == Constant.RequestCode.SETTING) {
+            sIsAllCalendar = false;
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
+                (this);
+            sGoogleCalendarList = data.getStringArrayListExtra(Constant.Intent
+                .INTENT_LIST_CALENDAR);
+            sIsHasBirthday = sharedPreferences.getBoolean(getString(R.string.birthday_key), true);
+            sIsHasHoliday = sharedPreferences.getBoolean(getString(R.string.holiday_key), true);
+            sIsHasReminder = sharedPreferences.getBoolean(getString(R.string.reminder_key), true);
+            sendBroadcastGotoToday(
+                MainActivity.dateFormat.format(Calendar.getInstance().getTime()));
+        }
     }
 }

@@ -22,6 +22,7 @@ import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.GoogleCalendar;
 import framgia.vn.framgiacrb.data.model.GoogleEvent;
+import framgia.vn.framgiacrb.ui.activity.MainActivity;
 import io.realm.RealmList;
 
 /**
@@ -62,15 +63,26 @@ public class GoogleCalendarUtil {
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 10;
     private static final int PROJECTION_DURATION_INDEX = 11;
 
-    public static List getAllGoogleEventNoRepeatByDate(Activity activity, Date today) {
+    public static List getAllGoogleEventNoRepeatByDate(Activity activity, Date today, String
+        calendarAccount) {
         List eventList = new ArrayList<>();
         ContentResolver contentResolver = activity.getContentResolver();
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
             PackageManager.PERMISSION_GRANTED) {
+            StringBuilder condition = new StringBuilder(CalendarContract.Events.VISIBLE);
+            condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
+            condition.append(Constant.GoogleCalendar.IS_VISIBLE_TRUE);
+            if (!MainActivity.sIsAllCalendar) {
+                condition.append(Constant.GoogleCalendar.CONNECT_CONDITION);
+                condition.append(CalendarContract.Calendars.ACCOUNT_NAME);
+                condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
+                condition.append(Constant.GoogleCalendar.QUOTE_VALUE);
+                condition.append(calendarAccount);
+                condition.append(Constant.GoogleCalendar.QUOTE_VALUE);
+            }
             Cursor cursor = contentResolver
                 .query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION,
-                    CalendarContract.Events.VISIBLE + " = " +
-                        Constant.GoogleCalendar.IS_VISIBLE_TRUE,
+                    condition.toString(),
                     null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
@@ -105,7 +117,7 @@ public class GoogleCalendarUtil {
         Event event = null;
         ContentResolver contentResolver = activity.getContentResolver();
         StringBuilder condition = new StringBuilder(CalendarContract.Events._ID);
-        condition.append(" = ");
+        condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
         condition.append(Integer.toString(Id));
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
             PackageManager.PERMISSION_GRANTED) {
@@ -137,15 +149,25 @@ public class GoogleCalendarUtil {
     }
 
     public static List getAllGoogleEventRepeatByDate(Activity activity, Date
-        today) {
+        today, String calendarAccount) {
         List eventList = new ArrayList<>();
         ContentResolver contentResolver = activity.getContentResolver();
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
             PackageManager.PERMISSION_GRANTED) {
+            StringBuilder condition = new StringBuilder(CalendarContract.Events.VISIBLE);
+            condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
+            condition.append(Constant.GoogleCalendar.IS_VISIBLE_TRUE);
+            if (!MainActivity.sIsAllCalendar) {
+                condition.append(Constant.GoogleCalendar.CONNECT_CONDITION);
+                condition.append(CalendarContract.Calendars.ACCOUNT_NAME);
+                condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
+                condition.append(Constant.GoogleCalendar.QUOTE_VALUE);
+                condition.append(calendarAccount);
+                condition.append(Constant.GoogleCalendar.QUOTE_VALUE);
+            }
             Cursor cursor = contentResolver
                 .query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION,
-                    CalendarContract.Events.VISIBLE + " = " +
-                        Constant.GoogleCalendar.IS_VISIBLE_TRUE,
+                    condition.toString(),
                     null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
@@ -291,7 +313,7 @@ public class GoogleCalendarUtil {
             Cursor cursor =
                 activity.getContentResolver().query(CalendarContract.Calendars.CONTENT_URI,
                     CALENDAR_PROJECTION,
-                    CalendarContract.Calendars.VISIBLE + " = " +
+                    CalendarContract.Calendars.VISIBLE + Constant.GoogleCalendar.EQUAL_CONDITION +
                         Constant.GoogleCalendar.IS_VISIBLE_TRUE,
                     null,
                     null);

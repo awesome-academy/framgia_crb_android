@@ -285,7 +285,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             if (date.equals(today)) {
                 mPositionToday = mDatas.size();
                 List<Event> events = RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils
-                    .formatDate(date));
+                    .formatDate(date), MainActivity.sGoogleCalendarList);
                 for (int i = 0; i < events.size(); i++) {
                     Event event = events.get(i);
                     if (event.getStartTime().getTime() > today.getTime() && !isTimelineAdded) {
@@ -299,7 +299,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
                 }
             } else {
                 mDatas.addAll(RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
-                    (date)));
+                    (date), MainActivity.sGoogleCalendarList));
             }
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
@@ -330,7 +330,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             !(mLastMonth == Constant.Number.NUM_MONTH_IN_YEAR && month == 1)) {
             mDatas.add(date);
             mDatas.addAll(RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
-                (date)));
+                (date), MainActivity.sGoogleCalendarList));
             calendar.add(Calendar.DATE, 1);
             date = calendar.getTime();
             month = Integer
@@ -355,10 +355,10 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         String stringMonth =
             android.text.format.DateFormat.format(TimeUtils.MONTH_STRING_FORMAT, date).toString();
         while ((month >= mFirstMonth) &&
-            !(mFirstMonth == 1 && month == Constant.Number.NUM_MONTH_IN_YEAR)) {
+            !(mFirstMonth == Constant.Number.MIN_MONTH && month == Constant.Number.NUM_MONTH_IN_YEAR)) {
             mDatas.add(0, date);
             mDatas.addAll(1, RenderEventUtil.getGenCodeEvent(getActivity(), TimeUtils.formatDate
-                (date)));
+                (date), MainActivity.sGoogleCalendarList));
             calendar.add(Calendar.DATE, -1);
             date = calendar.getTime();
             month = Integer

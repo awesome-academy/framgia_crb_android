@@ -9,10 +9,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.constant.ExceptionType;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.ui.activity.MainActivity;
 import io.realm.Realm;
 
 /**
@@ -29,7 +31,8 @@ public class RenderEventUtil {
     private static EventRepositoriesLocal sEventRepositoriesLocal =
         new EventRepositoriesLocal(sRealm);
 
-    public static List<Event> getGenCodeEvent(Activity activity, Date date) {
+    public static List<Event> getGenCodeEvent(Activity activity, Date date, ArrayList<String>
+        googleCalendarAccountList) {
         List<Event> genEventList = new ArrayList<>();
         List<Event> eventInDatabase = new ArrayList<>();
         eventInDatabase.addAll(sEventRepositoriesLocal.getEventByDate(date));
@@ -40,8 +43,16 @@ public class RenderEventUtil {
         }
         List<Event> eventRepeatList = new ArrayList<>();
         eventRepeatList.addAll(sEventRepositoriesLocal.getAllEventRepeatByDate(date));
-        eventRepeatList.addAll(
-            GoogleCalendarUtil.getAllGoogleEventRepeatByDate(activity, date));
+        if (MainActivity.sIsAllCalendar) {
+            eventRepeatList.addAll(GoogleCalendarUtil.getAllGoogleEventRepeatByDate(activity,
+                date, Constant.GoogleCalendar.ALL_CALENDAR));
+        } else {
+            for (String googleCalendarAccount : googleCalendarAccountList) {
+                eventRepeatList.addAll(
+                    GoogleCalendarUtil
+                        .getAllGoogleEventRepeatByDate(activity, date, googleCalendarAccount));
+            }
+        }
         Event eventGen = null;
         for (Event event : eventRepeatList) {
             String repeatType = event.getRepeatType();
@@ -59,7 +70,15 @@ public class RenderEventUtil {
                 genEventList.add(eventGen);
             }
         }
-        genEventList.addAll(GoogleCalendarUtil.getAllGoogleEventNoRepeatByDate(activity, date));
+        if (MainActivity.sIsAllCalendar) {
+            genEventList.addAll(GoogleCalendarUtil.getAllGoogleEventNoRepeatByDate(activity,
+                date, Constant.GoogleCalendar.ALL_CALENDAR));
+        } else {
+            for (String googleCalendarAccount : googleCalendarAccountList) {
+                genEventList.addAll(GoogleCalendarUtil
+                    .getAllGoogleEventNoRepeatByDate(activity, date, googleCalendarAccount));
+            }
+        }
         Collections.sort(genEventList, new Comparator<Event>() {
                 @Override
                 public int compare(Event event1, Event event2) {
