@@ -53,6 +53,7 @@ public class RenderEventUtil {
                         .getAllGoogleEventRepeatByDate(activity, date, googleCalendarAccount));
             }
         }
+        eventRepeatList.addAll(GoogleCalendarUtil.getReminderRepeatByDate(activity, date));
         Event eventGen = null;
         for (Event event : eventRepeatList) {
             String repeatType = event.getRepeatType();
@@ -79,6 +80,7 @@ public class RenderEventUtil {
                     .getAllGoogleEventNoRepeatByDate(activity, date, googleCalendarAccount));
             }
         }
+        genEventList.addAll(GoogleCalendarUtil.getReminderNoRepeatByDate(activity, date));
         Collections.sort(genEventList, new Comparator<Event>() {
                 @Override
                 public int compare(Event event1, Event event2) {

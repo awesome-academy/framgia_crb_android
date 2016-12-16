@@ -62,6 +62,10 @@ public class GoogleCalendarUtil {
     private static final int PROJECTION_ID_INDEX = 9;
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 10;
     private static final int PROJECTION_DURATION_INDEX = 11;
+    public static final String[] REMINDERS_PROJECTION = new String[]{
+        CalendarContract.Reminders.EVENT_ID,  //0
+    };
+    public static final int PROJECTION_REMINDERS_ID_INDEX = 0;
 
     public static List getAllGoogleEventNoRepeatByDate(Activity activity, Date today, String
         calendarAccount) {
@@ -336,5 +340,53 @@ public class GoogleCalendarUtil {
         listCalendar.clear();
         listCalendar.addAll(set);
         return listCalendar;
+    }
+
+    public static List getReminderNoRepeatByDate(Activity activity, Date date) {
+        List result = new ArrayList();
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
+            PackageManager.PERMISSION_GRANTED) {
+            Cursor cursor =
+                activity.getContentResolver().query(CalendarContract.Reminders.CONTENT_URI,
+                    REMINDERS_PROJECTION,
+                    null,
+                    null,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Event googleReminder =
+                        getEventById(activity, cursor.getInt(PROJECTION_REMINDERS_ID_INDEX));
+                    if (googleReminder.getRepeatType() == null
+                        && TimeUtils.compareDate(googleReminder.getStartTime(), date))
+                        result.add(googleReminder);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return result;
+    }
+
+    public static List getReminderRepeatByDate(Activity activity, Date date) {
+        List result = new ArrayList();
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
+            PackageManager.PERMISSION_GRANTED) {
+            Cursor cursor =
+                activity.getContentResolver().query(CalendarContract.Reminders.CONTENT_URI,
+                    REMINDERS_PROJECTION,
+                    null,
+                    null,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Event googleReminder =
+                        getEventById(activity, cursor.getInt(PROJECTION_REMINDERS_ID_INDEX));
+                    if (googleReminder.getRepeatType() != null
+                        && TimeUtils.compareDate(googleReminder.getStartTime(), date))
+                        result.add(googleReminder);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        return result;
     }
 }
