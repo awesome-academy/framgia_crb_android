@@ -48,6 +48,7 @@ public class NotificationUtil {
         alarmIntent.putExtra(Constant.Intent.INTENT_ID_EVENT, event.getId());
         alarmIntent.putExtra(Constant.Intent.INTENT_START_TIME, timeReal);
         alarmIntent.putExtra(AlarmReceiver.INTENT_CONTENT, content.toString());
+        alarmIntent.putExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT, event.isGoogleEvent());
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context
             , notificationNumber, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -59,11 +60,12 @@ public class NotificationUtil {
     }
 
     public static void pushNotification(Context context, String title, String content, int
-        eventId, int notificationNumber, Date startTime, Date finishTime) {
+        eventId, int notificationNumber, Date startTime, Date finishTime, boolean isGoogleEvent) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(Constant.Intent.INTENT_ID_EVENT, eventId);
         intent.putExtra(Constant.Intent.INTENT_START_TIME, startTime);
         intent.putExtra(Constant.Intent.INTENT_FINISH_TIME, finishTime);
+        intent.putExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT, isGoogleEvent);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
             notificationNumber, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder =

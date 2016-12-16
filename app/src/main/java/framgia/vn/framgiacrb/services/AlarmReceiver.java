@@ -11,6 +11,7 @@ import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.local.RealmController;
 import framgia.vn.framgiacrb.data.model.DayOfWeek;
 import framgia.vn.framgiacrb.data.model.Event;
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.NotificationUtil;
 
 /**
@@ -23,7 +24,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int eventId = intent.getIntExtra(Constant.Intent.INTENT_ID_EVENT, 0);
-        Event event = RealmController.getInstance().getEventById(eventId);
+        Event event;
+        if (intent.getBooleanExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT, false)) {
+            event = GoogleCalendarUtil.getEventById(context, eventId);
+        } else {
+            event = RealmController.getInstance().getEventById(eventId);
+        }
         Event eventChild = new Event(event);
         eventChild
             .setStartTime((Date) intent.getSerializableExtra(Constant.Intent.INTENT_START_TIME));
@@ -37,7 +43,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private void handleRepeat(Context context, Intent intent) {
         int eventId = intent.getIntExtra(Constant.Intent.INTENT_ID_EVENT, 0);
-        Event event = RealmController.getInstance().getEventById(eventId);
+        Event event;
+        if (intent.getBooleanExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT, false)) {
+            event = GoogleCalendarUtil.getEventById(context, eventId);
+        } else {
+            event = RealmController.getInstance().getEventById(eventId);
+        }
         Event eventChild = new Event(event);
         Date startTime = (Date) intent.getSerializableExtra(Constant.Intent.INTENT_START_TIME);
         eventChild.setStartTime(startTime);
@@ -119,6 +130,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             , eventChild.getId()
             , intent.getIntExtra(AlarmReceiver.INTENT_NOTIFICATION_ID, 0)
             , eventChild.getStartTime()
-            , eventChild.getFinishTime());
+            , eventChild.getFinishTime()
+            , eventChild.isGoogleEvent());
     }
 }
