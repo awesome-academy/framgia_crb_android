@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.constant.ExceptionType;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
@@ -43,16 +44,20 @@ public class RenderEventUtil {
         }
         List<Event> eventRepeatList = new ArrayList<>();
         eventRepeatList.addAll(sEventRepositoriesLocal.getAllEventRepeatByDate(date));
+        List googleEventRepeatList = new ArrayList();
         if (MainActivity.sIsAllCalendar) {
-            eventRepeatList.addAll(GoogleCalendarUtil.getAllGoogleEventRepeatByDate(activity,
-                date, Constant.GoogleCalendar.ALL_CALENDAR));
+            googleEventRepeatList = GoogleCalendarUtil.getAllGoogleEventRepeatByDate(activity,
+                date, Constant.GoogleCalendar.ALL_CALENDAR);
         } else {
             for (String googleCalendarAccount : googleCalendarAccountList) {
-                eventRepeatList.addAll(
-                    GoogleCalendarUtil
-                        .getAllGoogleEventRepeatByDate(activity, date, googleCalendarAccount));
+                googleEventRepeatList.addAll(GoogleCalendarUtil
+                    .getAllGoogleEventRepeatByDate(activity, date, googleCalendarAccount));
             }
         }
+        RegisterNotificationAsyncTask registerForRepeat = new
+            RegisterNotificationAsyncTask(true);
+        registerForRepeat.execute(googleEventRepeatList);
+        eventRepeatList.addAll(googleEventRepeatList);
         eventRepeatList.addAll(GoogleCalendarUtil.getReminderRepeatByDate(activity, date));
         Event eventGen = null;
         for (Event event : eventRepeatList) {
@@ -71,15 +76,20 @@ public class RenderEventUtil {
                 genEventList.add(eventGen);
             }
         }
+        List googleEventNoRepeatList = new ArrayList();
         if (MainActivity.sIsAllCalendar) {
-            genEventList.addAll(GoogleCalendarUtil.getAllGoogleEventNoRepeatByDate(activity,
+            googleEventNoRepeatList = (GoogleCalendarUtil.getAllGoogleEventNoRepeatByDate(activity,
                 date, Constant.GoogleCalendar.ALL_CALENDAR));
         } else {
             for (String googleCalendarAccount : googleCalendarAccountList) {
-                genEventList.addAll(GoogleCalendarUtil
+                googleEventNoRepeatList.addAll(GoogleCalendarUtil
                     .getAllGoogleEventNoRepeatByDate(activity, date, googleCalendarAccount));
             }
         }
+        RegisterNotificationAsyncTask registerForNoRepeat = new
+            RegisterNotificationAsyncTask(true);
+        registerForNoRepeat.execute(googleEventNoRepeatList);
+        genEventList.addAll(googleEventNoRepeatList);
         genEventList.addAll(GoogleCalendarUtil.getReminderNoRepeatByDate(activity, date));
         Collections.sort(genEventList, new Comparator<Event>() {
                 @Override

@@ -3,6 +3,7 @@ package framgia.vn.framgiacrb.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.CalendarContract;
@@ -117,13 +118,13 @@ public class GoogleCalendarUtil {
         return eventList;
     }
 
-    public static Event getEventById(Activity activity, int Id) {
+    public static Event getEventById(Context context, int Id) {
         Event event = null;
-        ContentResolver contentResolver = activity.getContentResolver();
+        ContentResolver contentResolver = context.getContentResolver();
         StringBuilder condition = new StringBuilder(CalendarContract.Events._ID);
         condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
         condition.append(Integer.toString(Id));
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) ==
             PackageManager.PERMISSION_GRANTED) {
             Cursor cursor = contentResolver
                 .query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION, condition.toString(),
@@ -142,12 +143,6 @@ public class GoogleCalendarUtil {
                 event = new Event(googleEvent);
                 cursor.close();
             }
-        }
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) !=
-            PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat
-                .requestPermissions(activity, new String[]{Manifest.permission.READ_CALENDAR},
-                    Constant.RequestCode.PERMISSIONS_READ_CALENDAR);
         }
         return event;
     }
