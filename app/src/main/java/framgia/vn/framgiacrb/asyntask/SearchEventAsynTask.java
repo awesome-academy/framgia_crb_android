@@ -5,10 +5,11 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import framgia.vn.framgiacrb.ui.activity.SearchActivity;
 import framgia.vn.framgiacrb.data.model.Event;
 import framgia.vn.framgiacrb.data.model.EventField;
 import framgia.vn.framgiacrb.listener.AsyncTaskFinishListener;
+import framgia.vn.framgiacrb.ui.activity.SearchActivity;
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.SearchUtil;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
@@ -35,16 +36,18 @@ public class SearchEventAsynTask extends AsyncTask<String, Void, Void> implement
 
     @Override
     protected Void doInBackground(String... params) {
+        List allEventList = GoogleCalendarUtil.getEventByTitle(mActivity, params[0]);
         List list = Realm.getDefaultInstance().where(Event.class)
             .contains(EVENT_TITLE_FIELD, params[0], Case.INSENSITIVE)
             .or()
             .contains(EVENT_DESCRIPTION_FIELD, params[0], Case.INSENSITIVE)
             .findAllSorted(EVENT_START_DATE_FIELD, Sort.ASCENDING);
-        if (list.size() == 0) {
+        allEventList.addAll(list);
+        if (allEventList.size() == 0) {
             SearchActivity.sIsHasMoreEvent = false;
             return null;
         }
-        mRealmList.addAll(SearchUtil.editListDataSearch((OrderedRealmCollection<Event>) list));
+        mRealmList.addAll(SearchUtil.editListDataSearch((OrderedRealmCollection<Event>) allEventList));
         return null;
     }
 

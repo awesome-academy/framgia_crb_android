@@ -88,6 +88,8 @@ public class Constant {
         public static final String CONNECT_CONDITION = " AND ";
         public static final String EQUAL_CONDITION = " = ";
         public static final String QUOTE_VALUE = "'";
+        public static final String LIKE_CONDITION = " like ";
+        public static final String PERCENT_STRING = "%";
     }
 
     public class Url {
