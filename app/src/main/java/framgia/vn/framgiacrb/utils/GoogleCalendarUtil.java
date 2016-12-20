@@ -384,4 +384,50 @@ public class GoogleCalendarUtil {
         }
         return result;
     }
+
+    public static RealmList getEventByTitle(Activity activity, String title) {
+        RealmList eventList = new RealmList<>();
+        ContentResolver contentResolver = activity.getContentResolver();
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
+            PackageManager.PERMISSION_GRANTED) {
+            StringBuilder condition = new StringBuilder(CalendarContract.Events.VISIBLE);
+            condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
+            condition.append(Constant.GoogleCalendar.IS_VISIBLE_TRUE);
+            condition.append(Constant.GoogleCalendar.CONNECT_CONDITION);
+            condition.append(CalendarContract.Events.TITLE);
+            condition.append(Constant.GoogleCalendar.LIKE_CONDITION);
+            condition.append(Constant.GoogleCalendar.QUOTE_VALUE);
+            condition.append(Constant.GoogleCalendar.PERCENT_STRING);
+            condition.append(title);
+            condition.append(Constant.GoogleCalendar.PERCENT_STRING);
+            condition.append(Constant.GoogleCalendar.QUOTE_VALUE);
+            Cursor cursor = contentResolver
+                .query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION,
+                    condition.toString(),
+                    null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    GoogleEvent googleEvent = new GoogleEvent();
+                    googleEvent.setId(cursor.getInt(PROJECTION_ID_INDEX));
+                    googleEvent.setTitle(cursor.getString(PROJECTION_TITLE_INDEX));
+                    googleEvent.setDescription(cursor.getString(PROJECTION_DESCRIPTION_INDEX));
+                    googleEvent.setStartTime(cursor.getString(PROJECTION_DTSTART_INDEX));
+                    googleEvent.setFinishTime(cursor.getString(PROJECTION_DTEND_INDEX));
+                    googleEvent.setColor(cursor.getString(PROJECTION_EVENT_COLOR_INDEX));
+                    googleEvent.setRule(cursor.getString(PROJECTION_RRULE_INDEX));
+                    googleEvent.setIsAllDay(cursor.getString(PROJECTION_ALL_DAY_INDEX));
+                    Event event = new Event(googleEvent);
+                    eventList.add(event);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat
+                .requestPermissions(activity, new String[]{Manifest.permission.READ_CALENDAR},
+                    Constant.RequestCode.PERMISSIONS_READ_CALENDAR);
+        }
+        return eventList;
+    }
 }
