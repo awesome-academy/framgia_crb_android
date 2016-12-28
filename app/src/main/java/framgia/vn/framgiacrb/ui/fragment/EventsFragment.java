@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
@@ -43,7 +45,6 @@ import framgia.vn.framgiacrb.ui.adapter.ListEventAdapter;
 import framgia.vn.framgiacrb.ui.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.ui.widget.MonthView;
 import framgia.vn.framgiacrb.utils.Connectivity;
-import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.RenderEventUtil;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -147,6 +148,7 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
             .registerReceiver(mBroadcastReceiverToday, new IntentFilter(MainActivity.ACTION_TODAY));
         getActivity().registerReceiver(mBroadcastReceiverToDate,
             new IntentFilter(MainActivity.ACTION_SCROLL_DAY));
+        updateFollowSetting();
         return mViewEvents;
     }
 
@@ -501,5 +503,16 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
     @Override
     public void onError() {
         Toast.makeText(getActivity(), getString(R.string.message_error), Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateFollowSetting() {
+        SharedPreferences sharedPreferences = getActivity()
+            .getSharedPreferences(Constant.GoogleCalendar.PREF_SAVE_ACCOUNT, Context.MODE_PRIVATE);
+        Set accountSet = sharedPreferences.getStringSet(Constant.GoogleCalendar.STRING_ACCOUNT_KEY,
+            null);
+        if (accountSet == null) return;
+        MainActivity.sIsAllCalendar = false;
+        MainActivity.sGoogleCalendarList.addAll(accountSet);
+        refreshData();
     }
 }
