@@ -1,6 +1,7 @@
 package framgia.vn.framgiacrb.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -11,7 +12,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import framgia.vn.framgiacrb.R;
 import framgia.vn.framgiacrb.constant.Constant;
@@ -66,6 +69,13 @@ public class SettingActivity extends PreferenceActivity implements
                 Intent data = new Intent();
                 data.putCharSequenceArrayListExtra(Constant.Intent.INTENT_LIST_CALENDAR,
                     mListCalendar);
+                SharedPreferences sharedPreferences = getSharedPreferences(Constant.GoogleCalendar
+                    .PREF_SAVE_ACCOUNT, MODE_PRIVATE);
+                Set accountSet = new HashSet<String>();
+                accountSet.addAll(mListCalendar);
+                sharedPreferences.edit()
+                    .putStringSet(Constant.GoogleCalendar.STRING_ACCOUNT_KEY, accountSet)
+                    .commit();
                 setResult(RESULT_OK, data);
                 finish();
             }

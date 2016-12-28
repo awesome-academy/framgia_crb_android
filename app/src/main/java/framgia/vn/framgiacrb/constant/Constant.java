@@ -90,6 +90,8 @@ public class Constant {
         public static final String QUOTE_VALUE = "'";
         public static final String LIKE_CONDITION = " like ";
         public static final String PERCENT_STRING = "%";
+        public static final String PREF_SAVE_ACCOUNT = "preference_account";
+        public static final String STRING_ACCOUNT_KEY = "account_key";
     }
 
     public class Url {
