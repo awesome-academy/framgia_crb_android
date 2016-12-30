@@ -513,6 +513,11 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
         if (accountSet == null) return;
         MainActivity.sIsAllCalendar = false;
         MainActivity.sGoogleCalendarList.addAll(accountSet);
-        refreshData();
+        try {
+            initDatas();
+        } catch (ParseException e) {
+            Toast.makeText(getActivity(), getString(R.string.update_fail), Toast.LENGTH_SHORT)
+                .show();
+        }
     }
 }

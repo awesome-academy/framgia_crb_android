@@ -337,7 +337,8 @@ public class GoogleCalendarUtil {
         return listCalendar;
     }
 
-    public static List getReminderNoRepeatByDate(Activity activity, Date date) {
+     // TODO: next version
+    /*public static List getReminderNoRepeatByDate(Activity activity, Date date) {
         List result = new ArrayList();
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
             PackageManager.PERMISSION_GRANTED) {
@@ -383,7 +384,7 @@ public class GoogleCalendarUtil {
             }
         }
         return result;
-    }
+    }*/
 
     public static RealmList getEventByTitle(Activity activity, String title) {
         RealmList eventList = new RealmList<>();

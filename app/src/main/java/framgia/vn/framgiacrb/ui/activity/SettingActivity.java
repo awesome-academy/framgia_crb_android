@@ -25,6 +25,7 @@ public class SettingActivity extends PreferenceActivity implements
     Preference.OnPreferenceChangeListener {
     private Toolbar mToolbar;
     private ArrayList mListCalendar = new ArrayList();
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,14 @@ public class SettingActivity extends PreferenceActivity implements
     }
 
     private void initViews() {
+        mSharedPreferences = getSharedPreferences(Constant.GoogleCalendar
+            .PREF_SAVE_ACCOUNT, MODE_PRIVATE);
         List<GoogleCalendar> calendarList = GoogleCalendarUtil.getAllCalendarName(this);
+        Set accountSet = mSharedPreferences.getStringSet(Constant.GoogleCalendar
+            .STRING_ACCOUNT_KEY, null);
+        if (accountSet != null) mListCalendar.addAll(accountSet);
         for (GoogleCalendar googleCalendar : calendarList) {
-            mListCalendar.add(googleCalendar.getAccountName());
+            if (accountSet == null) mListCalendar.add(googleCalendar.getAccountName());
             CheckBoxPreference checkBoxPreference = new CheckBoxPreference(this);
             checkBoxPreference.setKey(googleCalendar.getAccountName());
             checkBoxPreference.setDefaultValue(true);
@@ -69,11 +75,9 @@ public class SettingActivity extends PreferenceActivity implements
                 Intent data = new Intent();
                 data.putCharSequenceArrayListExtra(Constant.Intent.INTENT_LIST_CALENDAR,
                     mListCalendar);
-                SharedPreferences sharedPreferences = getSharedPreferences(Constant.GoogleCalendar
-                    .PREF_SAVE_ACCOUNT, MODE_PRIVATE);
                 Set accountSet = new HashSet<String>();
                 accountSet.addAll(mListCalendar);
-                sharedPreferences.edit()
+                mSharedPreferences.edit()
                     .putStringSet(Constant.GoogleCalendar.STRING_ACCOUNT_KEY, accountSet)
                     .commit();
                 setResult(RESULT_OK, data);
