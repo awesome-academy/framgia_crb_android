@@ -120,6 +120,8 @@ public class SearchEventAdapter extends RealmRecyclerViewAdapter<Event, SearchEv
                 Intent intent = new Intent(mActivity, DetailActivity.class);
                 intent.putExtra(Constant.Intent.INTENT_ID_EVENT, data.get(getAdapterPosition())
                     .getId());
+                intent.putExtra(Constant.Intent.INTENT_IS_GOOGLE_EVENT, data.get
+                    (getAdapterPosition()).isGoogleEvent());
                 intent.putExtra(Constant.Intent.INTENT_START_TIME,
                     data.get(getAdapterPosition()).getStartTime());
                 intent.putExtra(Constant.Intent.INTENT_FINISH_TIME, data.get(getAdapterPosition())
