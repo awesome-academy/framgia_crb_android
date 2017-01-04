@@ -12,7 +12,6 @@ import framgia.vn.framgiacrb.data.model.Session;
 import framgia.vn.framgiacrb.data.remote.EventRepositories;
 import framgia.vn.framgiacrb.listener.OnLoadEventListener;
 import framgia.vn.framgiacrb.utils.Connectivity;
-import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 
 /**
  * Created by nghicv on 15/09/2016.

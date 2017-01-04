@@ -336,8 +336,7 @@ public class GoogleCalendarUtil {
         listCalendar.addAll(set);
         return listCalendar;
     }
-
-     // TODO: next version
+    // TODO: next version
     /*public static List getReminderNoRepeatByDate(Activity activity, Date date) {
         List result = new ArrayList();
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) ==
@@ -428,6 +427,39 @@ public class GoogleCalendarUtil {
             ActivityCompat
                 .requestPermissions(activity, new String[]{Manifest.permission.READ_CALENDAR},
                     Constant.RequestCode.PERMISSIONS_READ_CALENDAR);
+        }
+        return eventList;
+    }
+
+    public static List getAllGoogleEvent(Context context) {
+        List eventList = new ArrayList<>();
+        ContentResolver contentResolver = context.getContentResolver();
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) ==
+            PackageManager.PERMISSION_GRANTED) {
+            StringBuilder condition = new StringBuilder(CalendarContract.Events.VISIBLE);
+            condition.append(Constant.GoogleCalendar.EQUAL_CONDITION);
+            condition.append(Constant.GoogleCalendar.IS_VISIBLE_TRUE);
+            Cursor cursor = contentResolver
+                .query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION,
+                    condition.toString(),
+                    null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    GoogleEvent googleEvent = new GoogleEvent();
+                    googleEvent.setDuration(cursor.getString(PROJECTION_DURATION_INDEX));
+                    googleEvent.setId(cursor.getInt(PROJECTION_ID_INDEX));
+                    googleEvent.setTitle(cursor.getString(PROJECTION_TITLE_INDEX));
+                    googleEvent.setDescription(cursor.getString(PROJECTION_DESCRIPTION_INDEX));
+                    googleEvent.setStartTime(cursor.getString(PROJECTION_DTSTART_INDEX));
+                    googleEvent.setFinishTime(cursor.getString(PROJECTION_DTEND_INDEX));
+                    googleEvent.setColor(cursor.getString(PROJECTION_EVENT_COLOR_INDEX));
+                    googleEvent.setRule(cursor.getString(PROJECTION_RRULE_INDEX));
+                    googleEvent.setIsAllDay(cursor.getString(PROJECTION_ALL_DAY_INDEX));
+                    Event event = new Event(googleEvent);
+                    eventList.add(event);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
         }
         return eventList;
     }
