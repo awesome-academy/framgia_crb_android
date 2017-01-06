@@ -94,6 +94,10 @@ public class Constant {
         public static final String STRING_ACCOUNT_KEY = "account_key";
     }
 
+    public class SharePreferenceKey {
+        public static final String OLD_NUM_GOOGLE_EVENT = "old_num_google_event";
+    }
+
     public class Url {
         public static final String BASE_URL = "http://crb.framgia.vn/api/";
     }

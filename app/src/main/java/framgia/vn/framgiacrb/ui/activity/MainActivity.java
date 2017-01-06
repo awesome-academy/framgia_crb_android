@@ -363,6 +363,10 @@ public class MainActivity extends AppCompatActivity {
             .clearDatabase(null);
         mEditor.clear();
         mEditor.apply();
+        getSharedPreferences(Constant.GoogleCalendar.PREF_SAVE_ACCOUNT, Context.MODE_PRIVATE).edit()
+            .clear()
+            .apply();
+        NotificationUtil.clearNotification();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }

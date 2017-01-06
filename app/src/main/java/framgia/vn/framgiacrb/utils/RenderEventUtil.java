@@ -54,9 +54,6 @@ public class RenderEventUtil {
                     .getAllGoogleEventRepeatByDate(activity, date, googleCalendarAccount));
             }
         }
-        RegisterNotificationAsyncTask registerForRepeat = new
-            RegisterNotificationAsyncTask(true);
-        registerForRepeat.execute(googleEventRepeatList);
         eventRepeatList.addAll(googleEventRepeatList);
         // TODO: next version
         //eventRepeatList.addAll(GoogleCalendarUtil.getReminderRepeatByDate(activity, date));
@@ -87,9 +84,6 @@ public class RenderEventUtil {
                     .getAllGoogleEventNoRepeatByDate(activity, date, googleCalendarAccount));
             }
         }
-        RegisterNotificationAsyncTask registerForNoRepeat = new
-            RegisterNotificationAsyncTask(true);
-        registerForNoRepeat.execute(googleEventNoRepeatList);
         genEventList.addAll(googleEventNoRepeatList);
         // TODO: next version
         //genEventList.addAll(GoogleCalendarUtil.getReminderNoRepeatByDate(activity, date));

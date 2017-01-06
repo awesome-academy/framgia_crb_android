@@ -30,7 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import framgia.vn.framgiacrb.CrbApplication;
 import framgia.vn.framgiacrb.R;
+import framgia.vn.framgiacrb.asyntask.RegisterNotificationAsyncTask;
 import framgia.vn.framgiacrb.constant.Constant;
 import framgia.vn.framgiacrb.data.local.EventRepositoriesLocal;
 import framgia.vn.framgiacrb.data.model.Event;
@@ -45,6 +47,7 @@ import framgia.vn.framgiacrb.ui.adapter.ListEventAdapter;
 import framgia.vn.framgiacrb.ui.fragment.item.ItemMonth;
 import framgia.vn.framgiacrb.ui.widget.MonthView;
 import framgia.vn.framgiacrb.utils.Connectivity;
+import framgia.vn.framgiacrb.utils.GoogleCalendarUtil;
 import framgia.vn.framgiacrb.utils.RenderEventUtil;
 import framgia.vn.framgiacrb.utils.SimpleItemTouchHelperCallback;
 import framgia.vn.framgiacrb.utils.TimeUtils;
@@ -508,6 +511,18 @@ public class EventsFragment extends Fragment implements OnLoadEventListener {
     private void updateFollowSetting() {
         SharedPreferences sharedPreferences = getActivity()
             .getSharedPreferences(Constant.GoogleCalendar.PREF_SAVE_ACCOUNT, Context.MODE_PRIVATE);
+        int oldNumGoogleEvent = sharedPreferences.getInt(Constant.SharePreferenceKey
+            .OLD_NUM_GOOGLE_EVENT, 0);
+        if (oldNumGoogleEvent == 0) {
+            List listGoogleEvent =
+                GoogleCalendarUtil.getAllGoogleEvent(CrbApplication.getInstanceContext());
+            sharedPreferences.edit()
+                .putInt(Constant.SharePreferenceKey.OLD_NUM_GOOGLE_EVENT, listGoogleEvent.size())
+                .commit();
+            RegisterNotificationAsyncTask registerGoogleEventNotify = new
+                RegisterNotificationAsyncTask(true);
+            registerGoogleEventNotify.execute(listGoogleEvent);
+        }
         Set accountSet = sharedPreferences.getStringSet(Constant.GoogleCalendar.STRING_ACCOUNT_KEY,
             null);
         if (accountSet == null) return;
